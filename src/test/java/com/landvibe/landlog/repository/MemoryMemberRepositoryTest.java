@@ -22,6 +22,8 @@ class MemoryMemberRepositoryTest {
         //given
         Member member = new Member();
         member.setName("spring");
+        member.setEmail("email");
+        member.setPassword("pass");
 
         //when
         repository.save(member);
@@ -36,9 +38,13 @@ class MemoryMemberRepositoryTest {
         //given
         Member member1 = new Member();
         member1.setName("spring1");
+        member1.setEmail("email1");
+        member1.setPassword("pass1");
         repository.save(member1);
         Member member2 = new Member();
         member2.setName("spring2");
+        member2.setEmail("email2");
+        member2.setPassword("pass2");
         repository.save(member2);
 
         //when
@@ -49,13 +55,38 @@ class MemoryMemberRepositoryTest {
     }
 
     @Test
+    public void findByEmail() {
+        //given
+        Member member1 = new Member();
+        member1.setName("spring1");
+        member1.setEmail("email1");
+        member1.setPassword("pass1");
+        repository.save(member1);
+        Member member2 = new Member();
+        member2.setName("spring2");
+        member2.setEmail("email2");
+        member2.setPassword("pass2");
+        repository.save(member2);
+
+        //when
+        Member result = repository.findByEmail("email1").get();
+
+        //then
+        assertThat(result).isEqualTo(member1);
+    }
+
+    @Test
     public void findAll() {
         //given
         Member member1 = new Member();
         member1.setName("spring1");
+        member1.setEmail("email1");
+        member1.setPassword("pass1");
         repository.save(member1);
         Member member2 = new Member();
         member2.setName("spring2");
+        member2.setEmail("email2");
+        member2.setPassword("pass2");
         repository.save(member2);
 
         //when

@@ -1,6 +1,8 @@
 package com.landvibe.landlog.service;
 
 import com.landvibe.landlog.domain.Member;
+import com.landvibe.landlog.error.ErrorCode;
+import com.landvibe.landlog.error.LandLogException;
 import com.landvibe.landlog.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +18,7 @@ public class MemberService {
     }
 
     public Long join(Member member) {
-        validateDuplicateMember(member); //중복 회원 검증
+        validateDuplicateMember(member); // 중복 회원 검증
         memberRepository.save(member);
         return member.getId();
     }
@@ -24,8 +26,21 @@ public class MemberService {
     private void validateDuplicateMember(Member member) {
         memberRepository.findByName(member.getName())
                 .ifPresent(m -> {
-                    throw new IllegalStateException("이미 존재하는 회원입니다.");
+                    throw new LandLogException(ErrorCode.DUPLICATE_USER_NAME);
                 });
+        memberRepository.findByEmail(member.getEmail())
+                .ifPresent(m -> {
+                    throw new LandLogException(ErrorCode.DUPLICATE_USER_EMAIL);
+                });
+    }
+
+    public Member login(String email, String password) {
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new LandLogException(ErrorCode.NOT_FOUND_USER));
+        if (!member.getPassword().equals(password)) {
+            throw new LandLogException(ErrorCode.INVALID_PASSWORD);
+        }
+        return member;
     }
 
     public List<Member> findMembers() {
