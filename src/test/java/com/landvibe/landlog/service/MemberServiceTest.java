@@ -1,5 +1,6 @@
 package com.landvibe.landlog.service;
 
+import com.landvibe.landlog.controller.MemberForm;
 import com.landvibe.landlog.domain.Member;
 import com.landvibe.landlog.repository.MemoryMemberRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -15,6 +16,12 @@ class MemberServiceTest {
     MemberService memberService;
     MemoryMemberRepository memberRepository;
 
+    MemberForm memberForm1 = new MemberForm("spring","spring1@spring.com","1234");
+    MemberForm memberForm1SameName = new MemberForm("spring","spring2@spring.com","1234");
+
+    MemberForm memberForm2 = new MemberForm("spring1","spring@spring.com","1234");
+    MemberForm memberForm2SameEmail = new MemberForm("spring2","spring@spring.com","1234");
+
     @BeforeEach
     public void beforeEach() {
         memberRepository = new MemoryMemberRepository();
@@ -29,25 +36,39 @@ class MemberServiceTest {
     @Test
     public void 회원가입() throws Exception {
         //Given
-        Member member = new Member();
-        member.setName("hello");
+        Member member = new Member(memberForm1);
+
         //When
         Long saveId = memberService.join(member);
+
         //Then
         Member findMember = memberRepository.findById(saveId).get();
         assertEquals(member.getName(), findMember.getName());
     }
+
     @Test
-    public void 중복_회원_예외() throws Exception {
+    public void 중복_이름_예외() throws Exception {
         //Given
-        Member member1 = new Member();
-        member1.setName("spring");
-        Member member2 = new Member();
-        member2.setName("spring");
+        Member member1 = new Member(memberForm1);
+        Member member2 = new Member(memberForm1SameName);
+
         //When
         memberService.join(member1);
         IllegalStateException e = assertThrows(IllegalStateException.class,
                 () -> memberService.join(member2));//예외가 발생해야 한다.
-        assertThat(e.getMessage()).isEqualTo("이미 존재하는 회원입니다.");
+        assertThat(e.getMessage()).isEqualTo("이미 존재하는 이름입니다.");
+    }
+
+    @Test
+    public void 중복_이메일_예외() throws Exception {
+        //Given
+        Member member1 = new Member(memberForm2);
+        Member member2 = new Member(memberForm2SameEmail);
+
+        //When
+        memberService.join(member1);
+        IllegalStateException e = assertThrows(IllegalStateException.class,
+                () -> memberService.join(member2));//예외가 발생해야 한다.
+        assertThat(e.getMessage()).isEqualTo("이미 존재하는 이메일입니다.");
     }
 }
