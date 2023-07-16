@@ -4,6 +4,7 @@ import com.landvibe.landlog.domain.Member;
 import com.landvibe.landlog.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,5 +35,8 @@ public class MemberService {
 
     public Optional<Member> findOne(Long memberId) {
         return memberRepository.findById(memberId);
+    }
+    public Optional<Member> login(String email, String password){
+        return memberRepository.findByEmailAndPassword(email,password);
     }
 }
