@@ -5,6 +5,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -63,5 +64,25 @@ class MemoryMemberRepositoryTest {
 
         //then
         assertThat(result.size()).isEqualTo(2);
+    }
+
+    @Test
+    public void findByEmailAndPassword(){
+        //given
+        Member member1 = new Member();
+        member1.setName("name1");
+        member1.setEmail("email1");
+        member1.setPassword("password1");
+        repository.save(member1);
+
+        //when
+        Optional<Member> successResult = repository.findByEmailAndPassword("email1", "password1");
+        Optional<Member> failedResult = repository.findByEmailAndPassword("email2", "password2");
+
+        //then
+        assertThat(successResult).isPresent();
+        assertThat(successResult.get()).isEqualTo(member1);
+
+        assertThat(failedResult).isEmpty();
     }
 }

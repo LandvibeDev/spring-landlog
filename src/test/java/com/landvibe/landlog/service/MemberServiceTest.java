@@ -6,6 +6,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -49,5 +51,25 @@ class MemberServiceTest {
         IllegalStateException e = assertThrows(IllegalStateException.class,
                 () -> memberService.join(member2));//예외가 발생해야 한다.
         assertThat(e.getMessage()).isEqualTo("이미 존재하는 회원입니다.");
+    }
+
+    @Test
+    public void login() throws Exception{
+        //Given
+        Member member1 = new Member();
+        member1.setName("name1");
+        member1.setEmail("email1");
+        member1.setPassword("password1");
+        memberService.join(member1);
+
+        //When
+        Optional<Member> successResult = memberService.login("email1", "password1");
+        Optional<Member> failedResult = memberService.login("email2", "password2");
+
+        //Then
+        assertThat(successResult).isPresent();
+        assertThat(successResult.get()).isEqualTo(member1);
+
+        assertThat(failedResult).isEmpty();
     }
 }
