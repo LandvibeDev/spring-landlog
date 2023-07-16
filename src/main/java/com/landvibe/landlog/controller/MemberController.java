@@ -42,24 +42,26 @@ public class MemberController {
         model.addAttribute("members", members);
         return "members/memberList";
     }
+
     @GetMapping(value = "/members/login")
-    public String loginForm(Model model) {
+    public String loginForm() {
         return "members/loginForm";
     }
+
     @PostMapping(value = "/members/login")
     public String login(MemberForm form, RedirectAttributes redirectAttributes) {
-        Optional<Member> member = memberService.login(form.getEmail(),form.getPassword());
-        if(!member.isEmpty()) {
-            redirectAttributes.addAttribute("creatorId",member.get().getId());
+        Optional<Member> member = memberService.login(form.getEmail(), form.getPassword());
+        if (!member.isEmpty()) {
+            redirectAttributes.addAttribute("creatorId", member.get().getId());
             return "redirect:/blogs/{creatorId}";
         }
         return "redirect:/";
     }
 
     @GetMapping(value = "/blogs/{creatorId}")
-    public String blog(@PathVariable Long creatorId, Model model){
+    public String blog(@PathVariable Long creatorId, Model model) {
         Optional<Member> member = memberService.findOne(creatorId);
-        model.addAttribute("name",member.get().getName());
+        model.addAttribute("name", member.get().getName());
         return "blogs";
     }
 }
