@@ -50,8 +50,8 @@ issue 1. 로그인 구현
          2. password 가 일치
       3. LoginController에 post 방식의 login하는 함수 , 데이터 받아올 form 생성 
          1. memberService.login 활용
-         2. 성공시 /blogs?creatorId='id'
-         3. 실패시 redirect
+         2. 성공시 redirect:/blogs?creatorId='id'
+         3. 실패시 redirect:/
    3. loginForm.html
 
    ---------------------------
@@ -60,4 +60,6 @@ issue 1. 로그인 구현
 4. 블로그 페이지
    1. Path: /blogs
       Title: ${name}의 블로그
+      1. blogController 추가
+      2. ....
 5. unit test 추가
