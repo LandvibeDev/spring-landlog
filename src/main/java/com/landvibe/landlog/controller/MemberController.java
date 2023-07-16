@@ -17,7 +17,7 @@ import java.util.Optional;
 public class MemberController {
     private final MemberService memberService;
 
-    public MemberController(MemberService memberService) {
+    public MemberController(MemberService memberService)  {
         this.memberService = memberService;
     }
 
@@ -58,10 +58,4 @@ public class MemberController {
         return "redirect:/";
     }
 
-    @GetMapping(value = "/blogs/{creatorId}")
-    public String blog(@PathVariable Long creatorId, Model model) {
-        Optional<Member> member = memberService.findOne(creatorId);
-        model.addAttribute("name", member.get().getName());
-        return "blogs";
-    }
 }
