@@ -8,7 +8,7 @@ public class Member {
     private String password;
 
 
-    public Member(Long id, String name,String email, String password) {
+    public Member(Long id, String name, String email, String password) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -30,6 +30,7 @@ public class Member {
     public void setName(String name) {
         this.name = name;
     }
+
     public String getEmail() {
         return email;
     }

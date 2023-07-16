@@ -36,7 +36,8 @@ public class MemberService {
     public Optional<Member> findOne(Long memberId) {
         return memberRepository.findById(memberId);
     }
-    public Optional<Member> login(String email, String password){
-        return memberRepository.findByEmailAndPassword(email,password);
+
+    public Optional<Member> login(String email, String password) {
+        return memberRepository.findByEmailAndPassword(email, password);
     }
 }
