@@ -31,13 +31,6 @@ public class MemoryMemberRepository implements MemberRepository {
     }
 
     @Override
-    public Optional<Member> findByEmail(String email) {
-        return store.values().stream()
-                .filter(member -> member.getEmail().equals(email))
-                .findAny();
-    }
-
-    @Override
     public Optional<Member> findByEmailAndPassword(String email, String password) {
         return store.values().stream()
                 .filter(member -> member.getEmail().equals(email) && member.getPassword().equals(password))
@@ -47,14 +40,6 @@ public class MemoryMemberRepository implements MemberRepository {
     @Override
     public List<Member> findAll() {
         return new ArrayList<>(store.values());
-    }
-
-    @Override
-    public boolean existsById(Long creatorId) {
-        if (store.get(creatorId) != null) {
-            return true;
-        }
-        return false;
     }
 
     public void clearStore() {
