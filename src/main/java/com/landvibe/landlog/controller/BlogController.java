@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Optional;
 
@@ -16,8 +17,8 @@ public class BlogController {
         this.memberService = memberService;
     }
 
-    @GetMapping(value = "/blogs/{creatorId}")
-    public String blog(@PathVariable Long creatorId, Model model) {
+    @GetMapping(value = "/blogs")
+    public String blog(@RequestParam Long creatorId, Model model) {
         Optional<Member> member = memberService.findOne(creatorId);
         model.addAttribute("name", member.get().getName());
         return "blogs";
