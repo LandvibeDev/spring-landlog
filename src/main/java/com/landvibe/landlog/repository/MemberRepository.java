@@ -13,5 +13,7 @@ public interface MemberRepository {
 
     Optional<Member> findByName(String name);
 
+    Optional<Member> findByEmail(String name);
+
     List<Member> findAll();
 }
