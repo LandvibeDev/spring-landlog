@@ -2,9 +2,11 @@ package com.landvibe.landlog.repository;
 
 import com.landvibe.landlog.domain.Member;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -63,5 +65,39 @@ class MemoryMemberRepositoryTest {
 
         //then
         assertThat(result.size()).isEqualTo(2);
+    }
+    @Test
+    @DisplayName("이메일과 비밀번호로 조회 실패")
+    public void findMemberByEmailAndPassword_whenNoSuchMemberByEmailAndPassword_returnNull(){
+        //given
+        Member member1 = new Member();
+        member1.setName("aaN");
+        member1.setEmail("aaI");
+        member1.setPassword("aaP");
+        repository.save(member1);
+        Member failureMember = new Member(1L,"bbN","bbI","bbP" );
+
+        //when
+        Optional<Member> failByEmailAndPassword = repository.findByEmailAndPassword(failureMember.getEmail(), failureMember.getPassword());
+
+        //then
+        assertThat(failByEmailAndPassword).isEmpty();
+    }
+    @Test
+    @DisplayName("이메일과 비밀번호로 조회 성공")
+    public void findMemberByEmailAndPassword_whenFindSuchMemberByEmailAndPassword_returnTrue(){
+        //given
+        Member member1 = new Member();
+        member1.setName("aaN");
+        member1.setEmail("aaI");
+        member1.setPassword("aaP");
+        repository.save(member1);
+        Member successMember = new Member(1L,"aaN","aaI","aaP" );
+
+        //when
+        Optional<Member> successByEmailAndPassword = repository.findByEmailAndPassword(successMember.getEmail(), successMember.getPassword());
+
+        //then
+        assertThat(successByEmailAndPassword.get()).isEqualTo(member1);
     }
 }
