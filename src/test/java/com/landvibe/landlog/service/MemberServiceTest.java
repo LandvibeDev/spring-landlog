@@ -4,7 +4,10 @@ import com.landvibe.landlog.domain.Member;
 import com.landvibe.landlog.repository.MemoryMemberRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -49,5 +52,40 @@ class MemberServiceTest {
         IllegalStateException e = assertThrows(IllegalStateException.class,
                 () -> memberService.join(member2));//예외가 발생해야 한다.
         assertThat(e.getMessage()).isEqualTo("이미 존재하는 회원입니다.");
+    }
+
+    private Member createMember() {
+        Member member1 = new Member();
+        member1.setName("name1");
+        member1.setEmail("email1");
+        member1.setPassword("password1");
+        memberService.join(member1);
+        return member1;
+    }
+
+    @Test
+    @DisplayName("로그인 성공 테스트")
+    public void login_success(){
+        //Given
+        Member member1 = createMember();
+
+        //When
+        Optional<Member> successResult = memberService.login("email1", "password1");
+
+        //Then
+        assertThat(successResult.get()).isEqualTo(member1);
+    }
+
+    @Test
+    @DisplayName("로그인 실패 테스트")
+    public void login_fail(){
+        //Given
+        Member member1 = createMember();
+
+        //When
+        Optional<Member> failedResult = memberService.login("email2", "password2");
+
+        //Then
+        assertThat(failedResult).isEmpty();
     }
 }

@@ -31,6 +31,13 @@ public class MemoryMemberRepository implements MemberRepository {
     }
 
     @Override
+    public Optional<Member> findByEmailAndPassword(String email, String password) {
+        return store.values().stream()
+                .filter(member -> member.getEmail().equals(email) && member.getPassword().equals(password))
+                .findAny();
+    }
+
+    @Override
     public List<Member> findAll() {
         return new ArrayList<>(store.values());
     }
