@@ -35,6 +35,13 @@ public class MemoryMemberRepository implements MemberRepository {
         return new ArrayList<>(store.values());
     }
 
+    @Override
+    public Optional<Member> findByEmailAndPassword(String email, String password) {
+        return store.values().stream()
+                .filter(member -> member.getEmail().equals(email) && member.getPassword().equals(password))
+                .findAny();
+    }
+
     public void clearStore() {
         store.clear();
     }

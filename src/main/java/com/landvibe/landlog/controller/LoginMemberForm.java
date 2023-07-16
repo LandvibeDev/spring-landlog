@@ -1,7 +1,6 @@
 package com.landvibe.landlog.controller;
 
-public class MemberForm {
-    private String name;
+public class LoginMemberForm {
 
     private String email;
     private String password;
@@ -20,13 +19,5 @@ public class MemberForm {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 }
