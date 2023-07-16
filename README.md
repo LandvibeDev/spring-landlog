@@ -30,20 +30,33 @@ issue 1. 로그인 구현
       5. memberService.join 의 validate 로직 수정 -> validateDuplicateMember에 email 중복 확인 코드 추가
       6. members/memberList.html 수정 -> email, password 추가
       
-
-
-
-
----------
 2. 홈 화면
    1. Path: /
    2. 로그인 버튼 추가
    3. 클릭 -> /members/login 으로 이동
+      => home.html 수정 -> 로그인 버튼 추가(/members/login 으로 보내기)
+   
 3. 로그인 페이지
    1. Path: /members/login
+      1. LoginController 생성 -> @GetMapping("/members/login") 함수 만들어서 loginForm.html과 바인딩
+      2. loginForm.html 생성
+   
+
    2. 성공 -> 블로그 리스트 페이지(/blogs?creatorId=1)
       실패 -> 홈(/)
+      1. memberService에 login 함수 만들기 
+      2. memberService에 validateLogin 함수 만들기
+         1. findByEmail해서 null X
+         2. password 가 일치
+      3. LoginController에 post 방식의 login하는 함수 , 데이터 받아올 form 생성 
+         1. memberService.login 활용
+         2. 성공시 /blogs?creatorId='id'
+         3. 실패시 redirect
    3. loginForm.html
+
+   ---------------------------
+
+
 4. 블로그 페이지
    1. Path: /blogs
       Title: ${name}의 블로그
