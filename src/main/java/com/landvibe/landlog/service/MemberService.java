@@ -47,4 +47,8 @@ public class MemberService {
         }
         return member.getId();
     }
+
+    public Optional<Member> login(String email, String password) {
+        return memberRepository.findByEmailAndPassword(email, password);
+    }
 }
