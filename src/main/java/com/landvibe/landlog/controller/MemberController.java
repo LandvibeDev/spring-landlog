@@ -53,7 +53,7 @@ public class MemberController {
         Optional<Member> member = memberService.login(form.getEmail(), form.getPassword());
         if (!member.isEmpty()) {
             redirectAttributes.addAttribute("creatorId", member.get().getId());
-            return "redirect:/blogs/{creatorId}";
+            return "redirect:/blogs";
         }
         return "redirect:/";
     }
