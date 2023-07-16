@@ -15,3 +15,36 @@
    - 이세원: sewon
    - 이승철: seungcheol
    - 임주민: jumin
+
+### 기능 구현
+issue 1. 로그인 구현
+
+회원가입 된 회원 정보로 로그인 구현
+
+1. 회원가입 필드 추가
+   1. 이메일 / 패스워드 추가 
+      1. members/createMemberForm.html 수정 -> email, password 추가
+      2. memberForm 객체 수정 -> email, password 추가
+      3. member 객체 수정 -> email, password 추가, 생성자 수정(id를 제외하고 객체 생성), set 함수 삭제
+      4. memberController.create 함수 수정 -> 객체 생성 수정
+      5. memberService.join 의 validate 로직 수정 -> validateDuplicateMember에 email 중복 확인 코드 추가
+      6. members/memberList.html 수정 -> email, password 추가
+      
+
+
+
+
+---------
+2. 홈 화면
+   1. Path: /
+   2. 로그인 버튼 추가
+   3. 클릭 -> /members/login 으로 이동
+3. 로그인 페이지
+   1. Path: /members/login
+   2. 성공 -> 블로그 리스트 페이지(/blogs?creatorId=1)
+      실패 -> 홈(/)
+   3. loginForm.html
+4. 블로그 페이지
+   1. Path: /blogs
+      Title: ${name}의 블로그
+5. unit test 추가
