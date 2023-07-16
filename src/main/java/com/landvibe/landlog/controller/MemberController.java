@@ -5,7 +5,10 @@ import com.landvibe.landlog.service.MemberService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Optional;
@@ -44,12 +47,19 @@ public class MemberController {
         return "members/loginForm";
     }
     @PostMapping(value = "/members/login")
-    public String login(MemberForm form,Model model) {
+    public String login(MemberForm form, RedirectAttributes redirectAttributes) {
         Optional<Member> member = memberService.login(form.getEmail(),form.getPassword());
         if(!member.isEmpty()) {
-            model.addAttribute("name",member.get().getName());
-            return "/blogs";
+            redirectAttributes.addAttribute("creatorId",member.get().getId());
+            return "redirect:/blogs/{creatorId}";
         }
-        return "home";
+        return "redirect:/";
+    }
+
+    @GetMapping(value = "/blogs/{creatorId}")
+    public String blog(@PathVariable Long creatorId, Model model){
+        Optional<Member> member = memberService.findOne(creatorId);
+        model.addAttribute("name",member.get().getName());
+        return "blogs";
     }
 }
