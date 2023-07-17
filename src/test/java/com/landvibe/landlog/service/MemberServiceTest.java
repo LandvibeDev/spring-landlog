@@ -54,15 +54,20 @@ class MemberServiceTest {
         assertThat(e.getMessage()).isEqualTo("이미 존재하는 회원입니다.");
     }
 
-    @Test
-    @DisplayName("로그인 성공 테스트")
-    public void login_success(){
-        //Given
+    private Member createMember() {
         Member member1 = new Member();
         member1.setName("name1");
         member1.setEmail("email1");
         member1.setPassword("password1");
         memberService.join(member1);
+        return member1;
+    }
+
+    @Test
+    @DisplayName("로그인 성공 테스트")
+    public void login_success(){
+        //Given
+        Member member1 = createMember();
 
         //When
         Optional<Member> successResult = memberService.login("email1", "password1");
@@ -75,11 +80,7 @@ class MemberServiceTest {
     @DisplayName("로그인 실패 테스트")
     public void login_fail(){
         //Given
-        Member member1 = new Member();
-        member1.setName("name1");
-        member1.setEmail("email1");
-        member1.setPassword("password1");
-        memberService.join(member1);
+        Member member1 = createMember();
 
         //When
         Optional<Member> failedResult = memberService.login("email2", "password2");
