@@ -17,6 +17,10 @@ class MemberServiceTest {
     MemberService memberService;
     MemoryMemberRepository memberRepository;
 
+    String name="name";
+    String password="password";
+    String email="email";
+
     @BeforeEach
     public void beforeEach() {
         memberRepository = new MemoryMemberRepository();
@@ -32,7 +36,7 @@ class MemberServiceTest {
     public void 회원가입() throws Exception {
         //Given
         Member member = new Member();
-        member.setName("hello");
+        member.setName(name);
         //When
         Long saveId = memberService.join(member);
         //Then
@@ -43,9 +47,9 @@ class MemberServiceTest {
     public void 중복_회원_예외() throws Exception {
         //Given
         Member member1 = new Member();
-        member1.setName("spring");
+        member1.setName(name);
         Member member2 = new Member();
-        member2.setName("spring");
+        member2.setName(name);
         //When
         memberService.join(member1);
         IllegalStateException e = assertThrows(IllegalStateException.class,
@@ -56,19 +60,17 @@ class MemberServiceTest {
     @Test
     public void 로그인_일치하는_회원_없음()throws Exception{
         LoginForm form=new LoginForm();
-        form.setEmail("asdf");
-        form.setEmail("asdf");
+        form.setEmail(email);
+        form.setPassword(password);
         IllegalStateException e = assertThrows(IllegalStateException.class,
                 () -> memberService.login(form));
         Assertions.assertEquals(e.getMessage(), "이메일, 비밀번호가 일치하는 회원이 존재하지 않습니다");
     }
     @Test
     public void 로그인_성공(){
-        String password="adsf";
-        String email="asdf";
 
         Member member1 = new Member();
-        member1.setName("asdf");
+        member1.setName(name);
         member1.setEmail(email);
         member1.setPassword(password);
 
