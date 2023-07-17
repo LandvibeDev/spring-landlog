@@ -29,8 +29,8 @@ public class LoginController {
             return "redirect:/";
         }
 
-        redirectAttributes.addAttribute("createId", memberId);
-        return "redirect:/blogs/{creatorId}";
+        redirectAttributes.addAttribute("creatorId", memberId);
+        return "redirect:/blogs";
     }
 
 }
