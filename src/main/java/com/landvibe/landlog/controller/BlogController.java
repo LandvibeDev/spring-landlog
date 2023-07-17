@@ -13,13 +13,15 @@ import java.util.Optional;
 @Controller
 public class BlogController {
     private final MemberService memberService;
-    public BlogController(MemberService memberService){
+
+    public BlogController(MemberService memberService) {
         this.memberService = memberService;
     }
 
     @GetMapping(value = "/blogs")
     public String blog(@RequestParam Long creatorId, Model model) {
         Optional<Member> member = memberService.findOne(creatorId);
+        if (member.isEmpty()) return "/";
         model.addAttribute("name", member.get().getName());
         return "blogs";
     }
