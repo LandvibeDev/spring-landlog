@@ -24,7 +24,7 @@ public class MemberController {
     }
 
     @PostMapping(value = "/members/new")
-    public String create(MemberForm form) {
+    public String create(MemberJoinForm form) {
         Member member = new Member();
         member.setName(form.getName());
         member.setEmail(form.getEmail());
@@ -47,8 +47,8 @@ public class MemberController {
     }
 
     @PostMapping(value = "/members/login")
-    public String login(MemberForm memberForm, RedirectAttributes redirect){
-        Optional<Member> loginResult = memberService.login(memberForm.getEmail(), memberForm.getPassword());
+    public String login(MemberLoginForm memberLoginForm, RedirectAttributes redirect){
+        Optional<Member> loginResult = memberService.login(memberLoginForm.getEmail(), memberLoginForm.getPassword());
 
         // 로그인 실패
         if(loginResult.isEmpty()){
@@ -59,19 +59,5 @@ public class MemberController {
         Long creatorId = loginResult.get().getId();
         redirect.addAttribute("creatorId", creatorId);
         return "redirect:/blogs";
-    }
-
-    @GetMapping(value = "/blogs")
-    public String blogs(@RequestParam("creatorId") Long creatorId, Model model){
-        Optional<Member> member = memberService.findOne(creatorId);
-
-        if(member.isEmpty()){
-            // 실패
-            return "redirect:/";
-        }
-
-        // 성공
-        model.addAttribute("name", member.get().getEmail());
-        return "blogs/blogList";
     }
 }
