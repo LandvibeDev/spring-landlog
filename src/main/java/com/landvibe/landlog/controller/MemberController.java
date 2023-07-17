@@ -28,9 +28,9 @@ public class MemberController {
     @PostMapping(value = "/new")
     public String create(MemberForm form) {
         Member member = new Member(form);
-        try{
+        try {
             memberService.join(member);
-        }catch (IllegalStateException e){
+        } catch (IllegalStateException e) {
             return "redirect:/members/new";
         }
         return "redirect:/";
@@ -51,12 +51,11 @@ public class MemberController {
     @PostMapping("/login")
     public String login(LoginForm form) {
         Member loginMember;
-        try{
-            loginMember=memberService.login(form);
-        }catch (IllegalStateException e){
+        try {
+            loginMember = memberService.login(form);
+        } catch (IllegalStateException e) {
             return "redirect:/";
         }
-        System.out.println("성공");
         return "redirect:/blogs?creatorId=" + loginMember.getId();
     }
 
