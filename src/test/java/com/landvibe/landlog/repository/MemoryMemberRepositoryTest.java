@@ -2,9 +2,11 @@ package com.landvibe.landlog.repository;
 
 import com.landvibe.landlog.domain.Member;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -63,5 +65,20 @@ class MemoryMemberRepositoryTest {
 
         //then
         assertThat(result.size()).isEqualTo(2);
+    }
+
+    @Test
+    public void findByEmailTest(){
+        String email="email";
+        String name="name";
+        String password="password";
+
+        Member member=new Member();
+        member.setEmail(email);
+        member.setPassword(password);
+        member.setName(name);
+        repository.save(member);
+        Optional<Member> optionalMember = repository.findByEmail(email);
+        Assertions.assertEquals(member,optionalMember.get());
     }
 }

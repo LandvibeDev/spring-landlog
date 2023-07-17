@@ -64,7 +64,6 @@ public class MemberController {
 
     @GetMapping("/blogs")
     public String blogForm(@RequestParam("creatorId") Long id, Model model) {
-        ;
         Optional<Member> optionalMember = memberService.findOne(id);
         Member member = optionalMember.get();
         System.out.println(member.getName());
