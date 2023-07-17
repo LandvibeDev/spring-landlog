@@ -50,16 +50,18 @@ issue 1. 로그인 구현
          2. password 가 일치
       3. LoginController에 post 방식의 login하는 함수 , 데이터 받아올 form 생성 
          1. memberService.login 활용
-         2. 성공시 redirect:/blogs?creatorId='id'
+         2. 성공시 redirect:/blogs
          3. 실패시 redirect:/
    3. loginForm.html
-
-   ---------------------------
 
 
 4. 블로그 페이지
    1. Path: /blogs
       Title: ${name}의 블로그
-      1. blogController 추가
-      2. ....
+      1. blogController 추가 (MemberRepository 의존)
+         1. blogForm : parameter로 creatorId를 받아옴. name을 찾고, model에 주입해 blogs/blogList.html과 바인딩
+      
 5. unit test 추가
+   1. LoginServiceTest : 추가(정상수행, 이메일 존재 X, 비밀번호 불일치 예외)
+   2. MemberServiceTest : "중복_이메일_예외" 추가
+   3. MemoryMemberRepositoryTest : 객체 생성 방법 수정(memberForm을 생성자에 주입), findById 추가
