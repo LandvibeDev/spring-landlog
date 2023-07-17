@@ -4,6 +4,7 @@ import com.landvibe.landlog.domain.Member;
 import com.landvibe.landlog.repository.MemoryMemberRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
@@ -54,7 +55,8 @@ class MemberServiceTest {
     }
 
     @Test
-    public void login() throws Exception{
+    @DisplayName("로그인 성공 테스트")
+    public void login_success(){
         //Given
         Member member1 = new Member();
         member1.setName("name1");
@@ -64,12 +66,25 @@ class MemberServiceTest {
 
         //When
         Optional<Member> successResult = memberService.login("email1", "password1");
+
+        //Then
+        assertThat(successResult.get()).isEqualTo(member1);
+    }
+
+    @Test
+    @DisplayName("로그인 실패 테스트")
+    public void login_fail(){
+        //Given
+        Member member1 = new Member();
+        member1.setName("name1");
+        member1.setEmail("email1");
+        member1.setPassword("password1");
+        memberService.join(member1);
+
+        //When
         Optional<Member> failedResult = memberService.login("email2", "password2");
 
         //Then
-        assertThat(successResult).isPresent();
-        assertThat(successResult.get()).isEqualTo(member1);
-
         assertThat(failedResult).isEmpty();
     }
 }
