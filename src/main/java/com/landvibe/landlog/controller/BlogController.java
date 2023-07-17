@@ -16,14 +16,19 @@ public class BlogController {
 
     private final MemberService memberService;
 
-    public BlogController(MemberService memberService){
-        this.memberService=memberService;
+    public BlogController(MemberService memberService) {
+        this.memberService = memberService;
     }
 
     @GetMapping("")
     public String blogForm(@RequestParam("creatorId") Long id, Model model) {
-        Member member = memberService.findOne(id);
-        model.addAttribute("name", member.getName());
+        Member member;
+        try {
+            member = memberService.findOne(id);
+            model.addAttribute("name", member.getName());
+        } catch (IllegalStateException e) {
+            return "redirect:/";
+        }
         return "/blogs/blogList";
     }
 }

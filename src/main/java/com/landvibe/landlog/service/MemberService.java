@@ -35,14 +35,14 @@ public class MemberService {
     }
 
     public Member findOne(Long memberId) {
-        Optional<Member> optionalMember=memberRepository.findById(memberId);
-        return optionalMember.orElseThrow(()->new IllegalStateException("이메일, 비밀번호가 일치하는 회원이 존재하지 않습니다"));
+        Optional<Member> optionalMember = memberRepository.findById(memberId);
+        return optionalMember.orElseThrow(() -> new IllegalStateException("아이디와 일치하는 회원을 찾을 수 없습니다."));
     }
 
     public Member login(LoginForm form) {
         String email = form.getEmail();
         String password = form.getPassword();
         Optional<Member> optionalMember = memberRepository.findByEmail(email);
-        return optionalMember.orElseThrow(()->new IllegalStateException("이메일, 비밀번호가 일치하는 회원이 존재하지 않습니다"));
+        return optionalMember.orElseThrow(() -> new IllegalStateException("이메일, 비밀번호가 일치하는 회원이 존재하지 않습니다"));
     }
 }
