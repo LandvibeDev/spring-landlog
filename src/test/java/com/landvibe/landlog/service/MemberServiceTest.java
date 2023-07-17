@@ -16,11 +16,11 @@ class MemberServiceTest {
     MemberService memberService;
     MemoryMemberRepository memberRepository;
 
-    MemberForm memberForm1 = new MemberForm("spring","spring1@spring.com","1234");
-    MemberForm memberForm1SameName = new MemberForm("spring","spring2@spring.com","1234");
+    MemberForm memberForm1 = new MemberForm("spring", "spring1@spring.com", "1234");
+    MemberForm memberForm1SameName = new MemberForm("spring", "spring2@spring.com", "1234");
 
-    MemberForm memberForm2 = new MemberForm("spring1","spring@spring.com","1234");
-    MemberForm memberForm2SameEmail = new MemberForm("spring2","spring@spring.com","1234");
+    MemberForm memberForm2 = new MemberForm("spring1", "spring@spring.com", "1234");
+    MemberForm memberForm2SameEmail = new MemberForm("spring2", "spring@spring.com", "1234");
 
     @BeforeEach
     public void beforeEach() {
