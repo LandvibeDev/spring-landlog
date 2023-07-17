@@ -1,6 +1,7 @@
 package com.landvibe.landlog.service;
 
 import com.landvibe.landlog.domain.Member;
+import com.landvibe.landlog.form.LoginForm;
 import com.landvibe.landlog.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 
@@ -28,11 +29,20 @@ public class MemberService {
                 });
     }
 
+
     public List<Member> findMembers() {
         return memberRepository.findAll();
     }
 
-    public Optional<Member> findOne(Long memberId) {
-        return memberRepository.findById(memberId);
+    public Member findOne(Long memberId) {
+        Optional<Member> optionalMember = memberRepository.findById(memberId);
+        return optionalMember.orElseThrow(() -> new IllegalStateException("아이디와 일치하는 회원을 찾을 수 없습니다."));
+    }
+
+    public Member login(LoginForm form) {
+        String email = form.getEmail();
+        String password = form.getPassword();
+        Optional<Member> optionalMember = memberRepository.findByEmailAndPassword(email, password);
+        return optionalMember.orElseThrow(() -> new IllegalStateException("이메일, 비밀번호가 일치하는 회원이 존재하지 않습니다"));
     }
 }

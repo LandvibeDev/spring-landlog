@@ -1,30 +1,9 @@
-package com.landvibe.landlog.domain;
+package com.landvibe.landlog.form;
 
-import com.landvibe.landlog.form.MemberForm;
-
-public class Member {
-
-    private Long id;
+public class MemberForm {
     private String name;
     private String email;
     private String password;
-
-    public Member() {
-    }
-
-    public Member(String name, String email, String password) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
