@@ -21,7 +21,7 @@ public class BlogController {
     @GetMapping(value = "/blogs")
     public String blog(@RequestParam Long creatorId, Model model) {
         Optional<Member> member = memberService.findOne(creatorId);
-        if (member.isEmpty()) return "/";
+        if (member.isEmpty()) return "home";
         model.addAttribute("name", member.get().getName());
         return "blogs";
     }
