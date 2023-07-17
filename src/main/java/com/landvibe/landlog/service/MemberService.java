@@ -29,7 +29,7 @@ public class MemberService {
 
         memberRepository.findByEmail(member.getEmail())
                 .ifPresent(m -> {
-                    throw new IllegalStateException("이미 존재하는 email 입니다."); // 에러 클래스 직접 만들어보기 ?
+                    throw new IllegalStateException("이미 존재하는 이메일입니다."); // 에러 클래스 직접 만들어보기 ?
                 });
     }
 
