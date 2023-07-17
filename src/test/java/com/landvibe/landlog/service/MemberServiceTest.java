@@ -40,6 +40,7 @@ class MemberServiceTest {
         Member findMember = memberRepository.findById(saveId).get();
         assertEquals(member.getName(), findMember.getName());
     }
+
     @Test
     public void 중복_회원_예외() throws Exception {
         //Given
@@ -56,12 +57,10 @@ class MemberServiceTest {
 
     @Test
     @DisplayName("로그인 성공")
-    public void login_whenSuchMemberInRepository_thenReturnTrue(){
+    public void login_whenSuchMemberInRepository_thenReturnTrue() {
         //given
         Member member1 = new Member();
-        member1.setName("aaN");
-        member1.setEmail("aaE");
-        member1.setPassword("aaP");
+        createNewMember(member1);
 
         memberService.join(member1);
 
@@ -73,14 +72,19 @@ class MemberServiceTest {
         //then
         assertThat(logined.get()).isEqualTo(member1);
     }
-    @Test
-    @DisplayName("로그인실패")
-    public void login_whenNoSuchMemberInRepository_thenReturnTrue(){
-        //given
-        Member member1 = new Member();
+
+    private static void createNewMember(Member member1) {
         member1.setName("aaN");
         member1.setEmail("aaE");
         member1.setPassword("aaP");
+    }
+
+    @Test
+    @DisplayName("로그인실패")
+    public void login_whenNoSuchMemberInRepository_thenReturnTrue() {
+        //given
+        Member member1 = new Member();
+        createNewMember(member1);
 
         memberService.join(member1);
 
