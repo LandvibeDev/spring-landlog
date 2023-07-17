@@ -4,7 +4,6 @@ import com.landvibe.landlog.controller.MemberForm;
 import com.landvibe.landlog.domain.Member;
 import com.landvibe.landlog.repository.MemoryMemberRepository;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -13,20 +12,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class MemberServiceTest {
 
-    MemberService memberService;
-    MemoryMemberRepository memberRepository;
+    MemoryMemberRepository memberRepository = new MemoryMemberRepository();
+    MemberService memberService = new MemberService(memberRepository);
 
     MemberForm memberForm1 = new MemberForm("spring", "spring1@spring.com", "1234");
     MemberForm memberForm1SameName = new MemberForm("spring", "spring2@spring.com", "1234");
 
     MemberForm memberForm2 = new MemberForm("spring1", "spring@spring.com", "1234");
     MemberForm memberForm2SameEmail = new MemberForm("spring2", "spring@spring.com", "1234");
-
-    @BeforeEach
-    public void beforeEach() {
-        memberRepository = new MemoryMemberRepository();
-        memberService = new MemberService(memberRepository);
-    }
 
     @AfterEach
     public void afterEach() {
