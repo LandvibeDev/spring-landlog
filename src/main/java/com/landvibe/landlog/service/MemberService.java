@@ -34,8 +34,9 @@ public class MemberService {
         return memberRepository.findAll();
     }
 
-    public Optional<Member> findOne(Long memberId) {
-        return memberRepository.findById(memberId);
+    public Member findOne(Long memberId) {
+        Optional<Member> optionalMember=memberRepository.findById(memberId);
+        return optionalMember.orElseThrow(()->new IllegalStateException("이메일, 비밀번호가 일치하는 회원이 존재하지 않습니다"));
     }
 
     public Member login(LoginForm form) {

@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
+@RequestMapping("/members")
 public class MemberController {
     private final MemberService memberService;
 
@@ -19,17 +20,14 @@ public class MemberController {
         this.memberService = memberService;
     }
 
-    @GetMapping(value = "/members/new")
+    @GetMapping(value = "/new")
     public String createForm() {
         return "members/createMemberForm";
     }
 
-    @PostMapping(value = "/members/new")
+    @PostMapping(value = "/new")
     public String create(MemberForm form) {
-        Member member = new Member();
-        member.setName(form.getName());
-        member.setEmail(form.getEmail());
-        member.setPassword(form.getPassword());
+        Member member = new Member(form);
         try{
             memberService.join(member);
         }catch (IllegalStateException e){
@@ -38,19 +36,19 @@ public class MemberController {
         return "redirect:/";
     }
 
-    @GetMapping(value = "/members")
+    @GetMapping(value = "")
     public String list(Model model) {
         List<Member> members = memberService.findMembers();
         model.addAttribute("members", members);
         return "members/memberList";
     }
 
-    @GetMapping("/members/login")
+    @GetMapping("/login")
     public String loginForm() {
         return "members/loginForm";
     }
 
-    @PostMapping("/members/login")
+    @PostMapping("/login")
     public String login(LoginForm form) {
         Member loginMember;
         try{
@@ -62,12 +60,5 @@ public class MemberController {
         return "redirect:/blogs?creatorId=" + loginMember.getId();
     }
 
-    @GetMapping("/blogs")
-    public String blogForm(@RequestParam("creatorId") Long id, Model model) {
-        Optional<Member> optionalMember = memberService.findOne(id);
-        Member member = optionalMember.get();
-        System.out.println(member.getName());
-        model.addAttribute("name", member.getName());
-        return "/blogs/blogList";
-    }
+
 }

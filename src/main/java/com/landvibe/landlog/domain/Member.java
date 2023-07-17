@@ -1,5 +1,7 @@
 package com.landvibe.landlog.domain;
 
+import com.landvibe.landlog.form.MemberForm;
+
 public class Member {
 
     private Long id;
@@ -10,11 +12,10 @@ public class Member {
     public Member() {
     }
 
-    public Member(Long id, String name, String email, String password) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.password = password;
+    public Member(MemberForm memberForm) {
+        this.name = memberForm.getName();
+        this.email = memberForm.getEmail();
+        this.password = memberForm.getPassword();
     }
 
     public Long getId() {
