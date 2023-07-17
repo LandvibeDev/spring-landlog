@@ -66,16 +66,15 @@ class MemoryMemberRepositoryTest {
         //then
         assertThat(result.size()).isEqualTo(2);
     }
+
     @Test
     @DisplayName("이메일과 비밀번호로 조회 실패")
-    public void findMemberByEmailAndPassword_whenNoSuchMemberByEmailAndPassword_returnNull(){
+    public void findMemberByEmailAndPassword_whenNoSuchMemberByEmailAndPassword_returnNull() {
         //given
         Member member1 = new Member();
-        member1.setName("aaN");
-        member1.setEmail("aaI");
-        member1.setPassword("aaP");
+        createNewMember(member1);
         repository.save(member1);
-        Member failureMember = new Member(1L,"bbN","bbI","bbP" );
+        Member failureMember = new Member(1L, "bbN", "bbI", "bbP");
 
         //when
         Optional<Member> failByEmailAndPassword = repository.findByEmailAndPassword(failureMember.getEmail(), failureMember.getPassword());
@@ -83,16 +82,21 @@ class MemoryMemberRepositoryTest {
         //then
         assertThat(failByEmailAndPassword).isEmpty();
     }
-    @Test
-    @DisplayName("이메일과 비밀번호로 조회 성공")
-    public void findMemberByEmailAndPassword_whenFindSuchMemberByEmailAndPassword_returnTrue(){
-        //given
-        Member member1 = new Member();
+
+    private static void createNewMember(Member member1) {
         member1.setName("aaN");
         member1.setEmail("aaI");
         member1.setPassword("aaP");
+    }
+
+    @Test
+    @DisplayName("이메일과 비밀번호로 조회 성공")
+    public void findMemberByEmailAndPassword_whenFindSuchMemberByEmailAndPassword_returnTrue() {
+        //given
+        Member member1 = new Member();
+        createNewMember(member1);
         repository.save(member1);
-        Member successMember = new Member(1L,"aaN","aaI","aaP" );
+        Member successMember = new Member(1L, "aaN", "aaI", "aaP");
 
         //when
         Optional<Member> successByEmailAndPassword = repository.findByEmailAndPassword(successMember.getEmail(), successMember.getPassword());
