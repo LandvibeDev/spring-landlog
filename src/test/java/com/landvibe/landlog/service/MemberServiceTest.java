@@ -1,11 +1,13 @@
 package com.landvibe.landlog.service;
 
+import com.landvibe.landlog.dto.LoginForm;
 import com.landvibe.landlog.domain.Member;
 import com.landvibe.landlog.repository.MemoryMemberRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static com.landvibe.landlog.ErrorMessage.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -37,6 +39,7 @@ class MemberServiceTest {
         Member findMember = memberRepository.findById(saveId).get();
         assertEquals(member.getName(), findMember.getName());
     }
+
     @Test
     public void 중복_회원_예외() throws Exception {
         //Given
@@ -49,5 +52,49 @@ class MemberServiceTest {
         IllegalStateException e = assertThrows(IllegalStateException.class,
                 () -> memberService.join(member2));//예외가 발생해야 한다.
         assertThat(e.getMessage()).isEqualTo("이미 존재하는 회원입니다.");
+    }
+
+    @Test
+    public void 없는_이메일_예외() {
+        //Given
+        Member member = new Member("오형석", "1234", "123@naver.com");
+
+        //when
+        memberService.join(member);
+        LoginForm loginForm = new LoginForm("123@inha.edu", "123");
+
+        //then
+        Exception e = assertThrows(Exception.class,
+                () -> memberService.login(loginForm));
+        assertThat(e.getMessage()).isEqualTo(NO_USER.message);
+    }
+
+    @Test
+    public void 로그인_성공() {
+        //Given
+        Member member = new Member("오형석", "123@naver.com", "1234");
+
+        //when
+        memberService.join(member);
+        LoginForm loginForm = new LoginForm("123@naver.com", "1234");
+
+        //then
+        Long memberId = memberService.login(loginForm);
+        assertThat(memberId).isEqualTo(member.getId());
+    }
+
+    @Test
+    public void 틀린_비밀번호() {
+        //Given
+        Member member = new Member("오형석", "123@naver.com", "1234");
+
+        //when
+        memberService.join(member);
+        LoginForm loginForm = new LoginForm("123@naver.com", "123");
+
+        //then
+        Exception e = assertThrows(Exception.class,
+                () -> memberService.login(loginForm));
+        assertThat(e.getMessage()).isEqualTo(WRONG_PASSWORD.message);
     }
 }

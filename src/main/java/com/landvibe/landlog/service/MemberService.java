@@ -1,11 +1,13 @@
 package com.landvibe.landlog.service;
 
+import com.landvibe.landlog.dto.LoginForm;
 import com.landvibe.landlog.domain.Member;
 import com.landvibe.landlog.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+
+import static com.landvibe.landlog.ErrorMessage.*;
 
 @Service
 public class MemberService {
@@ -24,7 +26,7 @@ public class MemberService {
     private void validateDuplicateMember(Member member) {
         memberRepository.findByName(member.getName())
                 .ifPresent(m -> {
-                    throw new IllegalStateException("이미 존재하는 회원입니다.");
+                    throw new IllegalStateException(ALREADY_EXIST.message);
                 });
     }
 
@@ -32,7 +34,18 @@ public class MemberService {
         return memberRepository.findAll();
     }
 
-    public Optional<Member> findOne(Long memberId) {
-        return memberRepository.findById(memberId);
+    public Member findById(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException(NO_USER.message));
+        return member;
+    }
+
+    public Long login(LoginForm loginForm) {
+        Member member = memberRepository.findByEmail(loginForm.getEmail())
+                .orElseThrow(() -> new IllegalArgumentException(NO_USER.message));
+        if (!member.getPassword().equals(loginForm.getPassword())) {
+            throw new IllegalArgumentException(WRONG_PASSWORD.message);
+        }
+        return member.getId();
     }
 }
