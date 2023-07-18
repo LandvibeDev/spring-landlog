@@ -5,11 +5,10 @@ import com.landvibe.landlog.service.MemberService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Optional;
-
+@RequestMapping("/blogs")
 @Controller
 public class BlogController {
 
@@ -19,8 +18,8 @@ public class BlogController {
         this.memberService = memberService;
     }
 
-    @GetMapping("/blogs")
-    public String blog(@RequestParam(name = "creatorId") Long creatorId, Model model) {
+    @GetMapping()
+    public String blog(@RequestParam Long creatorId, Model model) {
         Member member = memberService.findById(creatorId);
         model.addAttribute("name", member.getName());
         return "blog/blogList";
