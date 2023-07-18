@@ -55,7 +55,7 @@ class MemberServiceTest {
     }
 
     @Test
-    public void 없는_이메일_예외() throws Exception {
+    public void 없는_이메일_예외() {
         //Given
         Member member = new Member("오형석", "1234", "123@naver.com");
 
@@ -70,7 +70,7 @@ class MemberServiceTest {
     }
 
     @Test
-    public void 로그인_성공() throws Exception {
+    public void 로그인_성공() {
         //Given
         Member member = new Member("오형석", "123@naver.com", "1234");
 
@@ -84,7 +84,7 @@ class MemberServiceTest {
     }
 
     @Test
-    public void 틀린_비밀번호() throws Exception {
+    public void 틀린_비밀번호() {
         //Given
         Member member = new Member("오형석", "123@naver.com", "1234");
 
