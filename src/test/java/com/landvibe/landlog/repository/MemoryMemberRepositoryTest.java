@@ -1,9 +1,9 @@
 package com.landvibe.landlog.repository;
 
-import com.landvibe.landlog.controller.MemberForm;
 import com.landvibe.landlog.domain.Member;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -13,9 +13,22 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class MemoryMemberRepositoryTest {
 
-    MemoryMemberRepository repository = new MemoryMemberRepository();
-    MemberForm memberForm1 = new MemberForm("spring1","spring1@spring.com","1234");
-    MemberForm memberForm2 = new MemberForm("spring2","spring2@spring.com","1234");
+    MemoryMemberRepository repository;
+
+    //member1
+    String name1 = "spring1";
+    String email1 = "spring1@spring.com";
+    String password1 = "1234";
+
+    //member2
+    String name2 = "spring2";
+    String email2 = "spring2@spring.com";
+    String password2 = "1234";
+
+    @BeforeEach
+    public void beforeEach() {
+        repository = new MemoryMemberRepository();
+    }
 
     @AfterEach
     public void afterEach() {
@@ -25,7 +38,7 @@ class MemoryMemberRepositoryTest {
     @Test
     void save() {
         //given
-        Member member = new Member(memberForm1);
+        Member member = new Member(name1, email1, password1);
 
         //when
         repository.save(member);
@@ -38,9 +51,9 @@ class MemoryMemberRepositoryTest {
     @Test
     public void findByName() {
         //given
-        Member member1 = new Member(memberForm1);
+        Member member1 = new Member(name1, email1, password1);
         repository.save(member1);
-        Member member2 = new Member(memberForm2);
+        Member member2 = new Member(name2, email2, password2);
         repository.save(member2);
 
         //when
@@ -53,9 +66,9 @@ class MemoryMemberRepositoryTest {
     @Test
     public void findByEmail() {
         //given
-        Member member1 = new Member(memberForm1);
+        Member member1 = new Member(name1, email1, password1);
         repository.save(member1);
-        Member member2 = new Member(memberForm2);
+        Member member2 = new Member(name2, email2, password2);
         repository.save(member2);
 
         //when
@@ -66,13 +79,12 @@ class MemoryMemberRepositoryTest {
     }
 
 
-
     @Test
     public void findAll() {
         //given
-        Member member1 = new Member(memberForm1);
+        Member member1 = new Member(name1, email1, password1);
         repository.save(member1);
-        Member member2 = new Member(memberForm2);
+        Member member2 = new Member(name2, email2, password2);
         repository.save(member2);
 
         //when
@@ -83,9 +95,9 @@ class MemoryMemberRepositoryTest {
     }
 
     @Test
-    public void findById(){
+    public void findById() {
         //given
-        Member member1 = new Member(memberForm1);
+        Member member1 = new Member(name1, email1, password1);
         repository.save(member1);
 
         //when
