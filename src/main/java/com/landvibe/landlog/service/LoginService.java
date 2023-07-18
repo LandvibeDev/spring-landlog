@@ -13,27 +13,26 @@ public class LoginService {
 
     private final MemberRepository memberRepository;
 
-    @Autowired // 생략 가능
     public LoginService(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
     }
 
     public Long login(LoginForm loginForm) throws IllegalArgumentException {
-        validateLogin(loginForm);
-        return memberRepository.findByEmail(loginForm.getEmail()).get().getId();
+        Optional<Member> member = memberRepository.findByEmail(loginForm.getEmail());
+        Member validMember = validateLogin(member, loginForm);
+
+        return validMember.getId();
     }
 
-    private void validateLogin(LoginForm loginForm) {
-        Optional<Member> member = memberRepository.findByEmail(loginForm.getEmail());
-
-        if (member.isEmpty()) {
+    private Member validateLogin(Optional<Member> member, LoginForm loginForm) {
+        Member validMember = member.orElseThrow(() -> {
             throw new IllegalArgumentException("존재하지 않는 이메일 입니다.");
+        });
+
+        if (!validMember.getPassword().equals(loginForm.getPassword())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
 
-        member.ifPresent(m -> {
-            if (!m.getPassword().equals(loginForm.getPassword())) {
-                throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
-            }
-        });
+        return validMember;
     }
 }
