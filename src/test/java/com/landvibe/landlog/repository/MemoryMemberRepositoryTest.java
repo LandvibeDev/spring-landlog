@@ -49,6 +49,20 @@ class MemoryMemberRepositoryTest {
     }
 
     @Test
+    public void findByEmail() {
+        //given
+        Member member = new Member();
+        member.setEmail("123@naver.com");
+        repository.save(member);
+
+        //when
+        Member result = repository.findByEmail("123@naver.com").get();
+
+        //then
+        assertThat(result).isEqualTo(member);
+    }
+
+    @Test
     public void findAll() {
         //given
         Member member1 = new Member();
