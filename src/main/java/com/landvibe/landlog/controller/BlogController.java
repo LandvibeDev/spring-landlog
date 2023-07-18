@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/blogs")
@@ -20,15 +19,16 @@ public class BlogController {
         this.memberService = memberService;
     }
 
-    @GetMapping("")
+    @GetMapping()
     public String blogForm(@RequestParam("creatorId") Long id, Model model) {
-        Member member;
+
         try {
-            member = memberService.findOne(id);
+            Member member = memberService.findOne(id);
             model.addAttribute("name", member.getName());
+            return "/blogs/blogList";
         } catch (IllegalStateException e) {
             return "redirect:/";
         }
-        return "/blogs/blogList";
+
     }
 }

@@ -40,9 +40,9 @@ public class MemoryMemberRepository implements MemberRepository {
     }
 
     @Override
-    public Optional<Member> findByEmail(String email) {
+    public Optional<Member> findByEmailAndPassword(String email, String password) {
         return store.values().stream()
-                .filter(member -> member.getEmail().equals(email))
+                .filter(member -> member.getEmail().equals(email) && member.getPassword().equals(password))
                 .findAny();
     }
 }

@@ -12,10 +12,10 @@ public class Member {
     public Member() {
     }
 
-    public Member(MemberForm memberForm) {
-        this.name = memberForm.getName();
-        this.email = memberForm.getEmail();
-        this.password = memberForm.getPassword();
+    public Member(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
     }
 
     public Long getId() {
