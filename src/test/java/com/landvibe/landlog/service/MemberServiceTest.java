@@ -1,7 +1,6 @@
 package com.landvibe.landlog.service;
 
-import com.landvibe.landlog.ErrorMessage;
-import com.landvibe.landlog.controller.LoginForm;
+import com.landvibe.landlog.dto.LoginForm;
 import com.landvibe.landlog.domain.Member;
 import com.landvibe.landlog.repository.MemoryMemberRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -80,8 +79,8 @@ class MemberServiceTest {
         LoginForm loginForm = new LoginForm("123@naver.com", "1234");
 
         //then
-        Member result = memberService.login(loginForm);
-        assertThat(result).isEqualTo(member);
+        Long memberId = memberService.login(loginForm);
+        assertThat(memberId).isEqualTo(member.getId());
     }
 
     @Test
