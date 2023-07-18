@@ -14,9 +14,9 @@ class MemoryMemberRepositoryTest {
 
     MemoryMemberRepository repository = new MemoryMemberRepository();
 
-    String name="name";
-    String email="email";
-    String password="password";
+    String name = "name";
+    String email = "email";
+    String password = "password";
 
     @AfterEach
     public void afterEach() {
@@ -72,14 +72,14 @@ class MemoryMemberRepositoryTest {
     }
 
     @Test
-    public void findByEmailTest(){
+    public void findByEmailTest() {
 
-        Member member=new Member();
+        Member member = new Member();
         member.setEmail(email);
         member.setPassword(password);
         member.setName(name);
         repository.save(member);
-        Optional<Member> optionalMember = repository.findByEmail(email);
-        Assertions.assertEquals(member,optionalMember.get());
+        Optional<Member> optionalMember = repository.findByEmailAndPassword(email, password);
+        Assertions.assertEquals(member, optionalMember.get());
     }
 }
