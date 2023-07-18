@@ -20,7 +20,7 @@ public class BlogController {
     }
 
     @GetMapping("/blogs")
-    public String blog(@RequestParam(name = "creatorId") Long creatorId, Model model) throws Exception {
+    public String blog(@RequestParam(name = "creatorId") Long creatorId, Model model) {
         Member member = memberService.findById(creatorId);
         model.addAttribute("name", member.getName());
         return "blog/blogList";

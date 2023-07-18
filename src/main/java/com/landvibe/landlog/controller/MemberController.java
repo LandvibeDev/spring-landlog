@@ -46,7 +46,7 @@ public class MemberController {
     }
 
     @PostMapping(value = "/members/login")
-    public String login(LoginForm loginForm, RedirectAttributes redirectAttributes) throws Exception {
+    public String login(LoginForm loginForm, RedirectAttributes redirectAttributes) {
         try {
             Member member = memberService.login(loginForm);
             redirectAttributes.addAttribute("creatorId", member.getId());
