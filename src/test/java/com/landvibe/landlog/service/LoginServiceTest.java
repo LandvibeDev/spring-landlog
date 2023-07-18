@@ -63,7 +63,7 @@ class LoginServiceTest {
 
         //when & then
         IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> loginService.login(errorLoginForm));
-        Assertions.assertThat(e.getMessage()).isEqualTo("존재하지 않는 이메일 입니다.");
+        Assertions.assertThat(e.getMessage()).isEqualTo("존재하지 않는 이메일입니다.");
     }
 
     @Test
