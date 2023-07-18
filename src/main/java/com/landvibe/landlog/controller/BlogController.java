@@ -21,6 +21,11 @@ public class BlogController {
     @GetMapping("/blogs")
     public String blogForm(@RequestParam("creatorId") Long creatorId, Model model) {
         Optional<Member> member = memberService.findOne(creatorId);
+
+        if (member.isEmpty()) {
+            return "redirect:/";
+        }
+
         model.addAttribute("name", member.get().getName());
         return "blogs/blogList";
     }
