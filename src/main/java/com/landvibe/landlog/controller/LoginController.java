@@ -25,12 +25,12 @@ public class LoginController {
         Long memberId;
         try {
             memberId = loginService.login(loginForm);
+            redirectAttributes.addAttribute("creatorId", memberId);
+            return "redirect:/blogs";
+
         } catch (IllegalArgumentException e) {
             return "redirect:/";
         }
-
-        redirectAttributes.addAttribute("creatorId", memberId);
-        return "redirect:/blogs";
     }
 
 }
