@@ -101,7 +101,7 @@ public class BlogController {
 
     private static String exceptionHandlingMethod(Long creatorId) {
         try {
-            exceptionHandlingMethod(creatorId);
+            if(creatorId == null) throw new IllegalArgumentException("creatorId가 전달되지 않았습니다.");
         } catch (Exception e) {
             log.info("Exception 발생 : " + e.getClass().getName() + ", " + e.getMessage());
             return "home";
