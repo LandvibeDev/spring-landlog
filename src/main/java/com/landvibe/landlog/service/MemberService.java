@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import static com.landvibe.landlog.ErrorMessage.*;
+
 @Service
 public class MemberService {
     private final MemberRepository memberRepository;
@@ -15,7 +17,7 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
 
-    public Long join(Member member) {
+    public Long join(Member member) throws IllegalStateException {
         validateDuplicateMember(member); //중복 회원 검증
         memberRepository.save(member);
         return member.getId();
@@ -24,7 +26,7 @@ public class MemberService {
     private void validateDuplicateMember(Member member) {
         memberRepository.findByName(member.getName())
                 .ifPresent(m -> {
-                    throw new IllegalStateException("이미 존재하는 회원입니다.");
+                    throw new IllegalStateException(EXIST_MEMBER.message);
                 });
     }
 
@@ -36,7 +38,12 @@ public class MemberService {
         return memberRepository.findById(memberId);
     }
 
-    public Optional<Member> login(String email, String password) {
-        return memberRepository.findByEmailAndPassword(email, password);
+    public Long login(String email, String password) {
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(()->new IllegalArgumentException(WRONG_EMAIL.message));
+        if(!password.equals(member.getPassword())){
+            throw new IllegalArgumentException(WRONG_PASSWORD.message);
+        }
+        return member.getId();
     }
 }
