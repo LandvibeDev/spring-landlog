@@ -8,6 +8,8 @@ import java.util.List;
 
 import static com.landvibe.landlog.ErrorMessage.*;
 
+import static com.landvibe.landlog.ErrorMessage.*;
+
 @Service
 public class MemberService {
     private final MemberRepository memberRepository;
@@ -48,7 +50,12 @@ public class MemberService {
         return member.getId();
     }
 
-    public Optional<Member> login(String email, String password) {
-        return memberRepository.findByEmailAndPassword(email, password);
+    public Long login(String email, String password) {
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(()->new IllegalArgumentException(WRONG_EMAIL.message));
+        if(!password.equals(member.getPassword())){
+            throw new IllegalArgumentException(WRONG_PASSWORD.message);
+        }
+        return member.getId();
     }
 }
