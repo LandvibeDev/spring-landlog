@@ -30,9 +30,9 @@ class MemberServiceTest {
     }
 
     @Test
-    public void 회원가입() throws Exception {
+    public void 회원가입_성공() throws Exception {
         //Given
-        Member member = new Member("soohwan","hohoho@landvibe.com","1234");
+        Member member = new Member("soohwan","ksh@landvibe.com","1234");
         //When
         Long saveId = memberService.join(member);
         //Then
@@ -40,10 +40,35 @@ class MemberServiceTest {
         assertEquals(member.getName(), findMember.getName());
     }
     @Test
+    public void 이메일_형식_예외(){
+        Member member = new Member("yonghyeon","dragonhyeon","1234");
+        //when
+        Exception e = assertThrows(Exception.class,
+            () -> memberService.join(member));
+        assertThat(e.getMessage()).isEqualTo("이메일을 입력해주세요.");
+    }
+    @Test
+    public void 이름_입력안함(){
+        Member member = new Member("","spring@landvibe.com","1234");
+        //when
+        Exception e = assertThrows(Exception.class,
+            () -> memberService.join(member));
+        assertThat(e.getMessage()).isEqualTo("이름을 입력해주세요.");
+    }
+    @Test
+    public void 비밀번호_입력안함(){
+        Member member = new Member("승철","winFe@landvibe.com","");
+        //when
+        Exception e = assertThrows(Exception.class,
+            () -> memberService.join(member));
+        assertThat(e.getMessage()).isEqualTo("비밀번호를 입력해주세요.");
+    }
+
+    @Test
     public void 중복_회원_예외() throws Exception {
         //given
-        Member member1 = new Member("dongha","hohoho@landvibe.com","1234");
-        Member member2 = new Member("seungcheol","hohoho@landvibe.com","4567");
+        Member member1 = new Member("주민","hohoho@landvibe.com","1234");
+        Member member2 = new Member("동하","hohoho@landvibe.com","4567");
         //when
         memberService.join(member1);
         IllegalStateException e = assertThrows(IllegalStateException.class,
@@ -54,7 +79,7 @@ class MemberServiceTest {
     @Test
     public void 로그인_성공() {
         //given
-        Member member = new Member("Junyeong", "jyp@landvibe.com", "1234");
+        Member member = new Member("준영", "jyp@landvibe.com", "1234");
 
         //when
         memberService.join(member);
@@ -68,7 +93,7 @@ class MemberServiceTest {
     @Test
     public void 로그인_실패_잘못된이메일() {
         //given
-        Member member = new Member("Jaeseung", "jaewin@landvibe.com", "4567");
+        Member member = new Member("재승", "jaewin@landvibe.com", "4567");
 
         //when
         memberService.join(member);
@@ -81,9 +106,9 @@ class MemberServiceTest {
     }
 
     @Test
-    public void 로그인_성공_잘못된비밀번호(){
+    public void 로그인_실패_잘못된비밀번호(){
         //given
-        Member member = new Member("sewon", "sewon@landvibe.com", "3434");
+        Member member = new Member("세원", "sewon@landvibe.com", "3434");
 
         //when
         memberService.join(member);
