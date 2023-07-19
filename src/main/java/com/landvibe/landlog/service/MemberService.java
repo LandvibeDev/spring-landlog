@@ -23,7 +23,7 @@ public class MemberService {
 	}
 
 	private void validateDuplicateMember(Member member) {
-		memberRepository.findByName(member.getName())
+		memberRepository.findByEmail(member.getEmail())
 			.ifPresent(m -> {
 				throw new IllegalStateException("이미 존재하는 회원입니다.");
 			});
@@ -42,7 +42,7 @@ public class MemberService {
 
 	public Long logIn(LoginForm logInForm) {
 		Member member = memberRepository.findByEmail(logInForm.getEmail())
-			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
+			.orElseThrow(() -> new IllegalArgumentException("잘못된 이메일입니다."));
 		if (!member.getPassword().equals(logInForm.getPassword())) {
 			throw new IllegalArgumentException("잘못된 비밀번호입니다.");
 		}
