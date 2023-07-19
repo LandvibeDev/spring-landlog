@@ -34,7 +34,7 @@ public class MemberService {
         return memberRepository.findAll();
     }
 
-    public Member findOne(Long memberId) {
+    public Member findById(Long memberId) {
         Optional<Member> optionalMember = memberRepository.findById(memberId);
         return optionalMember.orElseThrow(() -> new IllegalStateException("아이디와 일치하는 회원을 찾을 수 없습니다."));
     }
