@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class LoginServiceTest {
 
     MemoryMemberRepository memberRepository;
+    MemberService memberService;
     LoginService loginService;
 
     // member, loginForm
@@ -30,7 +31,8 @@ class LoginServiceTest {
     @BeforeEach
     void beforeEach() {
         memberRepository = new MemoryMemberRepository();
-        loginService = new LoginService(memberRepository);
+        memberService = new MemberService(memberRepository);
+        loginService = new LoginService(memberService);
     }
 
     @AfterEach
@@ -40,7 +42,7 @@ class LoginServiceTest {
 
     @Test
     @DisplayName("로그인_정상")
-    void login() {
+    void login_whenNormalInput_success() {
         //given
         Member member = new Member(name, email, password);
         memberRepository.save(member);

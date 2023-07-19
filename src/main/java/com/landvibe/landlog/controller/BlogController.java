@@ -20,7 +20,7 @@ public class BlogController {
 
     @GetMapping("/blogs")
     public String blogForm(@RequestParam("creatorId") Long creatorId, Model model) {
-        Optional<Member> member = memberService.findOne(creatorId);
+        Optional<Member> member = memberService.findOneById(creatorId);
 
         if (member.isEmpty()) {
             return "redirect:/";
