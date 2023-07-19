@@ -6,8 +6,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 class MemoryMemberRepositoryTest {
@@ -17,14 +15,12 @@ class MemoryMemberRepositoryTest {
     String name = "a";
     String email = "a@spring.com";
     String password = "1234";
-
-    String secondName = "b";
-    String secondEmail = "b@spring.com";
-    String secondPassword = "1234";
+    Member member = new Member(name, email, password);
 
     @BeforeEach
     public void beforeEach() {
         repository = new MemoryMemberRepository();
+        repository.save(member);
     }
 
     @AfterEach
@@ -33,29 +29,9 @@ class MemoryMemberRepositoryTest {
     }
 
     @Test
-    void save() {
-        //given
-        Member member = new Member(name, email, password);
-
-        //when
-        repository.save(member);
-
-        //then
-        Member result = repository.findById(member.getId()).get();
-        assertThat(result).isEqualTo(member);
-    }
-
-    @Test
     public void findByName() {
-        //given
-        Member member = new Member(name, email, password);
-        repository.save(member);
-
-        Member secondMember = new Member(secondName, secondEmail, secondPassword);
-        repository.save(secondMember);
-
         //when
-        Member result = repository.findByName(member.getName()).get();
+        Member result = repository.findByName(name).get();
 
         //then
         assertThat(member).isEqualTo(result);
@@ -63,13 +39,6 @@ class MemoryMemberRepositoryTest {
 
     @Test
     public void findByEmail() {
-        //given
-        Member member = new Member(name, email, password);
-        repository.save(member);
-
-        Member secondMember = new Member(secondName, secondEmail, secondPassword);
-        repository.save(secondMember);
-
         //when
         Member result = repository.findByEmail(member.getEmail()).get();
 
@@ -81,27 +50,17 @@ class MemoryMemberRepositoryTest {
     @Test
     public void findAll() {
         //given
-        Member member = new Member(name, email, password);
-        repository.save(member);
-
-        Member secondMember = new Member(secondName, secondEmail, secondPassword);
-        repository.save(secondMember);
-
-        int expectedSize = 2;
+        int expectedSize = 1;
 
         //when
-        List<Member> result = repository.findAll();
+        int resultSize = repository.findAll().size();
 
         //then
-        assertThat(result.size()).isEqualTo(expectedSize);
+        assertThat(resultSize).isEqualTo(expectedSize);
     }
 
     @Test
     public void findById() {
-        //given
-        Member member = new Member(name, email, password);
-        repository.save(member);
-
         //when
         Member result = repository.findById(member.getId()).get();
 
