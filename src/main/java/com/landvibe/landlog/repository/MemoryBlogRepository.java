@@ -50,4 +50,9 @@ public class MemoryBlogRepository implements BlogRespository {
         return Optional.ofNullable(store.get(blogId));
     }
 
+    @Override
+    public void clear() {
+        store.clear();
+    }
+
 }

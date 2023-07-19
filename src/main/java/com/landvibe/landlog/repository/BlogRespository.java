@@ -17,4 +17,6 @@ public interface BlogRespository {
     public List<Blog> findAllByMemberId(Long memberId);
 
     public Optional<Blog> findByBlogId(Long blogId);
+
+    void clear();
 }

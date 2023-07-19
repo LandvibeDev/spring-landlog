@@ -11,7 +11,20 @@ import java.util.List;
 @Service
 public class BlogService {
 
+
     private final BlogRespository blogRespository;
+
+    public void validateCreatorId(Long creatorId) throws Exception {
+        if (creatorId == null) {
+            throw new Exception("creatorId가 존재하지 않습니다.");
+        }
+    }
+
+    public void validateCreatorIdAndBlogId(Long creatorId, Long blogId) throws Exception {
+        if (creatorId == null || blogId == null) {
+            throw new Exception("creatorId나 blogId가 존재하지 않습니다.");
+        }
+    }
 
     public BlogService(BlogRespository blogRespository) {
         this.blogRespository = blogRespository;
