@@ -1,6 +1,8 @@
 package com.landvibe.landlog.service;
 
 import com.landvibe.landlog.domain.Member;
+import com.landvibe.landlog.exception.DuplicatedEmailException;
+import com.landvibe.landlog.exception.DuplicatedNameException;
 import com.landvibe.landlog.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +17,7 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
 
-    public Long join(Member member) {
+    public Long join(Member member) throws RuntimeException {
         validateDuplicateMember(member); //중복 회원 검증
         memberRepository.save(member);
         return member.getId();
@@ -24,12 +26,12 @@ public class MemberService {
     private void validateDuplicateMember(Member member) {
         memberRepository.findByName(member.getName())
                 .ifPresent(m -> {
-                    throw new IllegalStateException("이미 존재하는 이름입니다."); // 에러 클래스 직접 만들어보기 ?
+                    throw new DuplicatedNameException("이미 존재하는 이름입니다.");
                 });
 
         memberRepository.findByEmail(member.getEmail())
                 .ifPresent(m -> {
-                    throw new IllegalStateException("이미 존재하는 이메일입니다."); // 에러 클래스 직접 만들어보기 ?
+                    throw new DuplicatedEmailException("이미 존재하는 이메일입니다.");
                 });
     }
 

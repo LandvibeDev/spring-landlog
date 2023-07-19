@@ -1,6 +1,8 @@
 package com.landvibe.landlog.service;
 
 import com.landvibe.landlog.domain.Member;
+import com.landvibe.landlog.exception.DuplicatedEmailException;
+import com.landvibe.landlog.exception.DuplicatedNameException;
 import com.landvibe.landlog.repository.MemoryMemberRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -58,7 +60,7 @@ class MemberServiceTest {
 
         //When
         memberService.join(member);
-        IllegalStateException e = assertThrows(IllegalStateException.class,
+        DuplicatedNameException e = assertThrows(DuplicatedNameException.class,
                 () -> memberService.join(sameNameMember));//예외가 발생해야 한다.
         assertThat(e.getMessage()).isEqualTo("이미 존재하는 이름입니다.");
     }
@@ -71,7 +73,7 @@ class MemberServiceTest {
 
         //When
         memberService.join(member);
-        IllegalStateException e = assertThrows(IllegalStateException.class,
+        DuplicatedEmailException e = assertThrows(DuplicatedEmailException.class,
                 () -> memberService.join(sameEmailMember));//예외가 발생해야 한다.
         assertThat(e.getMessage()).isEqualTo("이미 존재하는 이메일입니다.");
     }

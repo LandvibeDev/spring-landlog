@@ -28,7 +28,7 @@ public class LoginController {
             redirectAttributes.addAttribute("creatorId", memberId);
             return "redirect:/blogs";
 
-        } catch (IllegalArgumentException e) {
+        } catch (RuntimeException e) {
             return "redirect:/";
         }
     }

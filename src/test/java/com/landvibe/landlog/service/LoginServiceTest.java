@@ -2,6 +2,8 @@ package com.landvibe.landlog.service;
 
 import com.landvibe.landlog.controller.LoginForm;
 import com.landvibe.landlog.domain.Member;
+import com.landvibe.landlog.exception.InvalidEmailException;
+import com.landvibe.landlog.exception.PasswordMismatchException;
 import com.landvibe.landlog.repository.MemoryMemberRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
@@ -64,7 +66,7 @@ class LoginServiceTest {
 
 
         //when & then
-        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> loginService.login(errorLoginForm));
+        InvalidEmailException e = assertThrows(InvalidEmailException.class, () -> loginService.login(errorLoginForm));
         Assertions.assertThat(e.getMessage()).isEqualTo("존재하지 않는 이메일입니다.");
     }
 
@@ -77,7 +79,7 @@ class LoginServiceTest {
         LoginForm errorLoginForm = new LoginForm(email, errorPassword);
 
         //when & then
-        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> loginService.login(errorLoginForm));
+        PasswordMismatchException e = assertThrows(PasswordMismatchException.class, () -> loginService.login(errorLoginForm));
         Assertions.assertThat(e.getMessage()).isEqualTo("비밀번호가 일치하지 않습니다.");
     }
 }
