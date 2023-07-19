@@ -38,12 +38,12 @@ public class MemberController {
 		return "members/memberList";
 	}
 
-	@GetMapping(value = "/login")
+	@GetMapping(value = "/members/login")
 	public String createLogInForm() {
-		return "/loginForm";
+		return "/members/loginForm";
 	}
 
-	@PostMapping(value = "/login")
+	@PostMapping(value = "/members/login")
 	public String logIn(LoginForm logInForm, RedirectAttributes redirectAttributes) {
 		Long memberId;
 		try {
