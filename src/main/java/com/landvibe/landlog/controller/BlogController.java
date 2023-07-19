@@ -102,7 +102,7 @@ public class BlogController {
     private static String exceptionHandlingMethod(Long creatorId) {
         try {
             exceptionHandlingMethod(creatorId);
-        }catch(Exception e){
+        } catch (Exception e) {
             log.info("Exception 발생 : " + e.getClass().getName() + ", " + e.getMessage());
             return "home";
         }

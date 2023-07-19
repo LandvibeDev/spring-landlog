@@ -38,12 +38,14 @@ public class MemoryBlogRepository implements BlogRepository {
                 .filter(b -> blogId.equals(b.getId()) && creatorId.equals(b.getCreatorId()))
                 .findAny().orElseThrow(() -> new IllegalArgumentException("해당 블로그가 존재하지 않습니다."));
     }
+
     @Override
     public void deleteBlog(Long blogId, Long creatorId) {
         store.remove((store.values().stream()
                 .filter(b -> b.getId() == blogId && b.getCreatorId() == creatorId)
                 .findAny().orElseThrow(() -> new IllegalArgumentException("해당 블로그가 존재하지 않습니다.")).getId()));
     }
+
     public void clearStore() {
         store.clear();
     }

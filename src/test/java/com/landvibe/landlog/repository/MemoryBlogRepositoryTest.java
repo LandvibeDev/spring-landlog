@@ -80,7 +80,7 @@ class MemoryBlogRepositoryTest {
         blogRepository.save(blog2);
 
         //when
-        Blog result = blogRepository.findOneByBlogIdAndCreatorId(1L,1L);
+        Blog result = blogRepository.findOneByBlogIdAndCreatorId(1L, 1L);
 
         //then
         assertThat(result).isEqualTo(blog1);
@@ -89,8 +89,8 @@ class MemoryBlogRepositoryTest {
     @Test
     void deleteBlog() {
         //given
-        Blog blog1 = new Blog(1L,1L,"title1","contents1");
-        Blog blog2 = new Blog(1L,2L,"title2","contents2");
+        Blog blog1 = new Blog(1L, 1L, "title1", "contents1");
+        Blog blog2 = new Blog(1L, 2L, "title2", "contents2");
 
         blogRepository.save(blog1);
         blogRepository.save(blog2);
@@ -99,7 +99,7 @@ class MemoryBlogRepositoryTest {
         blogRepository.deleteBlog(blog1.getId(), blog1.getCreatorId());
 
         IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
-                () -> blogRepository.findOneByBlogIdAndCreatorId(1L,1L));//예외가 발생해야 한다.
+                () -> blogRepository.findOneByBlogIdAndCreatorId(1L, 1L));//예외가 발생해야 한다.
 
         //then
         assertThat(e.getMessage()).isEqualTo("해당 블로그가 존재하지 않습니다.");

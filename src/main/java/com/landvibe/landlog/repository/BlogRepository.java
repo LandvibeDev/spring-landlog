@@ -13,5 +13,6 @@ public interface BlogRepository {
     public List<Blog> findAllByCreatorId(Long id);
 
     public Blog findOneByBlogIdAndCreatorId(Long blogId, Long creatorId);
+
     public void deleteBlog(Long blogId, Long creatorId);
 }

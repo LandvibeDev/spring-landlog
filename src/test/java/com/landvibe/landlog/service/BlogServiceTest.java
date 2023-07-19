@@ -42,9 +42,9 @@ class BlogServiceTest {
     @DisplayName("블로그 리스트 찾기 테스트")
     void findBlogs_whenGivenCreatorId_ReturnArrays() {
         //given
-        Member member = new Member(1L,"aa","aa","aa");
-        Blog blog1 = new Blog(1L,1L,"title1","contents1");
-        Blog blog2 = new Blog(1L,2L,"title2","contents2");
+        Member member = new Member(1L, "aa", "aa", "aa");
+        Blog blog1 = new Blog(1L, 1L, "title1", "contents1");
+        Blog blog2 = new Blog(1L, 2L, "title2", "contents2");
         memberService.join(member);
 
         //when
@@ -56,24 +56,23 @@ class BlogServiceTest {
     }
 
 
-
     @Test
     @DisplayName("블로그 한개 찾기 테스트")
     void findOne_WhenGivenBLogIdAndCreatorId_ReturnBlog() {
         //given
-        Member member = new Member(1L,"aa","aa","aa");
-        Blog blog1 = new Blog(1L,1L,"title1","contents1");
-        Blog blog2 = new Blog(1L,2L,"title2","contents2");
+        Member member = new Member(1L, "aa", "aa", "aa");
+        Blog blog1 = new Blog(1L, 1L, "title1", "contents1");
+        Blog blog2 = new Blog(1L, 2L, "title2", "contents2");
         memberService.join(member);
 
         //when
         List<Blog> blogs = blogSetting(blog1, blog2);
 
         //then
-        assertThat(blogService.findOne(1L,1L)).isEqualTo(blog1);
-        assertThat(blogService.findOne(2L,1L)).isEqualTo(blog2);
+        assertThat(blogService.findOne(1L, 1L)).isEqualTo(blog1);
+        assertThat(blogService.findOne(2L, 1L)).isEqualTo(blog2);
 
-        assertThat(blogService.findOne(1L,1L)).isNotEqualTo(blog2);
+        assertThat(blogService.findOne(1L, 1L)).isNotEqualTo(blog2);
 
     }
 
@@ -81,16 +80,16 @@ class BlogServiceTest {
     @DisplayName("블로그1을 블로그2와 같이 업데이트")
     void updateBlog_WhenGivenBlogIdAndCreatorId() {
         //given
-        Member member = new Member(1L,"aa","aa","aa");
-        Blog blog1 = new Blog(1L,1L,"title1","contents1");
-        Blog blog2 = new Blog(1L,2L,"title2","contents2");
+        Member member = new Member(1L, "aa", "aa", "aa");
+        Blog blog1 = new Blog(1L, 1L, "title1", "contents1");
+        Blog blog2 = new Blog(1L, 2L, "title2", "contents2");
         memberService.join(member);
         List<Blog> blogs = blogSetting(blog1, blog2);
 
-        UpdateBlogForm updateBlogForm = new UpdateBlogForm(blog2.getTitle(),blog2.getContents());
+        UpdateBlogForm updateBlogForm = new UpdateBlogForm(blog2.getTitle(), blog2.getContents());
 
         //when
-        blogService.update(blog1.getId(), blog1.getCreatorId(),updateBlogForm);
+        blogService.update(blog1.getId(), blog1.getCreatorId(), updateBlogForm);
 
         //then
         assertThat(blog1.getTitle()).isEqualTo(blog2.getTitle());
@@ -102,8 +101,8 @@ class BlogServiceTest {
     @DisplayName("블로그 생성 테스트")
     void create_WhenGivenBlog_ReturnTrue() {
         //given
-        Member member = new Member(1L,"aa","aa","aa");
-        Blog blog1 = new Blog(1L,1L,"title1","contents1");
+        Member member = new Member(1L, "aa", "aa", "aa");
+        Blog blog1 = new Blog(1L, 1L, "title1", "contents1");
 
         //when
         Long saveId = blogService.create(blog1);
@@ -115,9 +114,9 @@ class BlogServiceTest {
     @Test
     void delete_WhenGivenBlogIdAndCreatorID_ThenReturnNull() {
         //given
-        Member member = new Member(1L,"aa","aa","aa");
-        Blog blog1 = new Blog(1L,1L,"title1","contents1");
-        Blog blog2 = new Blog(1L,2L,"title2","contents2");
+        Member member = new Member(1L, "aa", "aa", "aa");
+        Blog blog1 = new Blog(1L, 1L, "title1", "contents1");
+        Blog blog2 = new Blog(1L, 2L, "title2", "contents2");
         memberService.join(member);
         List<Blog> blogs = blogSetting(blog1, blog2);
 
@@ -125,7 +124,7 @@ class BlogServiceTest {
         blogService.delete(blog1.getId(), blog1.getCreatorId());
 
         IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
-                () -> blogRepository.findOneByBlogIdAndCreatorId(1L,1L));//예외가 발생해야 한다.
+                () -> blogRepository.findOneByBlogIdAndCreatorId(1L, 1L));//예외가 발생해야 한다.
 
         //then
         assertThat(e.getMessage()).isEqualTo("해당 블로그가 존재하지 않습니다.");
