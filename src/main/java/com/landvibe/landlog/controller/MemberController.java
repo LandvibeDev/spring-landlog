@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -24,8 +25,7 @@ public class MemberController {
 
     @PostMapping(value = "/members/new")
     public String create(MemberForm form) {
-        Member member = new Member();
-        member.setName(form.getName());
+        Member member = new Member(form.getName(), form.getEmail(), form.getPassword());
         memberService.join(member);
         return "redirect:/";
     }
@@ -35,5 +35,24 @@ public class MemberController {
         List<Member> members = memberService.findMembers();
         model.addAttribute("members", members);
         return "members/memberList";
+    }
+
+    @GetMapping(value = "/login")
+    public String createLogInForm() {
+        return "/loginForm";
+    }
+
+    @PostMapping(value = "/login")
+        public String logIn(LoginForm logInForm, RedirectAttributes redirectAttributes) {
+        Long memberId;
+        try {
+        memberId = memberService.logIn(logInForm);
+        redirectAttributes.addAttribute("creatorId", memberId);
+			return "redirect:/blogs";
+} catch (IllegalArgumentException e) {
+    return "redirect:/";
+    }
+
+
     }
 }

@@ -1,8 +1,0 @@
-package com.landvibe.landlog.controller;
-
-import org.springframework.stereotype.Controller;
-
-@Controller
-public class LoginController {
-
-}

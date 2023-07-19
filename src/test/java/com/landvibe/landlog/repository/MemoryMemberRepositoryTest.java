@@ -20,8 +20,7 @@ class MemoryMemberRepositoryTest {
     @Test
     void save() {
         //given
-        Member member = new Member();
-        member.setName("spring");
+        Member member = new Member("Soohwan","ksh@landvibe.com","1234");
 
         //when
         repository.save(member);
@@ -34,11 +33,9 @@ class MemoryMemberRepositoryTest {
     @Test
     public void findByName() {
         //given
-        Member member1 = new Member();
-        member1.setName("spring1");
+        Member member1 = new Member("Soohwan","ksh@landvibe.com","1234");
         repository.save(member1);
-        Member member2 = new Member();
-        member2.setName("spring2");
+        Member member2 = new Member("Dongha","dong@landvibe.com","5678");
         repository.save(member2);
 
         //when
@@ -51,11 +48,9 @@ class MemoryMemberRepositoryTest {
     @Test
     public void findAll() {
         //given
-        Member member1 = new Member();
-        member1.setName("spring1");
+        Member member1 = new Member("SeungCheol","tmdcheol@landvibe.com","1234");
         repository.save(member1);
-        Member member2 = new Member();
-        member2.setName("spring2");
+        Member member2 = new Member("Junyeong","jyp@landvibe.com","5678");
         repository.save(member2);
 
         //when
