@@ -22,7 +22,7 @@ class MemoryMemberRepositoryTest {
 	@Test
 	void save() {
 		//given
-		Member member = new Member("Soohwan", "ksh@landvibe.com", "1234");
+		Member member = new Member("수환", "ksh@landvibe.com", "1234");
 
 		//when
 		repository.save(member);
@@ -35,13 +35,13 @@ class MemoryMemberRepositoryTest {
 	@Test
 	public void findByName() {
 		//given
-		Member member1 = new Member("Soohwan", "ksh@landvibe.com", "1234");
+		Member member1 = new Member("수환", "ksh@landvibe.com", "1234");
 		repository.save(member1);
-		Member member2 = new Member("Dongha", "dong@landvibe.com", "5678");
+		Member member2 = new Member("동하", "dong@landvibe.com", "5678");
 		repository.save(member2);
 
 		//when
-		Member result = repository.findByName("Soohwan").get();
+		Member result = repository.findByName("수환").get();
 
 		//then
 		assertThat(result).isEqualTo(member1);
@@ -50,9 +50,9 @@ class MemoryMemberRepositoryTest {
 	@Test
 	public void findAll() {
 		//given
-		Member member1 = new Member("SeungCheol", "tmdcheol@landvibe.com", "1234");
+		Member member1 = new Member("승철", "tmdcheol@landvibe.com", "1234");
 		repository.save(member1);
-		Member member2 = new Member("Junyeong", "jyp@landvibe.com", "5678");
+		Member member2 = new Member("준영", "jyp@landvibe.com", "5678");
 		repository.save(member2);
 
 		//when
@@ -64,10 +64,10 @@ class MemoryMemberRepositoryTest {
 
 	@Test
 	void findByEmail() {
-		Member member1 = new Member("jaeseung", "jaewin@landvibe.com", "password");
+		Member member1 = new Member("재승", "jaewin@landvibe.com", "password");
 		repository.save(member1);
 
-		Member member2 = new Member("jumin", "zoomin@landvibe.com", "password");
+		Member member2 = new Member("주민", "zoomin@landvibe.com", "password");
 		repository.save(member2);
 
 		//when
@@ -80,7 +80,7 @@ class MemoryMemberRepositoryTest {
 	@Test
 	void findById() {
 		//given
-		Member member = new Member("seonwoo", "mentor@landvibe.com", "spring");
+		Member member = new Member("선우", "mentor@landvibe.com", "spring");
 		repository.save(member);
 
 		//when
