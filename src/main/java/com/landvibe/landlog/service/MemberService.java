@@ -34,14 +34,14 @@ public class MemberService {
         return memberRepository.findAll();
     }
 
-    public Optional<Member> findOne(Long memberId) {
+    public Optional<Member> findById(Long memberId) {
         return memberRepository.findById(memberId);
     }
 
     public Long login(String email, String password) {
         Member member = memberRepository.findByEmail(email)
-                .orElseThrow(()->new IllegalArgumentException(WRONG_EMAIL.message));
-        if(!password.equals(member.getPassword())){
+                .orElseThrow(() -> new IllegalArgumentException(WRONG_EMAIL.message));
+        if (!password.equals(member.getPassword())) {
             throw new IllegalArgumentException(WRONG_PASSWORD.message);
         }
         return member.getId();
