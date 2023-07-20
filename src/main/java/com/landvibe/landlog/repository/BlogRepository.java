@@ -1,9 +1,7 @@
 package com.landvibe.landlog.repository;
 
-import com.landvibe.landlog.controller.UpdateBlogForm;
 import com.landvibe.landlog.domain.Blog;
 import java.util.List;
-import java.util.Optional;
 
 public interface BlogRepository {
     public Blog save(Blog blog);
