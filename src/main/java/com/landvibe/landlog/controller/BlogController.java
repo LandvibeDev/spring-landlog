@@ -12,6 +12,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.List;
 import java.util.Optional;
 
+import static com.landvibe.landlog.exceptions.ExceptionHandling.exceptionHandlingMethod;
+
 @Slf4j
 @Controller
 public class BlogController {
@@ -99,13 +101,5 @@ public class BlogController {
         return "redirect:/blogs";
     }
 
-    private static String exceptionHandlingMethod(Long creatorId) {
-        try {
-            if(creatorId == null) throw new IllegalArgumentException("creatorId가 전달되지 않았습니다.");
-        } catch (Exception e) {
-            log.info("Exception 발생 : " + e.getClass().getName() + ", " + e.getMessage());
-            return "home";
-        }
-        return null;
-    }
+
 }
