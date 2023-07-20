@@ -26,8 +26,16 @@ public class MemberController {
     public String create(MemberForm form) {
         Member member = new Member();
         member.setName(form.getName());
-        memberService.join(member);
-        return "redirect:/";
+        member.setEmain(form.getEmail());
+        member.setPassword(form.getPassword());
+
+        try {
+            memberService.join(member);
+        } catch (IllegalArgumentException e) {
+            e.getMessage();
+        } finally {
+            return "redirect:/";
+        }
     }
 
     @GetMapping(value = "/members")
@@ -38,5 +46,14 @@ public class MemberController {
     }
 
     @GetMapping(value = "/members/login")
-    public String createLoginForm(){ return "members/loginForm"; }
+    public String createLoginForm() {
+        return "members/loginForm";
+    }
+
+    @PostMapping(value = "/members/login")
+    public String login() {
+        //성공시 블로그 페이지
+        //실패시 홈 페이지
+        return "redirect:/";
+    }
 }

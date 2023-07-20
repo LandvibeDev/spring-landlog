@@ -1,7 +1,9 @@
 package com.landvibe.landlog.service;
 
+import com.landvibe.landlog.controller.LoginForm;
 import com.landvibe.landlog.domain.Member;
 import com.landvibe.landlog.repository.MemberRepository;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,6 +28,24 @@ public class MemberService {
                 .ifPresent(m -> {
                     throw new IllegalStateException("이미 존재하는 회원입니다.");
                 });
+
+        memberRepository.findByEmail(member.getEmail())
+                .ifPresent(m -> {
+                    throw new IllegalStateException("이미 존재하는 이메일입니다.");
+                });
+    }
+
+    public Long logIn(LoginForm logInForm) {
+        Member member = memberRepository.findByEmail(logInForm.getEmail())
+                .orElseThrow(() -> new IllegalArgumentException("잘못된 이메일입니다."));
+        validCorrectPassword(logInForm, member);
+        return member.getId();
+    }
+
+    private void validCorrectPassword(LoginForm loginForm, Member member){
+        if (!member.getPassword().equals(loginForm.getPassword())) {
+            throw new IllegalArgumentException("잘못된 비밀번호입니다.");
+        }
     }
 
     public List<Member> findMembers() {
