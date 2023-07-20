@@ -17,7 +17,7 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
 
-    public Long join(Member member) {
+    public Long join(Member member) throws RuntimeException{
         validateDuplicateMember(member); //중복 회원 검증
         memberRepository.save(member);
         return member.getId();
@@ -35,7 +35,7 @@ public class MemberService {
                 });
     }
 
-    public Long logIn(LoginForm logInForm) {
+    public Long logIn(LoginForm logInForm) throws RuntimeException{
         Member member = memberRepository.findByEmail(logInForm.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("잘못된 이메일입니다."));
         validCorrectPassword(logInForm, member);
@@ -52,7 +52,4 @@ public class MemberService {
         return memberRepository.findAll();
     }
 
-    public Optional<Member> findOne(Long memberId) {
-        return memberRepository.findById(memberId);
-    }
 }
