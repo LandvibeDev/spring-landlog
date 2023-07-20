@@ -7,8 +7,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.Optional;
-
 import static com.landvibe.landlog.ErrorMessage.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -41,6 +39,7 @@ class MemberServiceTest {
         Member findMember = memberRepository.findById(saveId).get();
         assertEquals(member.getName(), findMember.getName());
     }
+
     @Test
     public void 중복_회원_예외() throws Exception {
         //Given
@@ -56,14 +55,14 @@ class MemberServiceTest {
     }
 
     private Member createMember() {
-        Member member = new Member("name","email","password");
+        Member member = new Member("name", "email", "password");
         memberService.join(member);
         return member;
     }
 
     @Test
     @DisplayName("[로그인 성공] 이메일, 패스워드 일치")
-    public void login_success(){
+    public void login_success() {
         //Given
         Member member = createMember();
 
@@ -76,12 +75,12 @@ class MemberServiceTest {
 
     @Test
     @DisplayName("[로그인 실패] 이메일 불일치")
-    public void login_fail_wrong_email(){
+    public void login_fail_wrong_email() {
         //
         Member member = createMember();
 
         //
-        Exception exception = assertThrows(Exception.class,() -> {
+        Exception exception = assertThrows(Exception.class, () -> {
             memberService.login("wrong_email", "password");
         });
         assertThat(exception.getMessage()).isEqualTo(WRONG_EMAIL.message);
@@ -89,12 +88,12 @@ class MemberServiceTest {
 
     @Test
     @DisplayName("[로그인 실패] 패스워드 불일치")
-    public void login_fail_wrong_password(){
+    public void login_fail_wrong_password() {
         //
         Member member = createMember();
 
         //
-        Exception exception = assertThrows(Exception.class,() -> {
+        Exception exception = assertThrows(Exception.class, () -> {
             memberService.login("email", "wrong_password");
         });
         assertThat(exception.getMessage()).isEqualTo(WRONG_PASSWORD.message);
