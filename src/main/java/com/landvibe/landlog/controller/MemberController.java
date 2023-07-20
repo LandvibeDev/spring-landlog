@@ -27,11 +27,11 @@ public class MemberController {
 
     @PostMapping(value = "/new")
     public String create(MemberJoinForm form) {
-        Member member = new Member(form.getName(),form.getEmail(),form.getPassword());
-        try{
+        Member member = new Member(form.getName(), form.getEmail(), form.getPassword());
+        try {
             Long join = memberService.join(member);
             return "redirect:/";
-        }catch (IllegalStateException e){
+        } catch (IllegalStateException e) {
             System.out.println(e.getMessage());
             return "redirect:/";
         }
@@ -50,11 +50,11 @@ public class MemberController {
     }
 
     @PostMapping(value = "/login")
-    public String login(MemberLoginForm memberLoginForm, RedirectAttributes redirect){
-        try{
+    public String login(MemberLoginForm memberLoginForm, RedirectAttributes redirect) {
+        try {
             Long loginId = memberService.login(memberLoginForm.getEmail(), memberLoginForm.getPassword());
             redirect.addAttribute("creatorId", loginId);
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
             return "redirect:/";
         }
