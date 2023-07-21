@@ -6,8 +6,6 @@ import com.landvibe.landlog.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
-
 import static com.landvibe.landlog.ErrorMessage.*;
 
 @Service
@@ -37,25 +35,31 @@ public class BlogService {
                 new IllegalArgumentException(NO_MATCH_BLOG_WITH_BLOG_ID.message));
     }
 
-    public Long write(Blog blog) {
+    public Long write(Blog blog) throws IllegalArgumentException {
+        validateCreatorId(blog.getCreatorId());
         blogRepository.save(blog);
         return blog.getId();
     }
 
-    public Long update(Blog blog) {
+    public Long update(Blog blog) throws IllegalArgumentException {
+        validateCreatorId(blog.getCreatorId());
         blogRepository.update(blog);
         return blog.getId();
     }
 
-    public List<Blog> findBlogsByCreatorId(Long creatorId) {
+    public List<Blog> findBlogsByCreatorId(Long creatorId) throws IllegalArgumentException {
+        validateCreatorId(creatorId);
         return blogRepository.findBlogsByCreatorId(creatorId);
     }
 
-    public Optional<Blog> findById(Long blogId) {
-        return blogRepository.findById(blogId);
+    public Blog findById(Long blogId) {
+        Blog blog = blogRepository.findById(blogId)
+                .orElseThrow(() -> new IllegalArgumentException(NO_MATCH_BLOG_WITH_BLOG_ID.message));
+        return blog;
     }
 
-    public Long deleteById(Long blogId) {
+    public Long deleteById(Long blogId) throws IllegalArgumentException {
+        validateCreatorId(findById(blogId).getCreatorId());
         Long id = blogRepository.deleteById(blogId);
         return id;
     }
