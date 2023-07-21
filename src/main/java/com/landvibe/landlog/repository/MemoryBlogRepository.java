@@ -12,26 +12,38 @@ import java.util.Optional;
 public class MemoryBlogRepository implements BlogRepository {
 
     private static Map<Long, Blog> store = new HashMap<>();
-    private static long blogSequence = 0L;
+    private static long sequence = 0L;
 
     @Override
     public void save(Blog blog) {
-        blog.setId(++blogSequence);
+        blog.setId(++sequence);
         store.put(blog.getId(), blog);
     }
 
     @Override
-    public Optional<Blog> findById(Long blogId) {
+    public Optional<Blog> findByBlogId(Long blogId) {
         return Optional.ofNullable(store.get(blogId));
     }
 
     @Override
-    public void deleteById(Long blogId) {
+    public void delete(Long blogId) {
         store.remove(blogId);
     }
 
     @Override
-    public List<Blog> findBlogByCreatorId(Long creatorId) {
+    public void update(Blog blog) {
+        store.put(blog.getId(), blog);
+    }
+
+    @Override
+    public Optional<Blog> findByCreatorIdAndBlogId(Long creatorId, Long blogId) {
+        return store.values().stream()
+                .filter(blog -> blog.getCreatorId() == creatorId && blog.getId() == blogId)
+                .findAny();
+    }
+
+    @Override
+    public List<Blog> findByCreatorId(Long creatorId) {
         return store.values().stream()
                 .filter(blog -> blog.getCreatorId() == creatorId)
                 .toList();
