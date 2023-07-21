@@ -22,22 +22,25 @@ public class BlogService {
     }
 
     public List<Blog> findBlogsByCreatorId(Long creatorId) {
-        return blogRepository.findBlogByCreatorId(creatorId);
+        return blogRepository.findByCreatorId(creatorId);
     }
 
     public Blog findById(Long blogId) {
-        return blogRepository.findById(blogId)
+        return blogRepository.findByBlogId(blogId)
                 .orElseThrow(() -> new IllegalArgumentException(NO_BLOG.message));
     }
 
-    public void deleteById(Long blogId) {
-        blogRepository.deleteById(blogId);
+    public void deleteBlog(Long blogId, Long creatorId) {
+        blogRepository.findByCreatorIdAndBlogId(blogId, creatorId)
+                .orElseThrow(() -> new IllegalArgumentException(NO_BLOG.message));
+        blogRepository.delete(blogId);
     }
 
-    public void updateBlog(BlogUpdateForm blogUpdateForm) {
-        Blog blog = blogRepository.findById(blogUpdateForm.getBlogId())
+    public void updateBlog(BlogUpdateForm blogUpdateForm, Long creatorId) {
+        Blog blog = blogRepository.findByCreatorIdAndBlogId(blogUpdateForm.getId(), creatorId)
                 .orElseThrow(() -> new IllegalArgumentException(NO_BLOG.message));
         blog.setTitle(blogUpdateForm.getTitle());
         blog.setContents(blogUpdateForm.getContents());
+        blogRepository.update(blog);
     }
 }
