@@ -1,6 +1,7 @@
 package com.landvibe.landlog.form;
 
 public class BlogForm {
+    private Long id;
     private Long creatorId;
     private String title;
     private String contents;
@@ -27,5 +28,13 @@ public class BlogForm {
 
     public void setContents(String contents) {
         this.contents = contents;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
