@@ -36,13 +36,6 @@ public class MemoryBlogRepository implements BlogRepository {
     }
 
     @Override
-    public Optional<Blog> findByCreatorIdAndBlogId(Long creatorId, Long blogId) {
-        return store.values().stream()
-                .filter(blog -> blog.getCreatorId() == creatorId && blog.getId() == blogId)
-                .findAny();
-    }
-
-    @Override
     public List<Blog> findByCreatorId(Long creatorId) {
         return store.values().stream()
                 .filter(blog -> blog.getCreatorId() == creatorId)
