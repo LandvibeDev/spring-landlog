@@ -78,7 +78,7 @@ class MemoryMemberRepositoryTest {
 
     @Test
     @DisplayName("이메일과 비밀번호로 회원 조회 성공 테스트")
-    public void findByEmailAndPassword_success() {
+    public void findByEmailAndPassword_success(){
         //given
         Member member1 = createMember();
 
@@ -92,7 +92,7 @@ class MemoryMemberRepositoryTest {
 
     @Test
     @DisplayName("이메일과 비밀번호로 회원 조회 실패 테스트")
-    public void findByEmailAndPassword_fail() {
+    public void findByEmailAndPassword_fail(){
         //given
         Member member1 = createMember();
 

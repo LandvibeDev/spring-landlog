@@ -8,6 +8,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static com.landvibe.landlog.ErrorMessage.*;
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -97,5 +99,40 @@ class MemberServiceTest {
             memberService.login("email", "wrong_password");
         });
         assertThat(exception.getMessage()).isEqualTo(WRONG_PASSWORD.message);
+    }
+
+    private Member createMember() {
+        Member member1 = new Member();
+        member1.setName("name1");
+        member1.setEmail("email1");
+        member1.setPassword("password1");
+        memberService.join(member1);
+        return member1;
+    }
+
+    @Test
+    @DisplayName("로그인 성공 테스트")
+    public void login_success(){
+        //Given
+        Member member1 = createMember();
+
+        //When
+        Optional<Member> successResult = memberService.login("email1", "password1");
+
+        //Then
+        assertThat(successResult.get()).isEqualTo(member1);
+    }
+
+    @Test
+    @DisplayName("로그인 실패 테스트")
+    public void login_fail(){
+        //Given
+        Member member1 = createMember();
+
+        //When
+        Optional<Member> failedResult = memberService.login("email2", "password2");
+
+        //Then
+        assertThat(failedResult).isEmpty();
     }
 }

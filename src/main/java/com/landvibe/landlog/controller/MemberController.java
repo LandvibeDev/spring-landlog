@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/members")
@@ -35,7 +36,6 @@ public class MemberController {
             System.out.println(e.getMessage());
             return "redirect:/";
         }
-    }
 
     @GetMapping()
     public String list(Model model) {
@@ -58,6 +58,5 @@ public class MemberController {
             System.out.println(e.getMessage());
             return "redirect:/";
         }
-        return "redirect:/blogs";
     }
 }
