@@ -67,11 +67,11 @@ class MemberServiceTest {
 
     @Test
     public void 틀린비밀번호입력(){
-
-        Member member = new Member("양재승", "jaeseung@naver.com", "123");
+        String testEmail = "jaeseung@naver.com";
+        Member member = new Member("양재승", testEmail, "123");
 
         memberService.join(member);
-        LoginForm loginForm = new LoginForm("jaeseung@naver.com", "456");
+        LoginForm loginForm = new LoginForm(testEmail, "456");
 
         Exception e = assertThrows(Exception.class,
                 () -> memberService.logIn(loginForm));
