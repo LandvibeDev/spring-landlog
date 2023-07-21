@@ -5,7 +5,6 @@ import com.landvibe.landlog.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 import static com.landvibe.landlog.ErrorMessage.*;
 
@@ -34,8 +33,10 @@ public class MemberService {
         return memberRepository.findAll();
     }
 
-    public Optional<Member> findById(Long memberId) {
-        return memberRepository.findById(memberId);
+    public Member findById(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException(NO_MATCH_MEMBER_WITH_CREATOR_ID.message));
+        return member;
     }
 
     public Long login(String email, String password) {
