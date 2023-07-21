@@ -11,7 +11,7 @@ public class BlogUpdateForm {
         this.contents = contents;
     }
 
-    public Long getBlogId() {
+    public Long getId() {
         return id;
     }
 
@@ -21,17 +21,5 @@ public class BlogUpdateForm {
 
     public String getContents() {
         return contents;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setContents(String contents) {
-        this.contents = contents;
     }
 }
