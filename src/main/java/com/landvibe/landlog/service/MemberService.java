@@ -45,4 +45,8 @@ public class MemberService {
         Optional<Member> optionalMember = memberRepository.findByEmailAndPassword(email, password);
         return optionalMember.orElseThrow(() -> new IllegalStateException("이메일, 비밀번호가 일치하는 회원이 존재하지 않습니다"));
     }
+
+    public void clearRespository() {
+        memberRepository.clear();
+    }
 }

@@ -6,12 +6,11 @@ import com.landvibe.landlog.form.BlogCreateForm;
 import com.landvibe.landlog.form.BlogUpdateForm;
 import com.landvibe.landlog.service.BlogService;
 import com.landvibe.landlog.service.MemberService;
-import jakarta.annotation.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.*;
 
 
 @Controller
@@ -28,10 +27,9 @@ public class BlogController {
     }
 
 
-    @GetMapping()
-    public String blogForm(@RequestParam("creatorId") @Nullable Long creatorId, Model model) {
+    @GetMapping
+    public String blogForm(@RequestParam("creatorId") Long creatorId, Model model) {
         try {
-            blogService.validateCreatorId(creatorId);
             Member member = memberService.findById(creatorId);
             List<Blog> blogList = blogService.findAllBlogs(creatorId);
             model.addAttribute("name", member.getName());
@@ -46,9 +44,8 @@ public class BlogController {
     }
 
     @GetMapping("/new")
-    public String createBlogForm(@RequestParam("creatorId") @Nullable Long creatorId, Model model) {
+    public String createBlogForm(@RequestParam("creatorId") Long creatorId, Model model) {
         try {
-            blogService.validateCreatorId(creatorId);
             Member member = memberService.findById(creatorId);
             model.addAttribute("name", member.getName());
             model.addAttribute("creatorId", creatorId);
@@ -60,9 +57,8 @@ public class BlogController {
     }
 
     @PostMapping("/new")
-    public String createBlog(BlogCreateForm form, @RequestParam("creatorId") @Nullable Long creatorId) {
+    public String createBlog(BlogCreateForm form, @RequestParam("creatorId") Long creatorId) {
         try {
-            blogService.validateCreatorId(creatorId);
             String title = form.getTitle();
             String content = form.getContents();
             System.out.println(form.getContents());
@@ -76,9 +72,8 @@ public class BlogController {
     }
 
     @GetMapping("/update")
-    public String updateBlogForm(@RequestParam("blogId") Long blogId, @RequestParam("creatorId") @Nullable Long creatorId, Model model) {
+    public String updateBlogForm(@RequestParam("blogId") Long blogId, @RequestParam("creatorId") Long creatorId, Model model) {
         try {
-            blogService.validateCreatorIdAndBlogId(creatorId, blogId);
             Member member = memberService.findById(creatorId);
             Blog blog = blogService.findBlogById(blogId);
             model.addAttribute("name", member.getName());
@@ -91,10 +86,11 @@ public class BlogController {
         }
     }
 
-    @PostMapping("/update")
-    public String updateBlog(@RequestParam("creatorId") @Nullable Long creatorId, @RequestParam("id") @Nullable Long id, BlogUpdateForm form) {
+
+    @PatchMapping("/update")
+    public String updateBlog(@RequestParam("creatorId") Long creatorId, @RequestParam("id") Long id, @RequestParam("title") String title, @RequestParam("contents") String contents) {
         try {
-            blogService.validateCreatorIdAndBlogId(creatorId, id);
+            BlogUpdateForm form = new BlogUpdateForm(title, contents);
             blogService.update(id, form);
             return "redirect:/blogs?creatorId=" + creatorId;
         } catch (Exception e) {
@@ -103,10 +99,10 @@ public class BlogController {
         }
     }
 
-    @PostMapping("/delete")
-    public String deleteBlog(@RequestParam("blogId") @Nullable Long blogId, @RequestParam("creatorId") @Nullable Long creatorId) {
+
+    @DeleteMapping("/delete")
+    public String deleteBlog(@RequestParam("blogId") Long blogId, @RequestParam("creatorId") Long creatorId) {
         try {
-            blogService.validateCreatorId(creatorId);
             blogService.delete(blogId);
             return "redirect:/blogs?creatorId=" + creatorId;
         } catch (Exception e) {
@@ -115,5 +111,3 @@ public class BlogController {
         }
     }
 }
-
-

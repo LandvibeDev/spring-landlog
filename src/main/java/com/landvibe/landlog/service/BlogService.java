@@ -14,18 +14,6 @@ public class BlogService {
 
     private final BlogRespository blogRespository;
 
-    public void validateCreatorId(Long creatorId) throws Exception {
-        if (creatorId == null) {
-            throw new Exception("creatorId가 존재하지 않습니다.");
-        }
-    }
-
-    public void validateCreatorIdAndBlogId(Long creatorId, Long blogId) throws Exception {
-        if (creatorId == null || blogId == null) {
-            throw new Exception("creatorId나 blogId가 존재하지 않습니다.");
-        }
-    }
-
     public BlogService(BlogRespository blogRespository) {
         this.blogRespository = blogRespository;
     }
@@ -44,14 +32,14 @@ public class BlogService {
     }
 
     public Blog findBlogById(Long blogId) {
-        return blogRespository.findByBlogId(blogId).orElseThrow(() -> new IllegalStateException());
+        return blogRespository.findByBlogId(blogId);
     }
 
     public Long update(Long id, BlogUpdateForm form) {
         return blogRespository.update(id, form);
     }
 
-    public Blog delete(Long blogId) {
+    public Long delete(Long blogId) {
         return blogRespository.delete(blogId);
     }
 

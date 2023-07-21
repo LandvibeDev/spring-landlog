@@ -15,8 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class MemberServiceTest {
 
-    MemberService memberService;
-    MemoryMemberRepository memberRepository;
+    MemberService memberService = new MemberService(new MemoryMemberRepository());
 
     String name = "name";
     String password = "password";
@@ -27,29 +26,25 @@ class MemberServiceTest {
 
     @BeforeEach
     public void beforeEach() {
-        memberRepository = new MemoryMemberRepository();
-        memberService = new MemberService(memberRepository);
+        memberService.clearRespository();
     }
 
-    @AfterEach
-    public void afterEach() {
-        memberRepository.clearStore();
-    }
 
     @Test
-    public void 회원가입() throws Exception {
+    public void 회원가입() {
         //Given
         Member member = new Member();
         member.setName(name);
+
         //When
         Long saveId = memberService.join(member);
         //Then
-        Member findMember = memberRepository.findById(saveId).get();
+        Member findMember = memberService.findById(saveId);
         assertEquals(member.getName(), findMember.getName());
     }
 
     @Test
-    public void 중복_회원_예외() throws Exception {
+    public void 중복_회원_예외() {
         //Given
         Member member1 = new Member();
         member1.setName(name);
@@ -63,7 +58,7 @@ class MemberServiceTest {
     }
 
     @Test
-    public void 로그인_일치하는_회원_없음() throws Exception {
+    public void 로그인_일치하는_회원_없음() {
         LoginForm form = new LoginForm();
         form.setEmail(email);
         form.setPassword(password);

@@ -10,13 +10,13 @@ public interface BlogRespository {
 
     public Long save(Blog blog);
 
-    public Blog delete(Long id);
+    public Long delete(Long id);
 
     public Long update(Long id, BlogUpdateForm form);
 
     public List<Blog> findAllByMemberId(Long memberId);
 
-    public Optional<Blog> findByBlogId(Long blogId);
+    public Blog findByBlogId(Long blogId);
 
     void clear();
 }
