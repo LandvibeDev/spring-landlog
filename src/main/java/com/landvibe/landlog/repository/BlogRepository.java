@@ -16,8 +16,6 @@ public interface BlogRepository {
 
     Optional<Blog> findByBlogId(Long blogId);
 
-    Optional<Blog> findByCreatorIdAndBlogId(Long creatorId, Long blogId);
-
     List<Blog> findByCreatorId(Long creatorId);
 
 }
