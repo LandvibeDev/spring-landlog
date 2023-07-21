@@ -13,17 +13,16 @@ import java.util.Optional;
 
 @Controller
 public class BlogController {
-    MemoryMemberRepository memoryMemberRepository;
+    MemberService memberService;
 
-    public BlogController(MemoryMemberRepository memberRepository) {
-        this.memoryMemberRepository = memberRepository;
+    public BlogController(MemberService memberService) {
+        this.memberService = memberService;
     }
 
     @GetMapping("/blogs")
     public String blogList(@RequestParam Long creatorId, Model model) {
-        Member member = memoryMemberRepository.findById(creatorId).get();
+        Member member = memberService.findById(creatorId);
         model.addAttribute("name", member.getName());
         return "blogs/blogList";
     }
-
 }

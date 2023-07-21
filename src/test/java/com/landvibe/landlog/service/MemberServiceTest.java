@@ -70,10 +70,8 @@ class MemberServiceTest {
 
         Member member = new Member("양재승", "jaeseung@naver.com", "123");
 
-
         memberService.join(member);
         LoginForm loginForm = new LoginForm("jaeseung@naver.com", "456");
-
 
         Exception e = assertThrows(Exception.class,
                 () -> memberService.logIn(loginForm));

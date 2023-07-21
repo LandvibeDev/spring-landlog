@@ -17,6 +17,9 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
 
+    public Member findById(Long id){
+        return memberRepository.findById(id).get();
+    }
     public Long join(Member member) throws RuntimeException{
         validateDuplicateMember(member); //중복 회원 검증
         memberRepository.save(member);
