@@ -31,9 +31,10 @@ public class MemberController {
             memberService.join(member);
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
-        } finally {
-            return "redirect:/";
         }
+
+        return "redirect:/";
+
     }
 
     @GetMapping(value = "/members")
