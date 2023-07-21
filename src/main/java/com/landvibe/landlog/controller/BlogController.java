@@ -88,9 +88,8 @@ public class BlogController {
 
 
     @PatchMapping("/update")
-    public String updateBlog(@RequestParam("creatorId") Long creatorId, @RequestParam("id") Long id, @RequestParam("title") String title, @RequestParam("contents") String contents) {
+    public String updateBlog(@RequestParam("creatorId") Long creatorId, @RequestParam("id") Long id, BlogUpdateForm form) {
         try {
-            BlogUpdateForm form = new BlogUpdateForm(title, contents);
             blogService.update(id, form);
             return "redirect:/blogs?creatorId=" + creatorId;
         } catch (Exception e) {
