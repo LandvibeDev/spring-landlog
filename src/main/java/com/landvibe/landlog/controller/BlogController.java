@@ -43,8 +43,7 @@ public class BlogController {
 
     @PostMapping("/new")
     public String createBlog(@RequestParam Long creatorId, BlogForm blogForm, RedirectAttributes redirectAttributes) {
-        Blog blog = new Blog(creatorId, blogForm.getTitle(), blogForm.getContent());
-        blogService.registerBlog(blog);
+        blogService.registerBlog(creatorId, blogForm);
         redirectAttributes.addAttribute("creatorId", creatorId);
         return "redirect:/blogs";
     }
