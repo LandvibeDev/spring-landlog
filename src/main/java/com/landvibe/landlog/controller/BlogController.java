@@ -60,15 +60,14 @@ public class BlogController {
 
     @PostMapping("/update")
     public String updateBlog(@RequestParam Long creatorId, BlogUpdateForm blogUpdateForm, RedirectAttributes redirectAttributes) {
-        blogService.updateBlog(blogUpdateForm);
+        blogService.updateBlog(blogUpdateForm, creatorId);
         redirectAttributes.addAttribute("creatorId", creatorId);
         return "redirect:/blogs";
     }
 
     @PostMapping("/delete")
     public String deleteBlog(@RequestParam Long blogId, @RequestParam Long creatorId, RedirectAttributes redirectAttributes) {
-        memberService.findById(creatorId); // creatorId 검증
-        blogService.deleteById(blogId);
+        blogService.deleteBlog(blogId, creatorId);
         redirectAttributes.addAttribute("creatorId", creatorId);
         return "redirect:/blogs";
     }
