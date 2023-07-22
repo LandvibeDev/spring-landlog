@@ -25,11 +25,13 @@ public class BlogController {
         this.blogService = blogService;
     }
 
-    @GetMapping(value = "/blogs")
-    public String blog(@RequestParam(required = false) Long creatorId, Model model) {
-        exceptionHandlingMethod(creatorId);
+    @GetMapping("/blogs")
+    public String blog(@RequestParam Long creatorId, Model model) {
+        exceptionHandlingMethod(creatorId, memberService);
         Optional<Member> member = memberService.findOne(creatorId);
-        if (member.isEmpty()) return "home";
+        if (member.isEmpty()) {
+            return "home";
+        }
         List<Blog> blogs = blogService.findBlogs(creatorId);
         model.addAttribute("blogs", blogs);
         model.addAttribute("creatorId", creatorId);
@@ -38,53 +40,56 @@ public class BlogController {
     }
 
 
-    @GetMapping(value = "/blogs/new")
-    public String createBlogForm(@RequestParam(required = false) Long creatorId, Model model) {
-        exceptionHandlingMethod(creatorId);
+    @GetMapping("/blogs/new")
+    public String createBlogForm(@RequestParam Long creatorId, Model model) {
+        exceptionHandlingMethod(creatorId, memberService);
         Optional<Member> member = memberService.findOne(creatorId);
         Member blogMember = new Member();
-        if (!member.isEmpty()) blogMember = member.get();
+        if (!member.isEmpty()) {
+            blogMember = member.get();
+        }
         model.addAttribute("name", blogMember.getName());
         model.addAttribute("creatorId", creatorId);
         return "createBlogForm";
     }
 
-    @PostMapping(value = "/blogs/new")
+    @PostMapping("/blogs/new")
     public String createBlog(@RequestParam String title,
                              @RequestParam String contents,
-                             @RequestParam(required = false) Long creatorId,
+                             @RequestParam Long creatorId,
                              RedirectAttributes redirectAttributes
     ) {
-        exceptionHandlingMethod(creatorId);
-        Blog blog = new Blog();
-        blog.setTitle(title);
-        blog.setCreatorId(creatorId);
-        blog.setContents(contents);
+        exceptionHandlingMethod(creatorId, memberService);
+        Blog blog = new Blog(creatorId, title, contents);
         Optional<Member> member = memberService.findOne(creatorId);
-        if (!member.isEmpty()) redirectAttributes.addAttribute("creatorId", creatorId);
+        if (!member.isEmpty()) {
+            redirectAttributes.addAttribute("creatorId", creatorId);
+        }
         blogService.create(blog);
         return "redirect:/blogs";
     }
 
     @GetMapping("/blogs/update")
     public String updateForm(@RequestParam Long blogId,
-                             @RequestParam(required = false) Long creatorId,
+                             @RequestParam Long creatorId,
                              Model model) {
-        exceptionHandlingMethod(creatorId);
+        exceptionHandlingMethod(creatorId, memberService);
         Blog blog = blogService.findOne(blogId, creatorId);
         Optional<Member> member = memberService.findOne(creatorId);
-        if (!member.isEmpty()) model.addAttribute("name", member.get().getName());
+        if (!member.isEmpty()) {
+            model.addAttribute("name", member.get().getName());
+        }
         model.addAttribute("blog", blog);
         model.addAttribute("creatorId", creatorId);
         return "updateBlogForm";
     }
 
-    @PostMapping("/blogs/update")
+    @PutMapping("/blogs/update")
     public String update(@RequestParam Long id,
                          @RequestParam(required = false) Long creatorId,
                          @ModelAttribute UpdateBlogForm updateBlogForm,
                          RedirectAttributes redirectAttributes) {
-        exceptionHandlingMethod(creatorId);
+        exceptionHandlingMethod(creatorId, memberService);
         blogService.update(id, creatorId, updateBlogForm);
         redirectAttributes.addAttribute("creatorId", creatorId);
         return "redirect:/blogs";
@@ -92,10 +97,9 @@ public class BlogController {
 
     @PostMapping("/blogs/delete")
     public String delete(@RequestParam Long blogId,
-                         @RequestParam(required = false
-                         ) Long creatorId,
+                         @RequestParam Long creatorId,
                          RedirectAttributes redirectAttributes) {
-        exceptionHandlingMethod(creatorId);
+        exceptionHandlingMethod(creatorId, memberService);
         blogService.delete(blogId, creatorId);
         redirectAttributes.addAttribute("creatorId", creatorId);
         return "redirect:/blogs";
