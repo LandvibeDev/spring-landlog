@@ -1,5 +1,6 @@
 package com.landvibe.landlog.service;
 
+import ch.qos.logback.core.testUtil.MockInitialContext;
 import com.landvibe.landlog.ErrorMessage;
 import com.landvibe.landlog.domain.Blog;
 import com.landvibe.landlog.dto.BlogUpdateForm;
@@ -23,6 +24,7 @@ import java.util.Optional;
 
 import static com.landvibe.landlog.ErrorMessage.NO_BLOG;
 import static com.landvibe.landlog.ErrorMessage.WRONG_PASSWORD;
+import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
@@ -44,44 +46,78 @@ class BlogServiceTest {
         blogService = new BlogService(repository, memberService);
     }
 
+    @DisplayName("creatorId로 블로그 리스트찾기")
     @Test
-    void CreatorId_검색_테스트() {
+    void findByCreatorId() {
         Mockito.when(repository.findByCreatorId(1L))
                 .thenReturn(blogs);
 
-        Assertions.assertThat(blogs).isEqualTo(blogService.findBlogsByCreatorId(1L));
+        assertThat(blogs).isEqualTo(blogService.findBlogsByCreatorId(1L));
     }
 
-    @DisplayName("블로그_업데이트 테스트")
+    @DisplayName("Id_검색_테스트 성공")
     @Test
-    void updateBlog() {
+    void findById_success() {
         Mockito.when(repository.findByBlogId(1L))
-                .thenReturn(Optional.of(blog2));
-        BlogUpdateForm blogUpdateForm = new BlogUpdateForm(1L, "bb", "cc");
+                .thenReturn(Optional.ofNullable(blog1));
 
-        blogService.updateBlog(blogUpdateForm, 1L);
-
-        Assertions.assertThat(blog2.getTitle()).isEqualTo(blogUpdateForm.getTitle());
-        Assertions.assertThat(blog2.getContents()).isEqualTo(blogUpdateForm.getContents());
+        assertThat(blogService.findById(1L)).isEqualTo(blog1);
     }
 
-    @DisplayName("Id_검색_테스트")
+    @DisplayName("Id_검색_테스트_예외")
     @Test
-    void findById() {
+    void findById_fail() {
         Mockito.when(repository.findByBlogId(2L))
                 .thenThrow(new IllegalArgumentException(NO_BLOG.message));
 
         Exception e = assertThrows(Exception.class,
                 () -> blogService.findById(2L));
         assertThat(e.getMessage()).isEqualTo(NO_BLOG.message);
+    }
 
+    @DisplayName("블로그_업데이트 테스트")
+    @Test
+    void updateBlog_success() {
+        Mockito.when(repository.findByBlogId(1L))
+                .thenReturn(Optional.of(blog1));
+        BlogUpdateForm blogUpdateForm = new BlogUpdateForm(1L, "bb", "cc");
+
+        blogService.updateBlog(blogUpdateForm, 1L);
+        assertThat(blog2.getTitle()).isEqualTo(blogUpdateForm.getTitle());
+    }
+
+    @DisplayName("블로그_업데이트 예외 테스트")
+    @Test
+    void updateBlog_fail() {
+        Mockito.when(repository.findByBlogId(3L))
+                .thenThrow(new IllegalArgumentException(NO_BLOG.message));
+        BlogUpdateForm blogUpdateForm = new BlogUpdateForm(3L, "bb", "cc");
+
+        Exception e = assertThrows(Exception.class,
+                () -> blogService.updateBlog(blogUpdateForm, 1L));
+        assertThat(e.getMessage()).isEqualTo(NO_BLOG.message);
+    }
+
+    @DisplayName("블로그 삭제 성공")
+    @Test
+    void deleteBlog_success() {
+        Mockito.when(memberService.isValidCreatorId(1L))
+                        .thenReturn(true);
+        Mockito.when(repository.findByBlogId(2L))
+                .thenThrow(new IllegalArgumentException(NO_BLOG.message));
+
+        blogService.deleteBlog(2L, 1L);
+
+        Exception e = assertThrows(Exception.class,
+                () -> blogService.findById(2L));
+        assertThat(e.getMessage()).isEqualTo(NO_BLOG.message);
     }
 
     @DisplayName("블로그_삭제_예외")
     @Test
-    void deleteBlog() {
-        Mockito.when(memberService.findById(2L))
-                .thenThrow(new IllegalArgumentException(ErrorMessage.NO_BLOG.message));
+    void deleteBlog_fail() {
+        Mockito.when(memberService.isValidCreatorId(2L))
+                .thenThrow(new IllegalArgumentException(NO_BLOG.message));
 
         Exception e = assertThrows(Exception.class,
                 () -> blogService.deleteBlog(2L, 2L));

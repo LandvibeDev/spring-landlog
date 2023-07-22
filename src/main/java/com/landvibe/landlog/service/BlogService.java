@@ -50,6 +50,6 @@ public class BlogService {
     }
 
     public void validateCreatorId(Long creatorId) {
-        memberService.findById(creatorId);
+        memberService.isValidCreatorId(creatorId);
     }
 }
