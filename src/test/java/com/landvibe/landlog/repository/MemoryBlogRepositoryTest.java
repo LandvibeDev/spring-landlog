@@ -39,16 +39,8 @@ class MemoryBlogRepositoryTest {
     void findAllByCreatorId() {
         //given
         Blog blog1 = new Blog();
-        blog1.setContents("content1");
-        blog1.setTitle("title1");
-        blog1.setCreatorId(1L);
-        blog1.setId(1L);
-
         Blog blog2 = new Blog();
-        blog2.setContents("content2");
-        blog2.setTitle("title2");
-        blog2.setCreatorId(1L);
-        blog2.setId(2L);
+        setBlog(blog1,blog2);
 
         blogRepository.save(blog1);
         blogRepository.save(blog2);
@@ -64,17 +56,9 @@ class MemoryBlogRepositoryTest {
     void findOneByBlogIdAndCreatorId() {
         //given
         Blog blog1 = new Blog();
-        blog1.setContents("content1");
-        blog1.setTitle("title1");
-        blog1.setCreatorId(1L);
-        blog1.setId(1L);
-
-
         Blog blog2 = new Blog();
-        blog2.setContents("content2");
-        blog2.setTitle("title2");
-        blog2.setCreatorId(1L);
-        blog2.setId(2L);
+        setBlog(blog1,blog2);
+
 
         blogRepository.save(blog1);
         blogRepository.save(blog2);
@@ -89,8 +73,9 @@ class MemoryBlogRepositoryTest {
     @Test
     void deleteBlog() {
         //given
-        Blog blog1 = new Blog(1L, 1L, "title1", "contents1");
-        Blog blog2 = new Blog(1L, 2L, "title2", "contents2");
+        Blog blog1 = new Blog();
+        Blog blog2 = new Blog();
+        setBlog(blog1,blog2);
 
         blogRepository.save(blog1);
         blogRepository.save(blog2);
@@ -103,5 +88,9 @@ class MemoryBlogRepositoryTest {
 
         //then
         assertThat(e.getMessage()).isEqualTo("해당 블로그가 존재하지 않습니다.");
+    }
+    void setBlog(Blog blog1, Blog blog2) {
+        blog1 = new Blog(1L,1L, "title1","content1");
+        blog2 = new Blog(1L,2L, "title2","content2");
     }
 }
