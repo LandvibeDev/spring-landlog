@@ -23,6 +23,12 @@ public class Blog {
         this.title = title;
         this.contents = contents;
     }
+    public Blog(Long creatorId, String title, String contents) {
+        this.creatorId = creatorId;
+        this.id = id;
+        this.title = title;
+        this.contents = contents;
+    }
 
     public Long getId() {
         return id;
