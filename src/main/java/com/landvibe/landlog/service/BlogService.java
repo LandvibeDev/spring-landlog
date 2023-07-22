@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 import static com.landvibe.landlog.ErrorMessage.NO_BLOG;
+import static com.landvibe.landlog.ErrorMessage.NO_USER;
 
 @Service
 public class BlogService {
@@ -41,12 +42,13 @@ public class BlogService {
         blogRepository.delete(blogId);
     }
 
-    public void updateBlog(BlogUpdateForm blogUpdateForm, Long creatorId) {
+    public Blog updateBlog(BlogUpdateForm blogUpdateForm, Long creatorId) {
         validateCreatorId(creatorId);
         Blog blog = blogRepository.findByBlogId(blogUpdateForm.getId())
                 .orElseThrow(() -> new IllegalArgumentException(NO_BLOG.message));
-        Blog updatedBlog = new Blog(blog.getId(), blog.getCreatorId(), blogUpdateForm.getTitle(), blogUpdateForm.getContents());
-        blogRepository.update(updatedBlog);
+        blog.setTitle(blogUpdateForm.getTitle());
+        blog.setContents(blogUpdateForm.getContents());
+        return blogRepository.update(blog);
     }
 
     public void validateCreatorId(Long creatorId) {

@@ -31,8 +31,9 @@ public class MemoryBlogRepository implements BlogRepository {
     }
 
     @Override
-    public void update(Blog blog) {
+    public Blog update(Blog blog) {
         store.put(blog.getId(), blog);
+        return blog;
     }
 
     @Override

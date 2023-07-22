@@ -12,7 +12,7 @@ public interface BlogRepository {
 
     void delete(Long blogId);
 
-    void update(Blog blog);
+    Blog update(Blog blog);
 
     Optional<Blog> findByBlogId(Long blogId);
 

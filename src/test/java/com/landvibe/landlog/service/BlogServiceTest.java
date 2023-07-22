@@ -38,6 +38,7 @@ class BlogServiceTest {
     MemberService memberService;
     Blog blog1 = new Blog(1L,1L, "aa", "bb");
     Blog blog2 = new Blog(2L,1L, "bb", "cc");
+    Blog blog3 = new Blog(1L,1L, "bb", "cc");
     List<Blog> blogs = Arrays.asList(blog1,blog2);
 
 
@@ -78,12 +79,13 @@ class BlogServiceTest {
     @DisplayName("블로그_업데이트 테스트")
     @Test
     void updateBlog_success() {
-        Mockito.when(repository.findByBlogId(1L))
-                .thenReturn(Optional.of(blog1));
-        BlogUpdateForm blogUpdateForm = new BlogUpdateForm(1L, "bb", "cc");
 
-        blogService.updateBlog(blogUpdateForm, 1L);
-        assertThat(blog2.getTitle()).isEqualTo(blogUpdateForm.getTitle());
+        BlogUpdateForm blogUpdateForm = new BlogUpdateForm(1L, "bb", "cc");
+        Mockito.when(repository.findByBlogId(1L))
+                        .thenReturn(Optional.of(blog1));
+        Mockito.when(repository.update(blog1))
+                        .thenReturn(blog3);
+        assertThat(blogService.updateBlog(blogUpdateForm, 1L).getTitle()).isEqualTo(blogUpdateForm.getTitle());
     }
 
     @DisplayName("블로그_업데이트 예외 테스트")
