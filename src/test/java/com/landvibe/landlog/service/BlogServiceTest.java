@@ -132,8 +132,6 @@ class BlogServiceTest {
         //
         Mockito.verify(blogRepository)
                 .save(blog);
-        Mockito.verify(blogRepository, Mockito.times(1))
-                .save(blog);
     }
 
     @Test
@@ -168,8 +166,6 @@ class BlogServiceTest {
         blogService.update(updateBlog);
         //
         Mockito.verify(blogRepository)
-                .update(updateBlog);
-        Mockito.verify(blogRepository, Mockito.times(1))
                 .update(updateBlog);
     }
 
@@ -208,8 +204,6 @@ class BlogServiceTest {
         //
         Mockito.verify(blogRepository)
                 .deleteById(blogId);
-        Mockito.verify(blogRepository, Mockito.times(1))
-                .deleteById(blogId);
     }
 
     @Test
@@ -244,8 +238,6 @@ class BlogServiceTest {
         blogService.findBlogsByCreatorId(creatorId);
         //
         Mockito.verify(blogRepository)
-                .findBlogsByCreatorId(creatorId);
-        Mockito.verify(blogRepository, Mockito.times(1))
                 .findBlogsByCreatorId(creatorId);
     }
 
