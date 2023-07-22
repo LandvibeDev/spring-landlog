@@ -89,10 +89,11 @@ public class BlogController {
     }
 
     @PostMapping(value = "/update")
-    public String update(@RequestParam(value = "creatorId", required = false) Long creatorId,
+    public String update(@RequestParam(value = "id", required = false) Long blogId,
+                         @RequestParam(value = "creatorId", required = false) Long creatorId,
                          BlogForm form, RedirectAttributes redirect) {
         try {
-            Blog blog = new Blog(form.getId(), creatorId, form.getTitle(), form.getContents());
+            Blog blog = new Blog(blogId, creatorId, form.getTitle(), form.getContents());
             blogService.update(blog);
 
             redirect.addAttribute("creatorId", creatorId);
