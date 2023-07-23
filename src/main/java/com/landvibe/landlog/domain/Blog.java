@@ -2,24 +2,23 @@ package com.landvibe.landlog.domain;
 
 public class Blog {
 
-	private Long blogId;
+	private Long id;
 	private Long creatorId;
 	private String title;
 	private String contents;
 
-	public Blog(Long blogId, Long creatorId, String title, String contents) {
-		this.blogId = blogId;
+	public Blog(Long creatorId, String title, String contents) {
 		this.creatorId = creatorId;
 		this.title = title;
 		this.contents = contents;
 	}
 
-	public Long getBlogId() {
-		return blogId;
+	public Long getId() {
+		return id;
 	}
 
-	public void setBlogId(Long blogId) {
-		this.blogId = blogId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public Long getCreatorId() {
