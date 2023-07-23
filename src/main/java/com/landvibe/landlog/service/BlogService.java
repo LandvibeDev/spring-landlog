@@ -34,8 +34,8 @@ public class BlogService {
         return blog.getId();
     }
 
-    public void delete(Long blogId, Long creatorId) {
-        blogRepository.deleteBlog(blogId, creatorId);
+    public boolean delete(Long blogId, Long creatorId) {
+        return blogRepository.deleteBlog(blogId, creatorId);
     }
 
 }
