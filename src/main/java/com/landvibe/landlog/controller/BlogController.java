@@ -53,6 +53,29 @@ public class BlogController {
 		return "redirect:/blogs";
 	}
 
+	@GetMapping("/update")
+	public String updateBlogForm(@RequestParam(name = "creatorId") Long creatorId,
+		@RequestParam(name = "blogId") Long blogId, Model model) {
+
+		Blog blog = blogService.findByBlogId(blogId);
+		String name = memberService.findById(creatorId).getName();
+
+		model.addAttribute("creatorId", creatorId);
+		model.addAttribute("blog", blog);
+		model.addAttribute("name", name);
+
+		return "blogs/updateBlogForm";
+	}
+
+	@PostMapping("/update")
+	public String updateBlog(BlogUpdateForm form, RedirectAttributes redirectAttributes) {
+		Blog blog = new Blog(form.getCreatorId(), form.getTitle(), form.getContents());
+		blog.setId(form.getId());
+		blogService.update(blog);
+		redirectAttributes.addAttribute("creatorId", form.getCreatorId());
+		return "redirect:/blogs";
+	}
+
 	@PostMapping("/delete")
 	public String deleteBlog(@RequestParam(name = "creatorId") Long creatorId,
 		@RequestParam(name = "blogId") Long blogId,
