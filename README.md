@@ -58,3 +58,43 @@
      - model <- findById()
      - html 파일 (blogs/blogList) 와 매칭
    
+    
+
+## 2. 블로그 CRUD 구현
+
+### 요구사항
+1. 블로그 리스트
+   - path : /blogs
+   - Query Parameter : creatorId
+     - db에 creatorId 없으면 예외 throw
+   - 블로그 리스트
+     - creatorId가 생성한 글들을 리스트업
+   - 생성 버튼
+     - 블로그 생성 페이지(blogs/new?creatorId=${creatorId}) 로 이동
+2. 블로그 생성
+   - Path: /blogs/new 
+   - Query parameter: 
+     - creatorId : 없으면 에러 throw 
+   - 등록 버튼 
+     - DB에 creatorId 가 없으면 에러 throw 
+     - 성공: 블로그 리스트 페이지 
+     - 실패: 에러 throw
+3. 블로그 수정
+   - Path: /blogs/update 
+   - Query parameter 
+     - creatorId : 없으면 에러 throw
+     - blogId 가 없으면 에러 throw
+   - 등록 버튼
+     - creatorId : 없으면 에러 throw
+     - 성공: 블로그 리스트 페이지
+     - 실패: 에러 throw
+
+4. 블로그 삭제
+   - 삭제 버튼
+     - creatorId 없으면 에러 throw
+     - 성공 : 블로그 리스트 페이지
+     - 실패 : 에러 throw
+
+### 구현
+    
+클라 : 블로그 리스트 -> 생성 버튼
