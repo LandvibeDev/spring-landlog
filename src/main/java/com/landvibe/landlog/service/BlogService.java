@@ -48,8 +48,7 @@ public class BlogService {
 	}
 
 	public void validateCreator(Long creatorId){
-		Member creator = memberService.findById(creatorId);
-		memberService.validateInvalidMember(creator);
+		memberService.findById(creatorId);
 	}
 
 	public void validateBlog(Blog blog){
