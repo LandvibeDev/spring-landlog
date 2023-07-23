@@ -131,4 +131,33 @@ class BlogServiceTest {
 
 	}
 
+	@Test
+	void 블로그_삭제_성공() {
+
+		// given
+		Blog blog = new Blog(member.getId(), title, contents);
+		blogService.create(blog);
+		// when
+		blogService.delete(blog.getId());
+
+		// then
+		Exception e = assertThrows(Exception.class,
+			() -> blogService.findByBlogId(blog.getId()));
+		assertThat(e.getMessage()).isEqualTo("존재하지 않는 블로그입니다.");
+
+	}
+
+	@Test
+	void 블로그_삭제_실패() {
+
+		// given
+		Long invalidBlogId = null;
+		Blog blog = new Blog(member.getId(), title, contents);
+		blogService.create(blog);
+		// when
+		Exception e = assertThrows(Exception.class,
+			() -> blogService.delete(invalidBlogId));
+		assertThat(e.getMessage()).isEqualTo("존재하지 않는 블로그입니다.");
+
+	}
 }
