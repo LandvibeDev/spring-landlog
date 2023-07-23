@@ -73,5 +73,62 @@ class BlogServiceTest {
 
 	}
 
+	@Test
+	void 업데이트_성공() {
+
+		//given
+		String updateTitle = "Title";
+		String updateContents = "Contents";
+		Blog blog = new Blog(member.getId(), title, contents);
+		blogService.create(blog);
+		BlogUpdateForm updateForm = new BlogUpdateForm(member.getId(), blog.getId(), updateTitle, updateContents);
+
+		// when
+		Blog updateBlog = new Blog(updateForm.getCreatorId(), updateForm.getTitle(), updateForm.getContents());
+		updateBlog.setId(updateForm.getId());
+		Long updateBlogId = blogService.update(updateBlog);
+
+		//then
+		assertThat(updateBlogId).isEqualTo(updateBlog.getId());
+
+	}
+
+	@Test
+	void 업데이트_제목_입력안함() {
+
+		//given
+		String updateTitle = "";
+		String updateContents = "Contents";
+		Blog blog = new Blog(member.getId(), title, contents);
+		blogService.create(blog);
+		BlogUpdateForm updateForm = new BlogUpdateForm(member.getId(), blog.getId(), updateTitle, updateContents);
+
+		// when
+		Blog updateBlog = new Blog(updateForm.getCreatorId(), updateForm.getTitle(), updateForm.getContents());
+		updateBlog.setId(updateForm.getId());
+		Exception e = assertThrows(Exception.class,
+			() -> blogService.update(updateBlog));
+		assertThat(e.getMessage()).isEqualTo("제목을 입력해주세요.");
+
+	}
+
+	@Test
+	void 업데이트_내용_입력안함() {
+
+		//given
+		String updateTitle = "Title";
+		String updateContents = "";
+		Blog blog = new Blog(member.getId(), title, contents);
+		blogService.create(blog);
+		BlogUpdateForm updateForm = new BlogUpdateForm(member.getId(), blog.getId(), updateTitle, updateContents);
+
+		// when
+		Blog updateBlog = new Blog(updateForm.getCreatorId(), updateForm.getTitle(), updateForm.getContents());
+		updateBlog.setId(updateForm.getId());
+		Exception e = assertThrows(Exception.class,
+			() -> blogService.update(updateBlog));
+		assertThat(e.getMessage()).isEqualTo("내용을 입력해주세요.");
+
+	}
 
 }
