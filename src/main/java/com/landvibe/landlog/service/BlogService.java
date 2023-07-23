@@ -23,7 +23,16 @@ public class BlogService {
 		blogRepository.save(blog);
 	}
 
+	public void update(Blog blog) {
+		validateInvalidCreator(blog.getCreatorId());
+		findByBlogId(blog.getId());
+		blogRepository.update(blog);
+	}
 
+	public void delete(Blog blog) {
+		validateInvalidCreator(blog.getCreatorId());
+		blogRepository.delete(blog.getId());
+	}
 
 	public List<Blog> findBlogList(Long creatorId) {
 		validateInvalidCreator(creatorId);
