@@ -4,6 +4,7 @@ import com.landvibe.landlog.domain.Blog;
 import com.landvibe.landlog.form.BlogCreateForm;
 import com.landvibe.landlog.form.BlogUpdateForm;
 import com.landvibe.landlog.repository.MemoryBlogRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,6 +12,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 
@@ -34,6 +37,12 @@ public class BlogServiceTest {
 
     BlogCreateForm createForm = new BlogCreateForm(title, content);
     BlogUpdateForm updateForm = new BlogUpdateForm(afterUpdateTitle, afterUpdateContent);
+    Blog blog = new Blog(title, creatorId, content);
+
+    @BeforeEach
+    public void 초기화() {
+        blogRepository.clear();
+    }
 
 
     @Test
@@ -41,7 +50,7 @@ public class BlogServiceTest {
     public void 블로그_생성_테스트() {
         when(blogRepository.save(any(Blog.class))).thenReturn(1L);
 
-        Blog blog = new Blog(title, creatorId, content);
+
         blogService.createBlog(creatorId, createForm);
 
         verify(blogRepository)
@@ -54,31 +63,28 @@ public class BlogServiceTest {
     @DisplayName("블로그 삭제 테스트")
     public void 블로그_삭제_테스트() {
         when(blogRepository.delete(blogId)).thenReturn(blogId);
+        when(blogRepository.findByBlogId(blogId)).thenReturn(Optional.ofNullable(blog));
 
-        Blog blog = new Blog(title, creatorId, content);
         blogService.createBlog(creatorId, createForm);
 
         blogService.delete(blogId);
 
-        verify(blogRepository).delete(blogId);
+        verify(blogRepository)
+                .delete(blogId);
     }
 
     @Test
     @DisplayName("블로그 업데이트 테스트")
     public void 블로그_업데이트_테스트() {
-        when(blogRepository.update(any(Long.class), any(BlogUpdateForm.class)))
-                .thenReturn(1L);
+        when(blogRepository.update(blogId, updateForm)).thenReturn(blogId);
+        when(blogRepository.findByBlogId(blogId)).thenReturn(Optional.ofNullable(blog));
 
-        Blog blog = new Blog(title, creatorId, content);
         blogService.createBlog(creatorId, createForm);
 
         blogService.update(blogId, updateForm);
 
+
         verify(blogRepository)
                 .update(any(Long.class), any(BlogUpdateForm.class));
-        verify(blogRepository, Mockito.times(1))
-                .update(any(Long.class), any(BlogUpdateForm.class));
-
-
     }
 }

@@ -32,14 +32,17 @@ public class BlogService {
     }
 
     public Blog findBlogById(Long blogId) {
-        return blogRespository.findByBlogId(blogId);
+        return blogRespository.findByBlogId(blogId)
+                .orElseThrow(() -> new IllegalStateException("해당하는 블로그를 찾을 수 없습니다."));
     }
 
     public Long update(Long id, BlogUpdateForm form) {
+        findBlogById(id);
         return blogRespository.update(id, form);
     }
 
     public Long delete(Long blogId) {
+        findBlogById(blogId);
         return blogRespository.delete(blogId);
     }
 

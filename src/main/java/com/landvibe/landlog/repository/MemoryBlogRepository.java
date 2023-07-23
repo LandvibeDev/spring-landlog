@@ -21,10 +21,8 @@ public class MemoryBlogRepository implements BlogRespository {
 
     @Override
     public Long delete(Long id) {
-        findByBlogId(id);
         store.remove(id);
         return id;
-
     }
 
     @Override
@@ -35,7 +33,6 @@ public class MemoryBlogRepository implements BlogRespository {
         Long memberId = blog.getCreatorId();
         Blog updatedBlog = new Blog(title, memberId, content);
         updatedBlog.setId(id);
-        findByBlogId(id);
         store.replace(id, updatedBlog);
         return id;
     }
@@ -43,19 +40,24 @@ public class MemoryBlogRepository implements BlogRespository {
     @Override
     public List<Blog> findAllByMemberId(Long memberId) {
         List<Blog> blogList = new ArrayList<>();
-        return Optional.ofNullable(store.values().stream()
-                .filter(blog -> blog.getCreatorId() == memberId).toList()).orElseThrow(() -> new IllegalArgumentException());
+        return store.values().stream()
+                .filter(blog -> blog.getCreatorId() == memberId).toList();
     }
 
     @Override
-    public Blog findByBlogId(Long blogId) {
+    public Optional<Blog> findByBlogId(Long blogId) {
         Optional<Blog> blog = Optional.ofNullable(store.get(blogId));
-        return blog.orElseThrow(() -> new IllegalArgumentException());
+        return blog;
     }
 
     @Override
     public void clear() {
         store.clear();
+    }
+
+    @Override
+    public int getSize() {
+        return store.size();
     }
 
 }
