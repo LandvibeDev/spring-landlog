@@ -1,6 +1,6 @@
 package com.landvibe.landlog.service;
 
-import com.landvibe.landlog.controller.LoginForm;
+import com.landvibe.landlog.controller.form.LoginForm;
 import com.landvibe.landlog.domain.Member;
 import com.landvibe.landlog.repository.MemberRepository;
 
@@ -30,12 +30,12 @@ public class MemberService {
 	}
 
 	public Long join(Member member) {
-		validateInvalidInput(member); //중복 회원 검증
+		validateInvalidMember(member); //중복 회원 검증
 		memberRepository.save(member);
 		return member.getId();
 	}
 
-	private void validateInvalidInput(Member member) {
+	void validateInvalidMember(Member member) {
 		validateNoInput(member);
 		validateInvalidEmail(member.getEmail());
 		validateDuplicateMember(member);
