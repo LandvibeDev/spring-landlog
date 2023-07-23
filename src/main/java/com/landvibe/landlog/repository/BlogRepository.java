@@ -12,5 +12,5 @@ public interface BlogRepository {
 
     public Blog findOneByBlogIdAndCreatorId(Long blogId, Long creatorId);
 
-    public void deleteBlog(Long blogId, Long creatorId);
+    public boolean deleteBlog(Long blogId, Long creatorId);
 }

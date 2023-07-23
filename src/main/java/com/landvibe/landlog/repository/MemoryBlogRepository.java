@@ -40,10 +40,11 @@ public class MemoryBlogRepository implements BlogRepository {
     }
 
     @Override
-    public void deleteBlog(Long blogId, Long creatorId) {
+    public boolean deleteBlog(Long blogId, Long creatorId) {
         store.remove((store.values().stream()
                 .filter(b -> b.getId() == blogId && b.getCreatorId() == creatorId)
                 .findAny().orElseThrow(() -> new IllegalArgumentException("해당 블로그가 존재하지 않습니다.")).getId()));
+        return true;
     }
 
     public void clearStore() {
