@@ -30,26 +30,38 @@ public class BlogController {
 
 	@GetMapping
 	public String blog(@RequestParam(name = "creatorId") Long creatorId, Model model) {
+
 		List<Blog> blogs = blogService.findBlogList(creatorId);
+		String name = memberService.findById(creatorId).getName();
+
 		model.addAttribute("creatorId", creatorId);
-		model.addAttribute("name", memberService.findById(creatorId).getName());
+		model.addAttribute("name", name);
 		model.addAttribute("blogs", blogs);
+
 		return "blogs/blogList";
 	}
 
 	@GetMapping("/new")
 	public String createBlogForm(@RequestParam(name = "creatorId") Long creatorId, Model model) {
+
+		String name = memberService.findById(creatorId).getName();
+
 		model.addAttribute("creatorId", creatorId);
-		model.addAttribute("name", memberService.findById(creatorId).getName());
+		model.addAttribute("name", name);
+
 		return "blogs/createBlogForm";
 	}
 
 	@PostMapping("/new")
 	public String createBlog(@RequestParam(name = "creatorId") Long creatorId, BlogForm blogForm,
 		RedirectAttributes redirectAttributes) {
+
 		Blog blog = new Blog(creatorId, blogForm.getTitle(), blogForm.getContents());
+
 		blogService.create(blog);
+
 		redirectAttributes.addAttribute("creatorId", creatorId);
+
 		return "redirect:/blogs";
 	}
 
@@ -69,10 +81,15 @@ public class BlogController {
 
 	@PostMapping("/update")
 	public String updateBlog(BlogUpdateForm form, RedirectAttributes redirectAttributes) {
+
 		Blog blog = new Blog(form.getCreatorId(), form.getTitle(), form.getContents());
 		blog.setId(form.getId());
+		Long creatorId = form.getCreatorId();
+
 		blogService.update(blog);
-		redirectAttributes.addAttribute("creatorId", form.getCreatorId());
+
+		redirectAttributes.addAttribute("creatorId", creatorId);
+
 		return "redirect:/blogs";
 	}
 
@@ -80,8 +97,11 @@ public class BlogController {
 	public String deleteBlog(@RequestParam(name = "creatorId") Long creatorId,
 		@RequestParam(name = "blogId") Long blogId,
 		RedirectAttributes redirectAttributes) {
+
 		blogService.delete(blogId);
+
 		redirectAttributes.addAttribute("creatorId", creatorId);
+
 		return "redirect:/blogs";
 	}
 }
