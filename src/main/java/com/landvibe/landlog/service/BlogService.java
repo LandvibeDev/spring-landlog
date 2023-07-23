@@ -24,6 +24,17 @@ public class BlogService {
 	}
 
 
+
+	public List<Blog> findBlogList(Long creatorId) {
+		validateInvalidCreator(creatorId);
+		return blogRepository.findBlogListByCreatorId(creatorId);
+	}
+
+	public Blog findByBlogId(Long blogId) {
+		return blogRepository.findByBlogId(blogId)
+			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 블로그입니다."));
+	}
+
 	public void validateInvalidCreator(Long creatorId){
 		Member creator = memberService.findById(creatorId);
 		memberService.validateInvalidMember(creator);
