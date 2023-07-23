@@ -8,9 +8,9 @@ import com.landvibe.landlog.domain.Blog;
 public interface BlogRepository {
 	void save(Blog blog);
 
-	void delete(Long blogId);
+	void update(Blog blog);
 
-	Blog update(Blog blog);
+	void delete(Long blogId);
 
 	Optional<Blog> findByBlogId(Long blogId);
 
