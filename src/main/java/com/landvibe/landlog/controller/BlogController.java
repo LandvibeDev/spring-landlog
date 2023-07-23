@@ -80,8 +80,7 @@ public class BlogController {
 	public String deleteBlog(@RequestParam(name = "creatorId") Long creatorId,
 		@RequestParam(name = "blogId") Long blogId,
 		RedirectAttributes redirectAttributes) {
-		Blog blog = blogService.findByBlogId(blogId);
-		blogService.delete(blog);
+		blogService.delete(blogId);
 		redirectAttributes.addAttribute("creatorId", creatorId);
 		return "redirect:/blogs";
 	}
