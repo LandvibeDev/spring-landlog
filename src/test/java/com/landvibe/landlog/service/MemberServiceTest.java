@@ -24,6 +24,13 @@ class MemberServiceTest {
     String existingMemberMessage = "이미 존재하는 회원입니다.";
     String cantFindMemberMessage = "이메일, 비밀번호가 일치하는 회원이 존재하지 않습니다";
 
+    String name = "name";
+    String password = "password";
+    String email = "email";
+
+    String existingMemberMessage = "이미 존재하는 회원입니다.";
+    String cantFindMemberMessage = "이메일, 비밀번호가 일치하는 회원이 존재하지 않습니다";
+
     @BeforeEach
     public void beforeEach() {
         memberService.clearRespository();

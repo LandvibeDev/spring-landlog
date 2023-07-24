@@ -18,4 +18,5 @@ public interface MemberRepository {
     Optional<Member> findByEmailAndPassword(String email, String password);
 
     public void clear();
+
 }
