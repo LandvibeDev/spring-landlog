@@ -30,6 +30,12 @@ public class MemberService {
                 });
     }
 
+    public boolean isValidCreatorId(Long creatorId) {
+        memberRepository.findById(creatorId)
+                .orElseThrow(() -> new IllegalArgumentException(NO_USER.message));
+        return true;
+    }
+
     public List<Member> findMembers() {
         return memberRepository.findAll();
     }
