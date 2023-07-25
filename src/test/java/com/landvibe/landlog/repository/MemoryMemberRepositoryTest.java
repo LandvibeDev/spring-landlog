@@ -2,6 +2,7 @@ package com.landvibe.landlog.repository;
 
 import com.landvibe.landlog.domain.Member;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -11,6 +12,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 class MemoryMemberRepositoryTest {
 
     MemoryMemberRepository repository = new MemoryMemberRepository();
+    Member member = new Member("gildong", "abc@def.com", "1234");
+
+    @BeforeEach
+    public void beforeEach() {
+        repository.save(member);
+    }
 
     @AfterEach
     public void afterEach() {
@@ -19,44 +26,45 @@ class MemoryMemberRepositoryTest {
 
     @Test
     void save() {
-        //given
-        Member member = new Member();
-        member.setName("spring");
-
         //when
-        repository.save(member);
+        Member result = repository.findById(member.getId()).get();
 
         //then
-        Member result = repository.findById(member.getId()).get();
         assertThat(result).isEqualTo(member);
     }
 
     @Test
     public void findByName() {
-        //given
-        Member member1 = new Member();
-        member1.setName("spring1");
-        repository.save(member1);
-        Member member2 = new Member();
-        member2.setName("spring2");
-        repository.save(member2);
-
         //when
-        Member result = repository.findByName("spring1").get();
+        Member result = repository.findByName(member.getName()).get();
 
         //then
-        assertThat(result).isEqualTo(member1);
+        assertThat(result).isEqualTo(member);
+    }
+
+    @Test
+    public void findByEmail() {
+        //when
+        Member result = repository.findByEmail(member.getEmail()).get();
+
+        //then
+        assertThat(result).isEqualTo(member);
+    }
+
+    @Test
+    public void findById() {
+        //when
+        Member result = repository.findById(member.getId()).get();
+
+        //then
+        assertThat(result).isEqualTo(member);
     }
 
     @Test
     public void findAll() {
         //given
-        Member member1 = new Member();
-        member1.setName("spring1");
-        repository.save(member1);
-        Member member2 = new Member();
-        member2.setName("spring2");
-        repository.save(member2);
+        Member anotherMember = new Member("gildong", "abc@def.com", "1234");
+        repository.save(anotherMember);
 
         //when
         List<Member> result = repository.findAll();
