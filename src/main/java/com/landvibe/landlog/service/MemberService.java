@@ -34,7 +34,9 @@ public class MemberService {
     }
 
     public Optional<Member> findOne(Long memberId) {
-        return memberRepository.findById(memberId);
+        Optional<Member> findMember = memberRepository.findById(memberId);
+        if(findMember.isEmpty()) throw new IllegalArgumentException("회원정보를 찾지 못했습니다.");
+        return findMember;
     }
 
     public Optional<Member> login(String email, String password) {

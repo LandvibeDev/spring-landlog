@@ -29,9 +29,6 @@ public class BlogController {
     public String blog(@RequestParam Long creatorId, Model model) {
         exceptionHandlingMethod(creatorId, memberService);
         Optional<Member> member = memberService.findOne(creatorId);
-        if (member.isEmpty()) {
-            return "home";
-        }
         List<Blog> blogs = blogService.findBlogs(creatorId);
         model.addAttribute("blogs", blogs);
         model.addAttribute("creatorId", creatorId);
@@ -44,11 +41,7 @@ public class BlogController {
     public String createBlogForm(@RequestParam Long creatorId, Model model) {
         exceptionHandlingMethod(creatorId, memberService);
         Optional<Member> member = memberService.findOne(creatorId);
-        Member blogMember = new Member();
-        if (!member.isEmpty()) {
-            blogMember = member.get();
-        }
-        model.addAttribute("name", blogMember.getName());
+        model.addAttribute("name", member.get().getName());
         model.addAttribute("creatorId", creatorId);
         return "createBlogForm";
     }
@@ -62,9 +55,7 @@ public class BlogController {
         exceptionHandlingMethod(creatorId, memberService);
         Blog blog = new Blog(creatorId, title, contents);
         Optional<Member> member = memberService.findOne(creatorId);
-        if (!member.isEmpty()) {
-            redirectAttributes.addAttribute("creatorId", creatorId);
-        }
+        redirectAttributes.addAttribute("creatorId", creatorId);
         blogService.create(blog);
         return "redirect:/blogs";
     }
@@ -76,9 +67,7 @@ public class BlogController {
         exceptionHandlingMethod(creatorId, memberService);
         Blog blog = blogService.findOne(blogId, creatorId);
         Optional<Member> member = memberService.findOne(creatorId);
-        if (!member.isEmpty()) {
-            model.addAttribute("name", member.get().getName());
-        }
+        model.addAttribute("name", member.get().getName());
         model.addAttribute("blog", blog);
         model.addAttribute("creatorId", creatorId);
         return "updateBlogForm";
