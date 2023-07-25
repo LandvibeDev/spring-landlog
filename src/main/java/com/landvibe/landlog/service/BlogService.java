@@ -5,6 +5,7 @@ import com.landvibe.landlog.dto.BlogForm;
 import com.landvibe.landlog.dto.BlogUpdateForm;
 import com.landvibe.landlog.repository.BlogRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -21,10 +22,10 @@ public class BlogService {
         this.memberService = memberService;
     }
 
-    public void registerBlog(Long creatorId, BlogForm blogForm) {
+    public Blog registerBlog(Long creatorId, Blog blog) {
         validateCreatorId(creatorId);
-        Blog blog = new Blog(creatorId, blogForm.getTitle(), blogForm.getContent());
         blogRepository.save(blog);
+        return blog;
     }
 
     public List<Blog> findBlogsByCreatorId(Long creatorId) {
@@ -32,23 +33,20 @@ public class BlogService {
         return blogRepository.findByCreatorId(creatorId);
     }
 
-    public Blog findById(Long blogId) {
+    public Blog findById(Long blogId, Long creatorId) {
+        validateCreatorId(creatorId);
         return blogRepository.findByBlogId(blogId)
                 .orElseThrow(() -> new IllegalArgumentException(NO_BLOG.message));
     }
 
-    public void deleteBlog(Long blogId, Long creatorId) {
+    public void deleteBlog(Long creatorId, Long blogId) {
         validateCreatorId(creatorId);
         blogRepository.delete(blogId);
     }
 
-    public Blog updateBlog(BlogUpdateForm blogUpdateForm, Long creatorId) {
+    public Blog updateBlog(Long creatorId, Long id, Blog  blog) {
         validateCreatorId(creatorId);
-        Blog blog = blogRepository.findByBlogId(blogUpdateForm.getId())
-                .orElseThrow(() -> new IllegalArgumentException(NO_BLOG.message));
-        blog.setTitle(blogUpdateForm.getTitle());
-        blog.setContents(blogUpdateForm.getContents());
-        return blogRepository.update(blog);
+        return blogRepository.update(id, blog);
     }
 
     public void validateCreatorId(Long creatorId) {
