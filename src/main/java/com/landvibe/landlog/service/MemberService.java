@@ -1,11 +1,12 @@
 package com.landvibe.landlog.service;
 
+import com.landvibe.landlog.Message;
 import com.landvibe.landlog.domain.Member;
 import com.landvibe.landlog.repository.MemberRepository;
 import org.springframework.stereotype.Service;
+import com.landvibe.landlog.controller.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class MemberService {
@@ -16,23 +17,51 @@ public class MemberService {
     }
 
     public Long join(Member member) {
-        validateDuplicateMember(member); //중복 회원 검증
+        validateEmptyInput(member);
+        validateDuplicateMember(member);
         memberRepository.save(member);
         return member.getId();
     }
 
-    private void validateDuplicateMember(Member member) {
-        memberRepository.findByName(member.getName())
-                .ifPresent(m -> {
-                    throw new IllegalStateException("이미 존재하는 회원입니다.");
-                });
+    public Long login(MemberLoginForm form) {
+        Member member = memberRepository.findByEmail(form.getEmail())
+                .orElseThrow(() -> new IllegalArgumentException(Message.NO_USER.message));
+        if (!member.getPassword().equals(form.getPassword())) {
+            throw new IllegalArgumentException(Message.NO_USER.message);
+        }
+        return member.getId();
     }
 
     public List<Member> findMembers() {
         return memberRepository.findAll();
     }
 
-    public Optional<Member> findOne(Long memberId) {
-        return memberRepository.findById(memberId);
+    public Member findOne(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException(Message.NO_USER.message));
+        return member;
+    }
+
+    private void validateDuplicateMember(Member member) {
+        memberRepository.findByEmail(member.getEmail())
+                .ifPresent(m -> {
+                    throw new IllegalStateException(Message.DUPLICATE_EMAIL.message);
+                });
+        memberRepository.findByName(member.getName())
+                .ifPresent(m -> {
+                    throw new IllegalStateException(Message.DUPLICATE_NAME.message);
+                });
+    }
+
+    private void validateEmptyInput(Member member) {
+        if (member.getName().equals("")) {
+            throw new IllegalArgumentException(Message.NO_INPUT_NAME.message);
+        }
+        if (member.getEmail().equals("")) {
+            throw new IllegalArgumentException(Message.NO_INPUT_EMAIL.message);
+        }
+        if (member.getPassword().equals("")) {
+            throw new IllegalArgumentException(Message.NO_INPUT_PASSWORD.message);
+        }
     }
 }
