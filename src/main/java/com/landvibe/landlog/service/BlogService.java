@@ -23,16 +23,21 @@ public class BlogService {
             throw new IllegalArgumentException(EMPTY_CREATOR_ID.message);
         }
 
-        memberRepository.findById(creatorId).orElseThrow(() ->
-                new IllegalArgumentException(NO_MATCH_MEMBER_WITH_CREATOR_ID.message));
+        boolean exists = memberRepository.existsById(creatorId);
+        if(!exists){
+            throw new IllegalArgumentException(NO_MATCH_MEMBER_WITH_CREATOR_ID.message);
+        }
     }
 
     public void validateBlogId(Long blogId) {
         if (blogId == null || blogId == 0) {
             throw new IllegalArgumentException(EMPTY_BLOG_ID.message);
         }
-        blogRepository.findById(blogId).orElseThrow(() ->
-                new IllegalArgumentException(NO_MATCH_BLOG_WITH_BLOG_ID.message));
+
+        boolean exists = blogRepository.existsById(blogId);
+        if(!exists){
+            throw new IllegalArgumentException(NO_MATCH_BLOG_WITH_BLOG_ID.message);
+        }
     }
 
     public Long write(Blog blog) throws IllegalArgumentException {

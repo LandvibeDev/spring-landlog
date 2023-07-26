@@ -15,4 +15,6 @@ public interface BlogRepository {
     List<Blog> findBlogsByCreatorId(Long id);
 
     Long deleteById(Long blogId);
+
+    boolean existsById(Long blogId);
 }
