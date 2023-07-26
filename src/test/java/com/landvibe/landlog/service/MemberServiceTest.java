@@ -98,7 +98,7 @@ class MemberServiceTest {
 
     @Test
     @DisplayName("로그인 실패 : 틀린 비밀번호 입력")
-    public void validCorrectPassword_Test(){
+    public void validCorrectPassword(){
         String testEmail = "jaeseung@naver.com";
         Member member = new Member("양재승", testEmail, "123");
 
@@ -110,4 +110,11 @@ class MemberServiceTest {
         assertThat(e.getMessage()).isEqualTo("비밀번호를 확인해주세요.");
     }
 
+    @Test
+    @DisplayName("등록된 멤버가 없을 시 예외처리")
+    public void validNoMember(){
+        Exception e = assertThrows(Exception.class,
+                () -> memberService.findById(member1.getId()));
+        assertThat(e.getMessage()).isEqualTo("등록된 회원이 없습니다.");
+    }
 }
