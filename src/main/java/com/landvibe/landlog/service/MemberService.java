@@ -16,13 +16,14 @@ public class MemberService {
     }
 
     public Member findById(Long id) {
+        validNoMember();
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 id 입니다."));
         return member;
     }
 
     public Long join(Member member) {
-        validateDuplicateMember(member); //중복 회원 검증
+        validateDuplicateMember(member);
 
         memberRepository.save(member);
         return member.getId();
@@ -41,9 +42,11 @@ public class MemberService {
     }
 
     public Long logIn(LoginForm logInForm) {
+
         Member member = memberRepository.findByEmail(logInForm.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("이메일을 확인해 주세요."));
         validCorrectPassword(logInForm, member);
+        validNoMember();
         return member.getId();
     }
 
@@ -57,4 +60,9 @@ public class MemberService {
         return memberRepository.findAll();
     }
 
+    public void validNoMember(){
+        if(memberRepository.noMember()){
+            throw new IllegalArgumentException("존재하는 회원이 없습니다.");
+        }
+    }
 }
