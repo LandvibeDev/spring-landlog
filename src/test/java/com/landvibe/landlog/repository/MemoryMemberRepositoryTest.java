@@ -83,7 +83,8 @@ class MemoryMemberRepositoryTest {
         Member member1 = createMember();
 
         //when
-        Optional<Member> successResult = repository.findByEmailAndPassword("email1", "password1");
+        Optional<Member> successResult = repository
+                .findByEmailAndPassword("email1", "password1");
 
         //then
         assertThat(successResult.get()).isEqualTo(member1);
@@ -96,7 +97,8 @@ class MemoryMemberRepositoryTest {
         Member member1 = createMember();
 
         //when
-        Optional<Member> failedResult = repository.findByEmailAndPassword("email2", "password2");
+        Optional<Member> failedResult = repository
+                .findByEmailAndPassword("email2", "password2");
 
         //then
         assertThat(failedResult).isEmpty();
