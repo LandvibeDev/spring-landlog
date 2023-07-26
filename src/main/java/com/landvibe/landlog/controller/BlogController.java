@@ -12,7 +12,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.List;
 import java.util.Optional;
 
-import static com.landvibe.landlog.exceptions.ExceptionHandling.exceptionHandlingMethod;
 
 @Slf4j
 @Controller
@@ -27,7 +26,6 @@ public class BlogController {
 
     @GetMapping("/blogs")
     public String blog(@RequestParam Long creatorId, Model model) {
-        exceptionHandlingMethod(creatorId, memberService);
         Optional<Member> member = memberService.findOne(creatorId);
         List<Blog> blogs = blogService.findBlogs(creatorId);
         model.addAttribute("blogs", blogs);
@@ -39,7 +37,6 @@ public class BlogController {
 
     @GetMapping("/blogs/new")
     public String createBlogForm(@RequestParam Long creatorId, Model model) {
-        exceptionHandlingMethod(creatorId, memberService);
         Optional<Member> member = memberService.findOne(creatorId);
         model.addAttribute("name", member.get().getName());
         model.addAttribute("creatorId", creatorId);
@@ -52,7 +49,6 @@ public class BlogController {
                              @RequestParam Long creatorId,
                              RedirectAttributes redirectAttributes
     ) {
-        exceptionHandlingMethod(creatorId, memberService);
         Blog blog = new Blog(creatorId, title, contents);
         Optional<Member> member = memberService.findOne(creatorId);
         redirectAttributes.addAttribute("creatorId", creatorId);
@@ -64,7 +60,6 @@ public class BlogController {
     public String updateForm(@RequestParam Long blogId,
                              @RequestParam Long creatorId,
                              Model model) {
-        exceptionHandlingMethod(creatorId, memberService);
         Blog blog = blogService.findOne(blogId, creatorId);
         Optional<Member> member = memberService.findOne(creatorId);
         model.addAttribute("name", member.get().getName());
@@ -78,7 +73,6 @@ public class BlogController {
                          @RequestParam(required = false) Long creatorId,
                          @ModelAttribute UpdateBlogForm updateBlogForm,
                          RedirectAttributes redirectAttributes) {
-        exceptionHandlingMethod(creatorId, memberService);
         blogService.update(id, creatorId, updateBlogForm);
         redirectAttributes.addAttribute("creatorId", creatorId);
         return "redirect:/blogs";
@@ -88,7 +82,6 @@ public class BlogController {
     public String delete(@RequestParam Long blogId,
                          @RequestParam Long creatorId,
                          RedirectAttributes redirectAttributes) {
-        exceptionHandlingMethod(creatorId, memberService);
         blogService.delete(blogId, creatorId);
         redirectAttributes.addAttribute("creatorId", creatorId);
         return "redirect:/blogs";
