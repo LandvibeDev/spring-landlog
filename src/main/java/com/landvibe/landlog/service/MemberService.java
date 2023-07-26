@@ -18,7 +18,8 @@ public class MemberService {
 
     public Long join(Member member) {
         validateEmptyInput(member);
-        validateDuplicateMember(member);
+        validateDuplicateName(member);
+        validateDuplicateEmail(member);
         memberRepository.save(member);
         return member.getId();
     }
@@ -42,11 +43,14 @@ public class MemberService {
         return member;
     }
 
-    private void validateDuplicateMember(Member member) {
+    private void validateDuplicateEmail(Member member) {
         memberRepository.findByEmail(member.getEmail())
                 .ifPresent(m -> {
                     throw new IllegalStateException(Message.DUPLICATE_EMAIL.message);
                 });
+    }
+
+    private void validateDuplicateName(Member member) {
         memberRepository.findByName(member.getName())
                 .ifPresent(m -> {
                     throw new IllegalStateException(Message.DUPLICATE_NAME.message);
