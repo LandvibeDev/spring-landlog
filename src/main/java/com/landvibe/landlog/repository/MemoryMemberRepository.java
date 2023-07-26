@@ -49,6 +49,14 @@ public class MemoryMemberRepository implements MemberRepository {
         return new ArrayList<>(store.values());
     }
 
+    @Override
+    public boolean existsById(Long creatorId) {
+        if (store.get(creatorId) != null) {
+            return true;
+        }
+        return false;
+    }
+
     public void clearStore() {
         store.clear();
     }
