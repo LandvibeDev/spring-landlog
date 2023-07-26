@@ -19,6 +19,7 @@ class MemberServiceTest {
 
     MemberService memberService;
     MemoryMemberRepository memberRepository;
+    Member member1 = new Member("철수", "cs@inha.com", "1234");
 
     @BeforeEach
     public void beforeEach() {
@@ -33,8 +34,7 @@ class MemberServiceTest {
 
     @Test
     @DisplayName("회원가입 성공")
-    public void join() throws Exception {
-
+    public void join() {
         Member member = new Member();
         member.setName("hello");
 
@@ -46,8 +46,7 @@ class MemberServiceTest {
 
     @Test
     @DisplayName("회원가입 실패 : 중복 회원 예외처리")
-    public void validateDuplicateMember() throws Exception {
-
+    public void validateDuplicateMember() {
         Member member1 = new Member();
         member1.setName("spring");
         Member member2 = new Member();
@@ -62,30 +61,26 @@ class MemberServiceTest {
     @Test
     @DisplayName("ID로 회원 찾기")
     void findById() {
+        memberRepository.save(member1);
 
-        Member member = new Member("철수", "cs@inha.com", "1234");
-        memberRepository.save(member);
+        memberRepository.save(member1);
 
-        memberRepository.save(member);
+        Member result = memberRepository.findById(member1.getId()).get();
 
-        Member result = memberRepository.findById(member.getId()).get();
-
-        Assertions.assertThat(result).isEqualTo(member);
+        Assertions.assertThat(result).isEqualTo(member1);
     }
 
     @Test
     @DisplayName("회원 목록 조회")
     public void findAll() {
-
-        Member member1 = new Member("철수", "cs@inha.com", "1234");
         memberRepository.save(member1);
         Member member2 = new Member("영희", "yh@inha.com", "5678");
         memberRepository.save(member2);
         Member member3 = new Member("길동", "gd.inha.com", "789");
-
+        memberRepository.save(member3);
         List<Member> result = memberRepository.findAll();
 
-        assertThat(result.size()).isEqualTo(2);
+        assertThat(result.size()).isEqualTo(3);
     }
 
     @Test

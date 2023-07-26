@@ -16,7 +16,9 @@ public class MemberService {
     }
 
     public Member findById(Long id) {
-        return memberRepository.findById(id).get();
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 id 입니다."));
+        return member;
     }
 
     public Long join(Member member) {
