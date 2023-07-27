@@ -20,7 +20,6 @@ public class BlogService {
 
     public void register(Long creatorId, Blog blog) {
         validCreatorId(creatorId);
-        validBlogId(creatorId, blog.getId());
         blogRepository.save(blog);
     }
 
