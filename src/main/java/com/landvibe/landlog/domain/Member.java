@@ -49,11 +49,4 @@ public class Member {
         this.password = password;
     }
 
-    public int getBlogCount() {
-        return blogCount;
-    }
-
-    public void setBlogCount(int blogCount) {
-        this.blogCount = blogCount;
-    }
 }

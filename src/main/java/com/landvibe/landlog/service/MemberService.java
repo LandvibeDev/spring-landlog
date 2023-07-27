@@ -22,12 +22,6 @@ public class MemberService {
         return member;
     }
 
-    public void validNoMember(){
-        if(memberRepository.noMember()){
-            throw new IllegalArgumentException("등록된 회원이 없습니다.");
-        }
-    }
-
     public Long join(Member member) {
         validateDuplicateMember(member);
 
@@ -48,7 +42,6 @@ public class MemberService {
     }
 
     public Long logIn(LoginForm logInForm) {
-
         Member member = memberRepository.findByEmail(logInForm.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("이메일을 확인해 주세요."));
         validCorrectPassword(logInForm, member);
@@ -65,6 +58,9 @@ public class MemberService {
     public List<Member> findMembers() {
         return memberRepository.findAll();
     }
-
-
+    private void validNoMember(){
+        if(memberRepository.noMember()){
+            throw new IllegalArgumentException("등록된 회원이 없습니다.");
+        }
+    }
 }

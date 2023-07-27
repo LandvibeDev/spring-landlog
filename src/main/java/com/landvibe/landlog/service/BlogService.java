@@ -1,15 +1,12 @@
 package com.landvibe.landlog.service;
 
 import com.landvibe.landlog.domain.Blog;
-import com.landvibe.landlog.domain.Member;
 import com.landvibe.landlog.form.BlogForm;
 import com.landvibe.landlog.repository.BlogRepository;
 import com.landvibe.landlog.repository.MemberRepository;
-import com.landvibe.landlog.repository.MemoryBlogRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BlogService {
@@ -22,25 +19,40 @@ public class BlogService {
     }
 
     public void register(Long creatorId, Blog blog) {
-        memberRepository.findById(creatorId).
-                orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원 id 입니다."));
+        validCreatorId(creatorId);
+        validBlogId(creatorId, blog.getId());
         blogRepository.save(blog);
     }
 
     public Blog findBlogByBlogIdAndCreatorId(Long creatorId, Long blogId){
-        Optional<Blog> blog = blogRepository.findBlogByCreatorIdAndBlogId(creatorId, blogId);
-        blog.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시물 입니다."));
+        validCreatorId(creatorId);
+        validBlogId(creatorId, blogId);
 
-        return blog.get();
+        return blogRepository.findBlogByCreatorIdAndBlogId(creatorId,blogId).get();
     }
 
     public void updateBlog(Long creatorId, Long blogId, BlogForm form){
+        validCreatorId(creatorId);
+        validBlogId(creatorId, blogId);
         blogRepository.update(blogId, form);
     }
 
     public void deleteBlog(Long creatorId, Long blogId){
+        validCreatorId(creatorId);
+        validBlogId(creatorId, blogId);
         blogRepository.delete(blogId);
     }
+
+    private void validCreatorId(Long creatorId){
+        memberRepository.findById(creatorId).
+                orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원 id 입니다."));
+    }
+
+    private void validBlogId(Long creatorId, Long blogId){
+        blogRepository.findBlogByCreatorIdAndBlogId(creatorId, blogId).
+                orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시물 입니다."));
+    }
+
     public List<Blog> findBlogs(Long creatorId) {
         return blogRepository.findAllBlogsByCreatorId(creatorId);
     }
