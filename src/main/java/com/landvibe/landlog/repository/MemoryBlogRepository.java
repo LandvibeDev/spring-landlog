@@ -19,7 +19,7 @@ public class MemoryBlogRepository implements BlogRepository {
     }
 
     @Override
-    public Optional<Blog> findBlogByMemberAndBlogId(Long MemberId, Long BlogId) {
+    public Optional<Blog> findBlogByCreatorIdAndBlogId(Long MemberId, Long BlogId) {
         return blogStore.values().stream()
                 .filter(blog -> blog.getCreatorId().equals(MemberId) &&
                                 blog.getId().equals(BlogId))
@@ -32,6 +32,19 @@ public class MemoryBlogRepository implements BlogRepository {
         blogStore.get(blogId).setContents(form.getContents());
     }
 
+    @Override
+    public void delete(Long creatorId, Long deleteBlogId){
+        blogStore.remove(deleteBlogId);
+
+        for (Map.Entry<Long, Blog> entry : blogStore.entrySet()) {
+            Long changeId = entry.getValue().getId();
+            if(changeId > deleteBlogId) {
+                entry.getValue().setId(changeId-1);
+            }
+        }
+
+        blogNumber--;
+    }
     @Override
     public List<Blog> findAllBlogsByCreatorId(Long creatorId) {
         List<Blog> creatorBlogList = new ArrayList<>();

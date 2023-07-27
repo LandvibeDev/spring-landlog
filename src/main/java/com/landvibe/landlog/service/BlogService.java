@@ -28,19 +28,18 @@ public class BlogService {
     }
 
     public Blog findBlogByBlogIdAndCreatorId(Long creatorId, Long blogId){
-        Optional<Blog> blog = blogRepository.findBlogByMemberAndBlogId(creatorId, blogId);
+        Optional<Blog> blog = blogRepository.findBlogByCreatorIdAndBlogId(creatorId, blogId);
         blog.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시물 입니다."));
 
         return blog.get();
     }
 
     public void updateBlog(Long creatorId, Long blogId, BlogForm form){
-//        Blog blog = blogRepository.findBlogByMemberAndBlogId(creatorId, blogId).get();
-//
-//        blog.setTitle(form.getTitle());
-//        blog.setContents(form.getContents());
-
         blogRepository.update(blogId, form);
+    }
+
+    public void deleteBlog(Long creatorId, Long blogId){
+        blogRepository.delete(creatorId, blogId);
     }
     public List<Blog> findBlogs(Long creatorId) {
         return blogRepository.findAllBlogsByCreatorId(creatorId);

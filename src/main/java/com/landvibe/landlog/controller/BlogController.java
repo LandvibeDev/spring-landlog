@@ -71,8 +71,8 @@ public class BlogController {
         return "blogs/updateBlogForm";
     }
 
-    @PostMapping(value = "/update")
-    public String updateBlog(@RequestParam(name = "creatorId") Long creatorId, @RequestParam(name = "id") Long blogId,
+    @PatchMapping(value = "/update")
+    public String updateBlog(@RequestParam(name = "creatorId") Long creatorId, @RequestParam(name = "id", required = false) Long blogId,
                              BlogForm form, RedirectAttributes redirect) {
         blogService.updateBlog(creatorId, blogId, form);
 
@@ -81,5 +81,14 @@ public class BlogController {
         return "redirect:/blogs";
     }
 
+    @DeleteMapping(value = "/delete")
+    public String deleteBlog(@RequestParam(name = "blogId") Long blogId, @RequestParam(name = "creatorId", required = false) Long creatorId,
+                             RedirectAttributes redirect){
+        blogService.deleteBlog(creatorId, blogId);
+
+        redirect.addAttribute("creatorId", creatorId);
+
+        return "redirect:/blogs";
+    }
 
 }
