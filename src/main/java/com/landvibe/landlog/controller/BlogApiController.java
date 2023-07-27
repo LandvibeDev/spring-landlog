@@ -2,7 +2,6 @@ package com.landvibe.landlog.controller;
 
 import com.landvibe.landlog.domain.Blog;
 import com.landvibe.landlog.service.BlogService;
-import com.landvibe.landlog.service.MemberService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,11 +22,9 @@ public class BlogApiController {
     }
 
 
-    @GetMapping("{blogId}")
-    public Blog blog(@RequestParam long creatorId, @PathVariable long blogId) {
-        System.out.println("!!!!!!!!!!");
-        Blog blog = blogService.findById(blogId, creatorId);
-        return blog;
+    @GetMapping("{id}")
+    public Blog blog(@RequestParam long creatorId, @PathVariable long id) {
+        return blogService.findById(creatorId, id);
     }
 
     @PostMapping
@@ -35,13 +32,13 @@ public class BlogApiController {
         return blogService.registerBlog(creatorId, blog);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     public Blog update(@RequestParam long creatorId, @PathVariable long id, @RequestBody Blog blog) {
         return blogService.updateBlog(creatorId, id , blog);
     }
 
 
-    @DeleteMapping("delete/{id}")
+    @DeleteMapping("/{id}")
     public void delete(@RequestParam long creatorId, @PathVariable long id) {
         blogService.deleteBlog(creatorId, id);
     }

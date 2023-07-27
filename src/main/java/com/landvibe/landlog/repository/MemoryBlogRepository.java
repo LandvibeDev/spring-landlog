@@ -1,12 +1,11 @@
 package com.landvibe.landlog.repository;
+import com.landvibe.landlog.domain.Blog;
+import org.springframework.stereotype.Repository;
 
-        import com.landvibe.landlog.domain.Blog;
-        import org.springframework.stereotype.Repository;
-
-        import java.util.HashMap;
-        import java.util.List;
-        import java.util.Map;
-        import java.util.Optional;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public class MemoryBlogRepository implements BlogRepository {
@@ -21,8 +20,8 @@ public class MemoryBlogRepository implements BlogRepository {
     }
 
     @Override
-    public Optional<Blog> findByBlogId(Long blogId) {
-        return Optional.ofNullable(store.get(blogId));
+    public Optional<Blog> findById(Long id) {
+        return Optional.ofNullable(store.get(id));
     }
 
     @Override

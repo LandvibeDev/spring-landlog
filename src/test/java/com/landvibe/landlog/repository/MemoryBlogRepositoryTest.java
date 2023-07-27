@@ -29,7 +29,7 @@ class MemoryBlogRepositoryTest {
         repository.save(blog);
 
         //then
-        Blog result = repository.findByBlogId(blog.getId()).get();
+        Blog result = repository.findById(blog.getId()).get();
         assertThat(result).isEqualTo(blog);
     }
 
@@ -43,7 +43,7 @@ class MemoryBlogRepositoryTest {
         repository.delete(blog.getId());
 
         //then
-        assertThat(repository.findByBlogId(blog.getId())).isEqualTo(Optional.empty());
+        assertThat(repository.findById(blog.getId())).isEqualTo(Optional.empty());
     }
 
     @Test
