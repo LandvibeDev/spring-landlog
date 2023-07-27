@@ -114,7 +114,7 @@ class MemberServiceTest {
     @DisplayName("등록된 멤버가 없을 시 예외처리")
     public void validNoMember(){
         Exception e = assertThrows(Exception.class,
-                () -> memberService.findById(member1.getId()));
+                () -> memberService.findMemberById(member1.getId()));
         assertThat(e.getMessage()).isEqualTo("등록된 회원이 없습니다.");
     }
 }

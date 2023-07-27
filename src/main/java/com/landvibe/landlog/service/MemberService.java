@@ -15,11 +15,17 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
 
-    public Member findById(Long id) {
+    public Member findMemberById(Long memberId) {
         validNoMember();
-        Member member = memberRepository.findById(id)
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 id 입니다."));
         return member;
+    }
+
+    public void validNoMember(){
+        if(memberRepository.noMember()){
+            throw new IllegalArgumentException("등록된 회원이 없습니다.");
+        }
     }
 
     public Long join(Member member) {
@@ -60,9 +66,5 @@ public class MemberService {
         return memberRepository.findAll();
     }
 
-    public void validNoMember(){
-        if(memberRepository.noMember()){
-            throw new IllegalArgumentException("존재하는 회원이 없습니다.");
-        }
-    }
+
 }
