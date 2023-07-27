@@ -33,17 +33,8 @@ public class MemoryBlogRepository implements BlogRepository {
     }
 
     @Override
-    public void delete(Long creatorId, Long deleteBlogId){
+    public void delete(Long deleteBlogId){
         blogStore.remove(deleteBlogId);
-
-        for (Map.Entry<Long, Blog> entry : blogStore.entrySet()) {
-            Long changeId = entry.getValue().getId();
-            if(changeId > deleteBlogId) {
-                entry.getValue().setId(changeId-1);
-            }
-        }
-
-        blogNumber--;
     }
     @Override
     public List<Blog> findAllBlogsByCreatorId(Long creatorId) {

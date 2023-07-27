@@ -12,7 +12,7 @@ public interface BlogRepository {
 
     void update(Long blogId, BlogForm updatedForm);
 
-    void delete(Long creatorId, Long blogId);
+    void delete(Long blogId);
 
     Optional<Blog> findBlogByCreatorIdAndBlogId(Long memberId, Long blogId);
 

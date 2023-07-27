@@ -39,7 +39,7 @@ public class BlogService {
     }
 
     public void deleteBlog(Long creatorId, Long blogId){
-        blogRepository.delete(creatorId, blogId);
+        blogRepository.delete(blogId);
     }
     public List<Blog> findBlogs(Long creatorId) {
         return blogRepository.findAllBlogsByCreatorId(creatorId);
