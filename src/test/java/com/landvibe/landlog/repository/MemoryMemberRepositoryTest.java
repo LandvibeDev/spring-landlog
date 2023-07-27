@@ -64,4 +64,22 @@ class MemoryMemberRepositoryTest {
         //then
         assertThat(result.size()).isEqualTo(2);
     }
+
+    @Test
+    void findByEmail() {
+        //given
+        Member member1 = new Member();
+        member1.setEmail("spring1");
+        repository.save(member1);
+        Member member2 = new Member();
+        member2.setEmail("spring2");
+        repository.save(member2);
+
+        //when
+        Member result = repository.findByEmail("spring1").get();
+
+        //then
+        assertThat(result).isEqualTo(member1);
+    }
+
 }

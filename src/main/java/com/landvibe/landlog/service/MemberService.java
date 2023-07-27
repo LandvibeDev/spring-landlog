@@ -1,11 +1,11 @@
 package com.landvibe.landlog.service;
 
+import com.landvibe.landlog.form.LoginForm;
 import com.landvibe.landlog.domain.Member;
 import com.landvibe.landlog.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class MemberService {
@@ -15,8 +15,16 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
 
+    public Member findById(Long id) {
+        validNoMember();
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 id 입니다."));
+        return member;
+    }
+
     public Long join(Member member) {
-        validateDuplicateMember(member); //중복 회원 검증
+        validateDuplicateMember(member);
+
         memberRepository.save(member);
         return member.getId();
     }
@@ -24,15 +32,37 @@ public class MemberService {
     private void validateDuplicateMember(Member member) {
         memberRepository.findByName(member.getName())
                 .ifPresent(m -> {
-                    throw new IllegalStateException("이미 존재하는 회원입니다.");
+                    throw new IllegalArgumentException("이미 존재하는 회원입니다.");
                 });
+
+        memberRepository.findByEmail(member.getEmail())
+                .ifPresent(m -> {
+                    throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
+                });
+    }
+
+    public Long logIn(LoginForm logInForm) {
+
+        Member member = memberRepository.findByEmail(logInForm.getEmail())
+                .orElseThrow(() -> new IllegalArgumentException("이메일을 확인해 주세요."));
+        validCorrectPassword(logInForm, member);
+        validNoMember();
+        return member.getId();
+    }
+
+    private void validCorrectPassword(LoginForm loginForm, Member member) {
+        if (!member.getPassword().equals(loginForm.getPassword())) {
+            throw new IllegalArgumentException("비밀번호를 확인해주세요.");
+        }
     }
 
     public List<Member> findMembers() {
         return memberRepository.findAll();
     }
 
-    public Optional<Member> findOne(Long memberId) {
-        return memberRepository.findById(memberId);
+    public void validNoMember(){
+        if(memberRepository.noMember()){
+            throw new IllegalArgumentException("존재하는 회원이 없습니다.");
+        }
     }
 }
