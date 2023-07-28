@@ -4,8 +4,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.landvibe.landlog.controller.form.BlogForm;
+import com.landvibe.landlog.controller.form.BlogUpdateForm;
 import com.landvibe.landlog.domain.Blog;
-import com.landvibe.landlog.domain.Member;
 import com.landvibe.landlog.repository.BlogRepository;
 
 @Service
@@ -18,21 +19,26 @@ public class BlogService {
 		this.memberService = memberService;
 	}
 
-	public Long create(Blog blog) {
-		validateCreator(blog.getCreatorId());
-		validateBlog(blog);
+	public Long create(Long creatorId, BlogForm blogForm) {
+		Blog blog = new Blog(creatorId, blogForm.getTitle(), blogForm.getContents());
+
+		validateCreator(creatorId);
+		validateBlog(blog.getTitle(), blog.getContents());
 		return blogRepository.save(blog);
 	}
 
-	public Long update(Blog blog) {
-		validateCreator(blog.getCreatorId());
-		findByBlogId(blog.getId());
-		validateBlog(blog);
-		return blogRepository.update(blog);
+	public Long update(BlogUpdateForm updateForm) {
+		validateCreator(updateForm.getCreatorId());
+		validateBlog(updateForm.getTitle(), updateForm.getContents());
+
+		Long blogId = findByBlogId(updateForm.getId()).getId();
+		Blog newBlog = new Blog(updateForm.getCreatorId(), updateForm.getTitle(), updateForm.getContents());
+
+		return blogRepository.update(blogId, newBlog);
 	}
 
 	public Long delete(Long blogId) {
-		Blog blog =  findByBlogId(blogId);
+		Blog blog = findByBlogId(blogId);
 		validateCreator(blog.getCreatorId());
 		return blogRepository.delete(blog.getId());
 	}
@@ -47,15 +53,15 @@ public class BlogService {
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 블로그입니다."));
 	}
 
-	public void validateCreator(Long creatorId){
+	public void validateCreator(Long creatorId) {
 		memberService.findById(creatorId);
 	}
 
-	public void validateBlog(Blog blog){
-		if (blog.getTitle().equals("")) {
+	public void validateBlog(String title, String contents) {
+		if (title.equals("")) {
 			throw new IllegalArgumentException("제목을 입력해주세요.");
 		}
-		if (blog.getContents().equals("")) {
+		if (contents.equals("")) {
 			throw new IllegalArgumentException("내용을 입력해주세요.");
 		}
 	}
