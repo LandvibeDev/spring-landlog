@@ -1,5 +1,6 @@
 package com.landvibe.landlog.service;
 
+import com.landvibe.landlog.controller.form.BlogForm;
 import com.landvibe.landlog.controller.form.BlogUpdateForm;
 import com.landvibe.landlog.domain.Blog;
 import com.landvibe.landlog.domain.Member;
@@ -8,156 +9,148 @@ import com.landvibe.landlog.repository.MemoryMemberRepository;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-class BlogServiceTest {
+import java.util.Optional;
+
+@ExtendWith(MockitoExtension.class)
+public class BlogServiceTest {
+
+	@Mock
+	private MemoryBlogRepository blogRepository;
+
+	@Mock
+	private MemberService memberService;
+
+	@Mock
+	private MemoryMemberRepository memberRepository;
+
 
 	BlogService blogService;
-	MemberService memberService;
-	MemoryMemberRepository memberRepository;
-	MemoryBlogRepository blogRepository;
+
+	String title = "제목";
+	String contents = "내용";
+	String updatedTitle = "새 제목";
+	String updatedContents = "새 내용";
+	String invalidTitle = "";
+	String invalidContents = "";
+	Long creatorId = 1L;
+	Long blogId = 1L;
+
+	BlogForm blogForm;
+	BlogUpdateForm updateForm;
+	Blog blog;
+	Blog updateBlog;
 	Member member;
 
 	@BeforeEach
 	public void beforeEach() {
-		memberRepository = new MemoryMemberRepository();
-		blogRepository = new MemoryBlogRepository();
-		memberService = new MemberService(memberRepository);
-		blogService = new BlogService(blogRepository, memberService);
-		member = new Member("name", "email@landvibe.com", "password");
-		memberService.join(member);
+		blogService = new BlogService(blogRepository,memberService);
+		blogForm = new BlogForm(title, contents);
+		updateForm = new BlogUpdateForm(creatorId, blogId, updatedTitle, updatedContents);
+		blog = new Blog(creatorId, blogForm.getTitle(), blogForm.getContents());
+		updateBlog = new Blog(updateForm.getCreatorId(),updateForm.getTitle(),updateForm.getContents());
+		blog.setId(blogId);
+		updateBlog.setId(blogId);
+		member = new Member("name","email@landvibe.com","password");
 	}
 
 	@AfterEach
-	public void afterEach() {
-		memberRepository.clearStore();
+	public void afterEach(){
 		blogRepository.clearStore();
 	}
 
-	String title = "제목";
-	String contents = "내용";
+	@DisplayName("블로그 생성 성공")
 	@Test
-	void 잘못된_작성자_id() {
-		Long invalidCreatorId = 0L;
-		Blog blog = new Blog(invalidCreatorId, title, contents);
-
-		Exception e = assertThrows(Exception.class,
-			() -> blogService.create(blog));
-		assertThat(e.getMessage()).isEqualTo("존재하지 않는 회원입니다.");
+	public void create() {
+		when(blogRepository.save(any(Blog.class))).thenReturn(blogId);
+		assertEquals(blogId, blogService.create(creatorId, blogForm));
+		verify(blogRepository, times(1)).save(any(Blog.class));
 	}
 
+	@DisplayName("블로그 생성 실패 -> 잘못된 제목")
 	@Test
-	void 제목_입력안함() {
-
-		String invalidTitle = "";
-		Blog blog = new Blog(member.getId(), invalidTitle, contents);
+	public void create_invalidTitle(){
+		BlogForm invalidBlogForm = new BlogForm(invalidTitle,contents);
 
 		Exception e = assertThrows(Exception.class,
-			() -> blogService.create(blog));
-		assertThat(e.getMessage()).isEqualTo("제목을 입력해주세요.");
-
+			() -> blogService.create(creatorId,invalidBlogForm));
+		assertEquals(e.getMessage(),"제목을 입력해주세요.");
 	}
 
+	@DisplayName("블로그 생성 실패 -> 잘못된 내용")
 	@Test
-	void 내용_입력안함() {
-
-		String invalidContents = "";
-		Blog blog = new Blog(member.getId(), title, invalidContents);
+	public void create_invalidContents(){
+		BlogForm invalidBlogForm = new BlogForm(title,invalidContents);
 
 		Exception e = assertThrows(Exception.class,
-			() -> blogService.create(blog));
-		assertThat(e.getMessage()).isEqualTo("내용을 입력해주세요.");
-
+			() -> blogService.create(creatorId,invalidBlogForm));
+		assertEquals(e.getMessage(),"내용을 입력해주세요.");
 	}
 
+	@DisplayName("블로그 업데이트 성공")
 	@Test
-	void 업데이트_성공() {
+	public void update(){
+		when(blogRepository.findByBlogId(any(Long.class))).thenReturn(Optional.ofNullable(updateBlog));
+		when(blogRepository.update(any(Long.class),any(Blog.class))).thenReturn(blogId);
 
-		//given
-		String updateTitle = "Title";
-		String updateContents = "Contents";
-		Blog blog = new Blog(member.getId(), title, contents);
-		blogService.create(blog);
-		BlogUpdateForm updateForm = new BlogUpdateForm(member.getId(), blog.getId(), updateTitle, updateContents);
+		Long updateBlogId = blogService.update(updateForm);
+		Blog targetBlog = blogService.findByBlogId(updateBlogId);
 
-		// when
-		Blog updateBlog = new Blog(updateForm.getCreatorId(), updateForm.getTitle(), updateForm.getContents());
-		updateBlog.setId(updateForm.getId());
-		Long updateBlogId = blogService.update(updateBlog);
-
-		//then
-		assertThat(updateBlogId).isEqualTo(updateBlog.getId());
-
+		assertEquals(blogId,updateBlogId);
+		assertEquals(updatedTitle,targetBlog.getTitle());
+		assertEquals(updatedContents,targetBlog.getContents());
+		verify(blogRepository, times(1)).update(any(Long.class), any(Blog.class));
 	}
 
+	@DisplayName("블로그 업데이트 실패 -> 잘못된 제목")
 	@Test
-	void 업데이트_제목_입력안함() {
+	public void update_invalidTitle(){
+		BlogUpdateForm invalidUpdateForm = new BlogUpdateForm(creatorId,blogId,invalidTitle,updatedContents);
 
-		//given
-		String updateTitle = "";
-		String updateContents = "Contents";
-		Blog blog = new Blog(member.getId(), title, contents);
-		blogService.create(blog);
-		BlogUpdateForm updateForm = new BlogUpdateForm(member.getId(), blog.getId(), updateTitle, updateContents);
-
-		// when
-		Blog updateBlog = new Blog(updateForm.getCreatorId(), updateForm.getTitle(), updateForm.getContents());
-		updateBlog.setId(updateForm.getId());
 		Exception e = assertThrows(Exception.class,
-			() -> blogService.update(updateBlog));
-		assertThat(e.getMessage()).isEqualTo("제목을 입력해주세요.");
-
+			() -> blogService.update(invalidUpdateForm));
+		assertEquals(e.getMessage(),"제목을 입력해주세요.");
 	}
 
+	@DisplayName("블로그 업데이트 실패 -> 잘못된 내용")
 	@Test
-	void 업데이트_내용_입력안함() {
+	public void update_invalidContents(){
+		BlogUpdateForm invalidUpdateForm = new BlogUpdateForm(creatorId,blogId,updatedTitle,invalidContents);
 
-		//given
-		String updateTitle = "Title";
-		String updateContents = "";
-		Blog blog = new Blog(member.getId(), title, contents);
-		blogService.create(blog);
-		BlogUpdateForm updateForm = new BlogUpdateForm(member.getId(), blog.getId(), updateTitle, updateContents);
-
-		// when
-		Blog updateBlog = new Blog(updateForm.getCreatorId(), updateForm.getTitle(), updateForm.getContents());
-		updateBlog.setId(updateForm.getId());
 		Exception e = assertThrows(Exception.class,
-			() -> blogService.update(updateBlog));
-		assertThat(e.getMessage()).isEqualTo("내용을 입력해주세요.");
-
+			() -> blogService.update(invalidUpdateForm));
+		assertEquals(e.getMessage(),"내용을 입력해주세요.");
 	}
 
+	@DisplayName("블로그 삭제 성공")
 	@Test
-	void 블로그_삭제_성공() {
+	public void delete() {
+		when(blogRepository.delete(blogId)).thenReturn(blogId);
+		when(blogRepository.findByBlogId(blogId)).thenReturn(Optional.ofNullable(blog));
 
-		// given
-		Blog blog = new Blog(member.getId(), title, contents);
-		blogService.create(blog);
-		// when
-		blogService.delete(blog.getId());
+		blogService.delete(blogId);
 
-		// then
-		Exception e = assertThrows(Exception.class,
-			() -> blogService.findByBlogId(blog.getId()));
-		assertThat(e.getMessage()).isEqualTo("존재하지 않는 블로그입니다.");
-
+		verify(blogRepository,times(1)).delete(blogId);
 	}
-
+	@DisplayName("블로그 삭제 실패")
 	@Test
-	void 블로그_삭제_실패() {
+	public void delete_fail() {
 
-		// given
-		Long invalidBlogId = null;
-		Blog blog = new Blog(member.getId(), title, contents);
-		blogService.create(blog);
-		// when
+		blogService.create(creatorId, blogForm);
+
 		Exception e = assertThrows(Exception.class,
-			() -> blogService.delete(invalidBlogId));
-		assertThat(e.getMessage()).isEqualTo("존재하지 않는 블로그입니다.");
+			() -> blogService.delete(0L));
+		assertEquals(e.getMessage(),"존재하지 않는 블로그입니다.");
 
+		verify(blogRepository, times(1)).findByBlogId(any(Long.class));
+		verify(blogRepository, never()).delete(any(Long.class));
 	}
 }
