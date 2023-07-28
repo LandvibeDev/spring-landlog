@@ -38,7 +38,6 @@ public class MemberService {
 	void validateInvalidMember(Member member) {
 		validateNoInput(member);
 		validateInvalidEmail(member.getEmail());
-		validateDuplicateMember(member);
 	}
 
 	private void validateNoInput(Member member) {
@@ -64,13 +63,11 @@ public class MemberService {
 				}
 			);
 
-	}
-
-	private void validateDuplicateMember(Member member) {
-		memberRepository.findByEmail(member.getEmail())
+		memberRepository.findByEmail(email)
 			.ifPresent(m -> {
 				throw new IllegalStateException("중복된 이메일입니다.");
 			});
+
 	}
 
 	public List<Member> findMembers() {

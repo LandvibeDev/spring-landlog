@@ -45,11 +45,10 @@ class MemoryBlogRepositoryTest {
 		Blog blog = new Blog(creatorId, title, contents);
 		Blog updatedBlog = new Blog(creatorId, "바뀐 제목", "바뀐 내용");
 
+
 		//when
 		repository.save(blog);
-		updatedBlog.setId(blog.getId());
-
-		repository.update(updatedBlog);
+		repository.update(blog.getId(),updatedBlog);
 
 		//then
 		Blog result = repository.findByBlogId(updatedBlog.getId()).get();
