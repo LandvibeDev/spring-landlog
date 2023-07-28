@@ -48,4 +48,8 @@ public class MemoryBlogRepository implements BlogRepository {
 
         return creatorBlogList;
     }
+
+    public void clearStore() {
+        blogStore.clear();
+    }
 }

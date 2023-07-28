@@ -16,7 +16,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class MemberServiceTest {
-
     MemberService memberService;
     MemoryMemberRepository memberRepository;
     Member member1 = new Member("철수", "cs@inha.com", "1234");
