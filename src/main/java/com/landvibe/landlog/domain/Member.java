@@ -1,4 +1,5 @@
 package com.landvibe.landlog.domain;
+
 public class Member {
 
     private Long id;
