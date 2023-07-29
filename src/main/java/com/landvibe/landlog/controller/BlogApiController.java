@@ -31,14 +31,18 @@ public class BlogApiController {
 
     @PostMapping
     public Blog create(@RequestParam long creatorId, @RequestBody Blog blog) {
-        BlogCreateForm form = new BlogCreateForm(blog.getTitle(), blog.getContents());
+        String title= blog.getTitle();
+        String contents= blog.getContents();
+        BlogCreateForm form = new BlogCreateForm(title,contents);
         blogService.createBlog(creatorId, form);
         return blog;
     }
 
     @PutMapping("/{id}")
     public Blog update(@RequestParam long creatorId, @PathVariable long id, @RequestBody Blog blog) {
-        BlogUpdateForm form = new BlogUpdateForm(blog.getTitle(), blog.getContents());
+        String title= blog.getTitle();
+        String contents= blog.getContents();
+        BlogUpdateForm form = new BlogUpdateForm(title,contents);
         blogService.update(id, form);
         return blog;
     }
