@@ -8,9 +8,9 @@ public class Blog {
     private Long creatorId;
     private String contents;
 
-    public Blog(String title, Long memberId, String content) {
+    public Blog(String title, Long creatorId, String content) {
         this.title = title;
-        this.creatorId = memberId;
+        this.creatorId = creatorId;
         this.contents = content;
     }
 

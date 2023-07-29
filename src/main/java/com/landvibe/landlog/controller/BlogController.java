@@ -75,11 +75,12 @@ public class BlogController {
     @GetMapping("/update")
     public String updateBlogForm(@RequestParam("blogId") Long blogId, @RequestParam("creatorId") Long creatorId, Model model) {
         try {
+            System.out.println(blogId);
             Member member = memberService.findById(creatorId);
             Blog blog = blogService.findBlogById(blogId);
             model.addAttribute("name", member.getName());
             model.addAttribute("creatorId", creatorId);
-            model.addAttribute("blog", blog);
+            model.addAttribute("blogId", blogId);
             return "blogs/updateBlogForm";
         } catch (Exception e) {
             System.out.println(e.getMessage());
