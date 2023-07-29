@@ -1,6 +1,7 @@
 package com.landvibe.landlog.controller;
 
 
+import com.landvibe.landlog.converter.BlogConverter;
 import com.landvibe.landlog.domain.Blog;
 import com.landvibe.landlog.form.BlogCreateForm;
 import com.landvibe.landlog.form.BlogUpdateForm;
@@ -31,18 +32,14 @@ public class BlogApiController {
 
     @PostMapping
     public Blog create(@RequestParam long creatorId, @RequestBody Blog blog) {
-        String title= blog.getTitle();
-        String contents= blog.getContents();
-        BlogCreateForm form = new BlogCreateForm(title,contents);
+        BlogCreateForm form = BlogConverter.getBlogCreateForm(blog);
         blogService.createBlog(creatorId, form);
         return blog;
     }
 
     @PutMapping("/{id}")
     public Blog update(@RequestParam long creatorId, @PathVariable long id, @RequestBody Blog blog) {
-        String title= blog.getTitle();
-        String contents= blog.getContents();
-        BlogUpdateForm form = new BlogUpdateForm(title,contents);
+        BlogUpdateForm form = BlogConverter.getBlogUpdateForm(blog);
         blogService.update(id, form);
         return blog;
     }
