@@ -18,27 +18,29 @@ public class BlogApiController {
         this.blogService = blogService;
     }
 
-    @GetMapping("")
+    @GetMapping
     public List<Blog> list(@RequestParam long creatorId) {
         List<Blog> blogs = blogService.findBlogs(creatorId);
         return blogs;
     }
 
 
-    @GetMapping("{blogId}")
-    public Blog blogUpdate(@RequestParam long creatorId, @PathVariable long blogId) {
+    @GetMapping("/{blogId}")
+    public UpdateBlogForm blogUpdate(@RequestParam long creatorId, @PathVariable long blogId) {
         Blog blog = blogService.findOne(blogId, creatorId);
-        return blog;
+        UpdateBlogForm updateBlogForm = new UpdateBlogForm(blog.getTitle(), blog.getContents());
+        return updateBlogForm;
     }
 
-    @PostMapping("")
+
+    @PostMapping
     public Blog create(@RequestParam long creatorId, @RequestBody Blog blog) {
         blogService.create(blog);
         return blog;
     }
 
 
-    @PutMapping("{blogId}")
+    @PutMapping("/{blogId}")
     public Blog update(@RequestParam long creatorId, @PathVariable long blogId, @RequestBody Blog blog) {
         UpdateBlogForm updateBlogForm = new UpdateBlogForm(blog.getTitle(), blog.getContents());
         blogService.update(blogId, creatorId, updateBlogForm);
@@ -47,7 +49,7 @@ public class BlogApiController {
 
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public void delete(@RequestParam long creatorId, @PathVariable long id) {
         blogService.delete(id, creatorId);
     }
