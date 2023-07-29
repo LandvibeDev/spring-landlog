@@ -30,8 +30,9 @@ public class BlogController {
         List<Blog> blogs = blogService.findBlogs(creatorId);
         model.addAttribute("blogs", blogs);
         model.addAttribute("creatorId", creatorId);
+        if (member.isEmpty()) return "home";
         model.addAttribute("name", member.get().getName());
-        return "blogList";
+        return "blogs";
     }
 
 

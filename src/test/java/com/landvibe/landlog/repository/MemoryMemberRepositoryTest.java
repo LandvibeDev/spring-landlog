@@ -82,7 +82,6 @@ class MemoryMemberRepositoryTest {
         //then
         assertThat(failByEmailAndPassword).isEmpty();
     }
-
     private static void createNewMember(Member member1) {
         member1.setName("aaN");
         member1.setEmail("aaI");
