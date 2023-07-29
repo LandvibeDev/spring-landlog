@@ -21,26 +21,23 @@ public class BlogApiController {
         return blogService.findBlogsByCreatorId(creatorId);
     }
 
-
-    @GetMapping("{id}")
-    public Blog blog(@RequestParam long creatorId, @PathVariable long id) {
-        return blogService.findById(creatorId, id);
-    }
-
     @PostMapping
     public Blog create(@RequestParam long creatorId, @RequestBody Blog blog) {
         return blogService.registerBlog(creatorId, blog);
     }
 
-    @PutMapping("/{id}")
-    public Blog update(@RequestParam long creatorId, @PathVariable long id, @RequestBody Blog blog) {
-        return blogService.updateBlog(creatorId, id , blog);
+    @GetMapping("/{id}")
+    public Blog blog(@RequestParam long creatorId, @PathVariable long id) {
+        return blogService.findById(creatorId, id);
     }
 
+    @PutMapping("/{id}")
+    public void update(@RequestParam long creatorId, @PathVariable long id, @RequestBody Blog blog) {
+        blogService.updateBlog(creatorId, id , blog);
+    }
 
     @DeleteMapping("/{id}")
     public void delete(@RequestParam long creatorId, @PathVariable long id) {
         blogService.deleteBlog(creatorId, id);
     }
-
 }
