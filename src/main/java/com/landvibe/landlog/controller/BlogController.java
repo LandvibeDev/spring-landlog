@@ -75,7 +75,6 @@ public class BlogController {
     @GetMapping("/update")
     public String updateBlogForm(@RequestParam("blogId") Long blogId, @RequestParam("creatorId") Long creatorId, Model model) {
         try {
-            System.out.println(blogId);
             Member member = memberService.findById(creatorId);
             Blog blog = blogService.findBlogById(blogId);
             model.addAttribute("name", member.getName());

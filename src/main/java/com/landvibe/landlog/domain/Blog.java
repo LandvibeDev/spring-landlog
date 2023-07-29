@@ -8,6 +8,7 @@ public class Blog {
     private Long creatorId;
     private String contents;
 
+
     public Blog(String title, Long creatorId, String content) {
         this.title = title;
         this.creatorId = creatorId;
