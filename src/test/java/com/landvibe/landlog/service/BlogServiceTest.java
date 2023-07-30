@@ -30,8 +30,18 @@ class BlogServiceTest {
     @Mock
     MemoryBlogRepository blogRepository;
 
-    Blog blog1 = new Blog(1L,1L, "title1", "content1");
-    Blog blog2 = new Blog(2L,1L, "title2", "content2");
+    Blog blog1 = Blog.builder()
+            .creatorId(1L)
+            .id(1L)
+            .title("title1")
+            .contents("content1")
+            .build();
+    Blog blog2 = Blog.builder()
+            .creatorId(2L)
+            .id(1L)
+            .title("title2")
+            .contents("content1")
+            .build();
 
     List<Blog> blogs = Arrays.asList(blog1,blog2);
 
