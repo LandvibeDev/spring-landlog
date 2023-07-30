@@ -18,6 +18,7 @@ import java.util.Optional;
 import static com.landvibe.landlog.ErrorMessage.NO_BLOG;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+
 @ExtendWith(MockitoExtension.class)
 class BlogServiceTest {
 
@@ -27,10 +28,10 @@ class BlogServiceTest {
     MemoryBlogRepository repository;
     @Mock
     MemberService memberService;
-    Blog blog1 = new Blog(1L,1L, "aa", "bb");
-    Blog blog2 = new Blog(2L,1L, "bb", "cc");
-    Blog blog3 = new Blog(1L,1L, "bb", "cc");
-    List<Blog> blogs = Arrays.asList(blog1,blog2);
+    Blog blog1 = new Blog(1L, 1L, "aa", "bb");
+    Blog blog2 = new Blog(2L, 1L, "bb", "cc");
+    Blog blog3 = new Blog(1L, 1L, "bb", "cc");
+    List<Blog> blogs = Arrays.asList(blog1, blog2);
 
 
     @BeforeEach
@@ -63,7 +64,7 @@ class BlogServiceTest {
                 .thenThrow(new IllegalArgumentException(NO_BLOG.message));
 
         Exception e = assertThrows(Exception.class,
-                () -> blogService.findById(1L,2L));
+                () -> blogService.findById(1L, 2L));
         assertThat(e.getMessage()).isEqualTo(NO_BLOG.message);
     }
 

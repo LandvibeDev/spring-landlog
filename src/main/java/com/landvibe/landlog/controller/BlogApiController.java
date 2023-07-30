@@ -33,7 +33,7 @@ public class BlogApiController {
 
     @PutMapping("/{id}")
     public Blog update(@RequestParam long creatorId, @PathVariable long id, @RequestBody Blog blog) {
-        return blogService.updateBlog(creatorId, id , blog);
+        return blogService.updateBlog(creatorId, id, blog);
     }
 
     @DeleteMapping("/{id}")

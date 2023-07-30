@@ -40,7 +40,7 @@ public class BlogService {
         blogRepository.delete(id);
     }
 
-    public Blog updateBlog(Long creatorId, Long id, Blog  blog) {
+    public Blog updateBlog(Long creatorId, Long id, Blog blog) {
         validateCreatorId(creatorId);
         isValidBlogId(id);
         return blogRepository.update(id, blog);

@@ -19,7 +19,8 @@ public class Blog {
         this.contents = contents;
     }
 
-    public Blog() {}
+    public Blog() {
+    }
 
     public void setId(Long id) {
         this.id = id;

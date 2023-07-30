@@ -1,4 +1,5 @@
 package com.landvibe.landlog.repository;
+
 import com.landvibe.landlog.domain.Blog;
 import org.springframework.stereotype.Repository;
 
