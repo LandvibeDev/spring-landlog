@@ -32,8 +32,8 @@ public class BlogApiController {
     }
 
     @PutMapping("/{id}")
-    public void update(@RequestParam long creatorId, @PathVariable long id, @RequestBody Blog blog) {
-        blogService.updateBlog(creatorId, id , blog);
+    public Blog update(@RequestParam long creatorId, @PathVariable long id, @RequestBody Blog blog) {
+        return blogService.updateBlog(creatorId, id , blog);
     }
 
     @DeleteMapping("/{id}")

@@ -73,7 +73,7 @@ class BlogServiceTest {
         Mockito.when(repository.findById(1L))
                 .thenReturn(Optional.ofNullable(blog1));
         Mockito.when(repository.update(1L, blog1))
-                        .thenReturn(blog3);
+                .thenReturn(blog3);
 
         assertThat(blogService.updateBlog(1L, 1L, blog1).getTitle()).isEqualTo(blog3.getTitle());
     }
@@ -93,7 +93,7 @@ class BlogServiceTest {
     @Test
     void deleteBlog_success() {
         Mockito.when(memberService.isValidCreatorId(1L))
-                        .thenReturn(true);
+                .thenReturn(true);
         Mockito.when(repository.findById(2L))
                 .thenThrow(new IllegalArgumentException(NO_BLOG.message));
 
