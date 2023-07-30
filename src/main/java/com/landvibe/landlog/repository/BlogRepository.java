@@ -15,6 +15,9 @@ public interface BlogRepository {
     List<Blog> findBlogsByCreatorId(Long id);
 
     Long deleteById(Long blogId);
+<<<<<<< HEAD
 
     boolean existsById(Long blogId);
+=======
+>>>>>>> bde545b (add blogRepository)
 }

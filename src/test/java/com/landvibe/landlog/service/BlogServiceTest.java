@@ -28,6 +28,7 @@ class BlogServiceTest {
     @Mock
     MemoryMemberRepository memberRepository;
 
+<<<<<<< HEAD
     long creatorId = 1L;
     long blogId = 1L;
 
@@ -45,6 +46,14 @@ class BlogServiceTest {
     @DisplayName("[creatorId 유효성검정 성공]")
     void validateCreatorId_success() {
         Member member = createMember();
+=======
+    @Test
+    @DisplayName("[creatorId 유효성검정 성공]")
+    void validateCreatorId_success() {
+        long creatorId = 1L;
+        Member member = new Member("name", "email", "password");
+        member.setId(creatorId);
+>>>>>>> 8f12297 (add BlogServiceTest)
 
         Mockito.when(memberRepository.findById(creatorId))
                 .thenReturn(Optional.of(member));
@@ -57,6 +66,11 @@ class BlogServiceTest {
     @Test
     @DisplayName("[creatorId 유효성검정 실패] 존재하지 않는 멤버")
     void validateCreatorId_fail_empty_Optional() {
+<<<<<<< HEAD
+=======
+        long creatorId = 1L;
+
+>>>>>>> 8f12297 (add BlogServiceTest)
         Mockito.when(memberRepository.findById(creatorId))
                 .thenReturn(Optional.empty());
 
@@ -64,8 +78,12 @@ class BlogServiceTest {
                 IllegalArgumentException.class, () -> {
                     blogService.validateCreatorId(creatorId);
                 });
+<<<<<<< HEAD
         assertThat(exception.getMessage())
                 .isEqualTo(NO_MATCH_MEMBER_WITH_CREATOR_ID.message);
+=======
+        assertThat(exception.getMessage()).isEqualTo(NO_MATCH_MEMBER_WITH_CREATOR_ID.message);
+>>>>>>> 8f12297 (add BlogServiceTest)
     }
 
     @Test
@@ -75,14 +93,23 @@ class BlogServiceTest {
                 IllegalArgumentException.class, () -> {
                     blogService.validateCreatorId(null);
                 });
+<<<<<<< HEAD
         assertThat(exception.getMessage())
                 .isEqualTo(EMPTY_CREATOR_ID.message);
+=======
+        assertThat(exception.getMessage()).isEqualTo(EMPTY_CREATOR_ID.message);
+>>>>>>> 8f12297 (add BlogServiceTest)
     }
 
     @Test
     @DisplayName("[blogId 유효성검정 성공]")
     void validateBlogId_success() {
+<<<<<<< HEAD
         Blog blog = createBlog();
+=======
+        long blogId = 1L;
+        Blog blog = new Blog(1L, "title", "contents");
+>>>>>>> 8f12297 (add BlogServiceTest)
         blog.setId(blogId);
 
         Mockito.when(blogRepository.findById(blogId))
@@ -96,6 +123,11 @@ class BlogServiceTest {
     @Test
     @DisplayName("[blogId 유효성검정 실패] 존재하지 않는 게시글")
     void validateBlogId_fail_empty_Optional() {
+<<<<<<< HEAD
+=======
+        long blogId = 1L;
+
+>>>>>>> 8f12297 (add BlogServiceTest)
         Mockito.when(blogRepository.findById(blogId))
                 .thenReturn(Optional.empty());
 
@@ -119,6 +151,7 @@ class BlogServiceTest {
     }
 
     @Test
+<<<<<<< HEAD
     @DisplayName("[게시글 등록 성공]")
     void write_success() {
         //
@@ -127,10 +160,17 @@ class BlogServiceTest {
 
         Mockito.when(memberRepository.findById(creatorId))
                 .thenReturn(Optional.of(member));
+=======
+    @DisplayName("[게시글] 등록 테스트")
+    void write() {
+        //
+        Blog blog = new Blog(1L, "title", "contents");
+>>>>>>> 8f12297 (add BlogServiceTest)
         //
         blogService.write(blog);
         //
         Mockito.verify(blogRepository)
+<<<<<<< HEAD
                 .save(blog);
     }
 
@@ -162,10 +202,24 @@ class BlogServiceTest {
 
         Mockito.when(memberRepository.findById(creatorId))
                 .thenReturn(Optional.of(member));
+=======
+                .save(Mockito.any(Blog.class));
+        Mockito.verify(blogRepository, Mockito.times(1))
+                .save(Mockito.any(Blog.class));
+    }
+
+    @Test
+    @DisplayName("[게시글] 수정 테스트")
+    void update() {
+        //
+        blogRepository.save(new Blog(1L, "title", "contents"));
+        Blog updateBlog = new Blog(1L, "updateTitle", "updateContents");
+>>>>>>> 8f12297 (add BlogServiceTest)
         //
         blogService.update(updateBlog);
         //
         Mockito.verify(blogRepository)
+<<<<<<< HEAD
                 .update(updateBlog);
     }
 
@@ -254,5 +308,38 @@ class BlogServiceTest {
                 });
         assertThat(exception.getMessage())
                 .isEqualTo(NO_MATCH_MEMBER_WITH_CREATOR_ID.message);
+=======
+                .update(Mockito.any(Blog.class));
+        Mockito.verify(blogRepository, Mockito.times(1))
+                .update(Mockito.any(Blog.class));
+    }
+
+    @Test
+    @DisplayName("[게시글] 삭제 테스트")
+    void delete() {
+        //
+        blogRepository.save(new Blog(1L, "title", "contents"));
+        //
+        blogService.deleteById(1L);
+        //
+        Mockito.verify(blogRepository)
+                .deleteById(Mockito.any(Long.class));
+        Mockito.verify(blogRepository, Mockito.times(1))
+                .deleteById(Mockito.any(Long.class));
+    }
+
+    @Test
+    @DisplayName("[게시글] creatorId 기반으로 찾기")
+    void findBlogsByCreatorId() {
+        //
+        blogRepository.save(new Blog(1L, "title", "contents"));
+        //
+        blogService.findBlogsByCreatorId(1L);
+        //
+        Mockito.verify(blogRepository)
+                .findBlogsByCreatorId(Mockito.any(Long.class));
+        Mockito.verify(blogRepository, Mockito.times(1))
+                .findBlogsByCreatorId(Mockito.any(Long.class));
+>>>>>>> 8f12297 (add BlogServiceTest)
     }
 }

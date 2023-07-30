@@ -36,6 +36,7 @@ public class MemoryBlogRepository implements BlogRepository {
     }
 
     @Override
+<<<<<<< HEAD
     public boolean existsById(Long blogId) {
         if (store.get(blogId) != null) {
             return true;
@@ -44,6 +45,8 @@ public class MemoryBlogRepository implements BlogRepository {
     }
 
     @Override
+=======
+>>>>>>> bde545b (add blogRepository)
     public List<Blog> findBlogsByCreatorId(Long id) {
         return store.values().stream()
                 .filter(blog -> blog.getCreatorId().equals(id))

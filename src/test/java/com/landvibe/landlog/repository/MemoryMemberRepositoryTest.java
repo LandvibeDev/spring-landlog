@@ -67,12 +67,19 @@ class MemoryMemberRepositoryTest {
         assertThat(result.size()).isEqualTo(2);
     }
 
+<<<<<<< HEAD
     private Member createMember() {
+=======
+    @Test
+    public void findByEmailAndPassword(){
+        //given
+>>>>>>> 732cb05 (add test code)
         Member member1 = new Member();
         member1.setName("name1");
         member1.setEmail("email1");
         member1.setPassword("password1");
         repository.save(member1);
+<<<<<<< HEAD
         return member1;
     }
 
@@ -99,6 +106,17 @@ class MemoryMemberRepositoryTest {
         Optional<Member> failedResult = repository.findByEmailAndPassword("email2", "password2");
 
         //then
+=======
+
+        //when
+        Optional<Member> successResult = repository.findByEmailAndPassword("email1", "password1");
+        Optional<Member> failedResult = repository.findByEmailAndPassword("email2", "password2");
+
+        //then
+        assertThat(successResult).isPresent();
+        assertThat(successResult.get()).isEqualTo(member1);
+
+>>>>>>> 732cb05 (add test code)
         assertThat(failedResult).isEmpty();
     }
 }
