@@ -16,6 +16,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/blogs")
 public class BlogController {
+    //
     private final MemberService memberService;
     private final BlogService blogService;
 
