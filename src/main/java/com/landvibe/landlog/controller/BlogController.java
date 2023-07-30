@@ -79,7 +79,7 @@ public class BlogController {
             Blog blog = blogService.findBlogById(blogId);
             model.addAttribute("name", member.getName());
             model.addAttribute("creatorId", creatorId);
-            model.addAttribute("blog", blog);
+            model.addAttribute("blogId", blogId);
             return "blogs/updateBlogForm";
         } catch (Exception e) {
             System.out.println(e.getMessage());
