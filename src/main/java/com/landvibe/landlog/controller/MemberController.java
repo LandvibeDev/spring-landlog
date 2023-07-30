@@ -1,6 +1,7 @@
 package com.landvibe.landlog.controller;
 
 import com.landvibe.landlog.domain.Member;
+import com.landvibe.landlog.controller.form.MemberForm;
 import com.landvibe.landlog.service.MemberService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,14 +19,14 @@ public class MemberController {
     }
 
     @GetMapping(value = "/members/new")
-    public String createForm() {
+    public String showCreateMemberForm() {
         return "members/createMemberForm";
     }
 
     @PostMapping(value = "/members/new")
     public String create(MemberForm form) {
-        Member member = new Member(form.getName(), form.getEmail(), form.getPassword());
-        memberService.join(member);
+        Member member = Member.createMember(form.getName(), form.getEmail(), form.getPassword());
+        memberService.join(member); // 예외
         return "redirect:/";
     }
 
