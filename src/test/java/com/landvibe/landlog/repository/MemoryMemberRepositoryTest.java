@@ -15,7 +15,7 @@ class MemoryMemberRepositoryTest {
     String name = "a";
     String email = "a@spring.com";
     String password = "1234";
-    Member member = new Member(name, email, password);
+    Member member = Member.createMember(name, email, password);
 
     @BeforeEach
     public void beforeEach() {

@@ -1,13 +1,13 @@
 package com.landvibe.landlog.service;
 
 import com.landvibe.landlog.domain.Member;
-import com.landvibe.landlog.exception.DuplicatedEmailException;
-import com.landvibe.landlog.exception.DuplicatedNameException;
+import com.landvibe.landlog.exception.LandLogException;
 import com.landvibe.landlog.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+
+import static com.landvibe.landlog.exception.ErrorCode.*;
 
 @Service
 public class MemberService {
@@ -17,33 +17,41 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
 
-    public Long join(Member member) throws RuntimeException {
-        validateDuplicateMember(member); //중복 회원 검증
+    // <--생성-->
+    public Long join(Member member) {
+        validateDuplicateMember(member); // 예외
         memberRepository.save(member);
         return member.getId();
     }
 
-    private void validateDuplicateMember(Member member) {
-        memberRepository.findByName(member.getName())
-                .ifPresent(m -> {
-                    throw new DuplicatedNameException("이미 존재하는 이름입니다.");
-                });
-
-        memberRepository.findByEmail(member.getEmail())
-                .ifPresent(m -> {
-                    throw new DuplicatedEmailException("이미 존재하는 이메일입니다.");
-                });
-    }
-
+    //<--조회-->
     public List<Member> findMembers() {
         return memberRepository.findAll();
     }
 
-    public Optional<Member> findOneById(Long memberId) {
-        return memberRepository.findById(memberId);
+    public Member findMemberById(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new LandLogException(NOT_FOUND_USER));
+        return member;
     }
 
-    public Optional<Member> findOneByEmail(String memberEmail) {
-        return memberRepository.findByEmail(memberEmail);
+    public Member findMemberByEmail(String email) {
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new LandLogException(NOT_FOUND_USER));
+        return member;
     }
+
+    // <--valid-->
+    private void validateDuplicateMember(Member member) {
+        memberRepository.findByName(member.getName())
+                .ifPresent(m -> {
+                    throw new LandLogException(DUPLICATE_USER_NAME);
+                });
+
+        memberRepository.findByEmail(member.getEmail())
+                .ifPresent(m -> {
+                    throw new LandLogException(DUPLICATE_USER_EMAIL);
+                });
+    }
+
 }

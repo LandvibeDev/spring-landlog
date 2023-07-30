@@ -1,12 +1,18 @@
-package com.landvibe.landlog.controller;
+package com.landvibe.landlog.controller.form;
 
-public class LoginForm {
+public class MemberForm {
+    private final String name;
     private final String email;
     private final String password;
 
-    public LoginForm(String email, String password) {
+    public MemberForm(String name, String email, String password) {
+        this.name = name;
         this.email = email;
         this.password = password;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public String getEmail() {

@@ -1,5 +1,6 @@
 package com.landvibe.landlog.controller;
 
+import com.landvibe.landlog.controller.form.LoginForm;
 import com.landvibe.landlog.service.LoginService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,21 +17,16 @@ public class LoginController {
     }
 
     @GetMapping("/members/login")
-    public String loginForm() {
+    public String showLoginForm() {
         return "members/loginForm";
     }
 
     @PostMapping("/members/login")
     public String login(LoginForm loginForm, RedirectAttributes redirectAttributes) {
-        Long memberId;
-        try {
-            memberId = loginService.login(loginForm);
-            redirectAttributes.addAttribute("creatorId", memberId);
-            return "redirect:/blogs";
+        Long memberId = loginService.login(loginForm.getEmail(), loginForm.getPassword()); // 예외
 
-        } catch (RuntimeException e) {
-            return "redirect:/";
-        }
+        redirectAttributes.addAttribute("creatorId", memberId);
+        return "redirect:/blogs";
     }
 
 }

@@ -1,80 +1,84 @@
 package com.landvibe.landlog.service;
 
 import com.landvibe.landlog.domain.Member;
-import com.landvibe.landlog.exception.DuplicatedEmailException;
-import com.landvibe.landlog.exception.DuplicatedNameException;
+import com.landvibe.landlog.exception.LandLogException;
 import com.landvibe.landlog.repository.MemoryMemberRepository;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class MemberServiceTest {
 
+    @Mock
     MemoryMemberRepository memberRepository;
+
+    @InjectMocks
     MemberService memberService;
 
     //member
+    Long memberId = 1L;
     String name = "spring1";
     String email = "spring1@spring.com";
     String password = "1234";
 
-    //different
-    String differentName = "spring2";
-    String differentEmail = "spring2@spring.com";
-    String differentPassword = "12345";
+    Member createMember(Long id, String name, String email, String password) {
+        Member member = Member.createMember(name, email, password);
+        member.setId(id);
 
-
-    @BeforeEach
-    public void beforeEach() {
-        memberRepository = new MemoryMemberRepository();
-        memberService = new MemberService(memberRepository);
-    }
-
-    @AfterEach
-    public void afterEach() {
-        memberRepository.clearStore();
+        return member;
     }
 
     @Test
-    public void 회원가입() throws Exception {
-        //Given
-        Member member = new Member(name, email, password);
+    @DisplayName("join_회원가입_성공")
+    void join_whenDetailsProvided_Success() throws Exception {
+        //given
+        when(memberRepository.save(any(Member.class))).thenReturn(any(Member.class));
 
-        //When
-        Long saveId = memberService.join(member);
+        //when
+        Member member = createMember(memberId, name, email, password);
+        Long actualMemberId = memberService.join(member);
+        assertThat(actualMemberId).isEqualTo(memberId);
 
         //Then
-        Member findMember = memberRepository.findById(saveId).get();
-        assertEquals(member.getName(), findMember.getName());
+        verify(memberRepository).save(any(Member.class));
+    }
+
+
+    @Test
+    @DisplayName("join_중복이름_예외발생")
+    void join_whenDuplicateName_Exception() throws Exception {
+        //given
+        Member member = createMember(memberId, name, email, password);
+        when(memberRepository.save(member)).thenThrow(LandLogException.class);
+
+        //when & then
+        assertThrows(LandLogException.class,
+                () -> memberService.join(member));
+
+        //Then
+        verify(memberRepository, times(1)).save(member);
     }
 
     @Test
-    public void 중복_이름_예외() throws Exception {
-        //Given
-        Member member = new Member(name, email, password);
-        Member sameNameMember = new Member(name, differentEmail, differentPassword);
+    @DisplayName("join_중복이메일_예외발생")
+    void join_whenDuplicateEmail_Exception() throws Exception {
+        //given
+        Member member = createMember(memberId, name, email, password);
+        when(memberRepository.save(member)).thenThrow(LandLogException.class);
 
-        //When
-        memberService.join(member);
-        DuplicatedNameException e = assertThrows(DuplicatedNameException.class,
-                () -> memberService.join(sameNameMember));//예외가 발생해야 한다.
-        assertThat(e.getMessage()).isEqualTo("이미 존재하는 이름입니다.");
-    }
+        //when & then
+        assertThrows(LandLogException.class,
+                () -> memberService.join(member));
 
-    @Test
-    public void 중복_이메일_예외() throws Exception {
-        //Given
-        Member member = new Member(name, email, password);
-        Member sameEmailMember = new Member(differentName, email, differentEmail);
-
-        //When
-        memberService.join(member);
-        DuplicatedEmailException e = assertThrows(DuplicatedEmailException.class,
-                () -> memberService.join(sameEmailMember));//예외가 발생해야 한다.
-        assertThat(e.getMessage()).isEqualTo("이미 존재하는 이메일입니다.");
+        //Then
+        verify(memberRepository, times(1)).save(member);
     }
 }

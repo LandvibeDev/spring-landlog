@@ -1,85 +1,86 @@
 package com.landvibe.landlog.service;
 
-import com.landvibe.landlog.controller.LoginForm;
 import com.landvibe.landlog.domain.Member;
-import com.landvibe.landlog.exception.InvalidEmailException;
-import com.landvibe.landlog.exception.PasswordMismatchException;
-import com.landvibe.landlog.repository.MemoryMemberRepository;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import com.landvibe.landlog.exception.LandLogException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class LoginServiceTest {
 
-    MemoryMemberRepository memberRepository;
+    @Mock
     MemberService memberService;
+
+    @InjectMocks
     LoginService loginService;
 
-    // member, loginForm
+    // member
+    Long memberId = 1L;
     String name = "spring";
     String email = "spring@spring.com";
     String password = "1234";
-    LoginForm loginForm = new LoginForm(email, password);
 
     //error
-    String errorEmail = "error@spring.com";
     String errorPassword = "error";
 
 
-    @BeforeEach
-    void beforeEach() {
-        memberRepository = new MemoryMemberRepository();
-        memberService = new MemberService(memberRepository);
-        loginService = new LoginService(memberService);
-    }
+    Member createMember(Long id, String name, String email, String password) {
+        Member member = Member.createMember(name, email, password);
+        member.setId(id);
 
-    @AfterEach
-    void afterEach() {
-        memberRepository.clearStore();
+        return member;
     }
 
     @Test
-    @DisplayName("로그인_정상")
+    @DisplayName("login_로그인_정상수행")
     void login_whenNormalInput_success() {
         //given
-        Member member = new Member(name, email, password);
-        memberRepository.save(member);
+        Member member = createMember(memberId, name, email, password);
+        when(memberService.findMemberByEmail(eq(email))).thenReturn(member);
 
-        //when
-        Long memberId = loginService.login(loginForm);
+        //when & then
+        Long actual = loginService.login(email, password);
+        assertThat(actual).isEqualTo(memberId);
 
         //then
-        Assertions.assertThat(member.getId()).isEqualTo(memberId);
+        verify(memberService).findMemberByEmail(eq(email));
     }
 
     @Test
-    @DisplayName("로그인_비정상_이메일_존재X")
+    @DisplayName("login_이메일존재X_에러")
     void login_whenEmailIsNotExist_Exception() {
         //given
-        Member member = new Member(name, email, password);
-        memberRepository.save(member);
-        LoginForm errorLoginForm = new LoginForm(errorEmail, password);
-
+        when(memberService.findMemberByEmail(anyString())).thenThrow(LandLogException.class);
 
         //when & then
-        InvalidEmailException e = assertThrows(InvalidEmailException.class, () -> loginService.login(errorLoginForm));
-        Assertions.assertThat(e.getMessage()).isEqualTo("존재하지 않는 이메일입니다.");
+        assertThrows(LandLogException.class,
+                () -> loginService.login(email, password));
+
+        //then
+        verify(memberService, times(1)).findMemberByEmail(anyString());
     }
 
     @Test
-    @DisplayName("로그인_비정상_비밀번호_불일치")
+    @DisplayName("login_비밀번호불일치_에러")
     void login_whenPasswordIsNotCorrect_Exception() {
         //given
-        Member member = new Member(name, email, password);
-        memberRepository.save(member);
-        LoginForm errorLoginForm = new LoginForm(email, errorPassword);
+        Member member = createMember(memberId, name, email, password);
+        when(memberService.findMemberByEmail(email)).thenReturn(member);
 
         //when & then
-        PasswordMismatchException e = assertThrows(PasswordMismatchException.class, () -> loginService.login(errorLoginForm));
-        Assertions.assertThat(e.getMessage()).isEqualTo("비밀번호가 일치하지 않습니다.");
+        assertThrows(LandLogException.class,
+                () -> loginService.login(email, errorPassword));
+
+        //then
+        verify(memberService).findMemberByEmail(email);
     }
 }
