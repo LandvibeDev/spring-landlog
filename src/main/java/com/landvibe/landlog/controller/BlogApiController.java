@@ -1,7 +1,7 @@
 package com.landvibe.landlog.controller;
 
 
-import com.landvibe.landlog.converter.BlogConverter;
+import com.landvibe.landlog.utility.BlogConverter;
 import com.landvibe.landlog.domain.Blog;
 import com.landvibe.landlog.form.BlogCreateForm;
 import com.landvibe.landlog.form.BlogUpdateForm;
@@ -26,7 +26,7 @@ public class BlogApiController {
     }
 
     @GetMapping("/{blogId}")
-    public Blog getByBlogId(@PathVariable Long blogId, @RequestParam("creatorId") Long creatorId) {
+    public Blog getBlogById(@PathVariable Long blogId, @RequestParam("creatorId") Long creatorId) {
         return blogService.findBlogById(blogId);
     }
 

@@ -1,4 +1,4 @@
-package com.landvibe.landlog.converter;
+package com.landvibe.landlog.utility;
 
 import com.landvibe.landlog.domain.Blog;
 import com.landvibe.landlog.form.BlogCreateForm;
