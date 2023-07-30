@@ -16,7 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.BDDMockito.*;
 
 import java.util.Optional;
 
@@ -31,7 +31,6 @@ public class BlogServiceTest {
 
 	@Mock
 	private MemoryMemberRepository memberRepository;
-
 
 	BlogService blogService;
 
@@ -52,82 +51,81 @@ public class BlogServiceTest {
 
 	@BeforeEach
 	public void beforeEach() {
-		blogService = new BlogService(blogRepository,memberService);
+		blogService = new BlogService(blogRepository, memberService);
 		blogForm = new BlogForm(title, contents);
 		updateForm = new BlogUpdateForm(creatorId, blogId, updatedTitle, updatedContents);
 		blog = new Blog(creatorId, blogForm.getTitle(), blogForm.getContents());
-		updateBlog = new Blog(updateForm.getCreatorId(),updateForm.getTitle(),updateForm.getContents());
+		updateBlog = new Blog(updateForm.getCreatorId(), updateForm.getTitle(), updateForm.getContents());
 		blog.setId(blogId);
 		updateBlog.setId(blogId);
-		member = new Member("name","email@landvibe.com","password");
+		member = new Member("name", "email@landvibe.com", "password");
 	}
 
 	@AfterEach
-	public void afterEach(){
+	public void afterEach() {
 		blogRepository.clearStore();
 	}
 
 	@DisplayName("블로그 생성 성공")
 	@Test
 	public void create() {
-		when(blogRepository.save(any(Blog.class))).thenReturn(blogId);
-		assertEquals(blogId, blogService.create(creatorId, blogForm));
+		when(blogRepository.save(blog)).thenReturn(blogId);
+		assertEquals(blogId, blogService.create(blog));
 		verify(blogRepository, times(1)).save(any(Blog.class));
 	}
 
 	@DisplayName("블로그 생성 실패 -> 잘못된 제목")
 	@Test
-	public void create_invalidTitle(){
-		BlogForm invalidBlogForm = new BlogForm(invalidTitle,contents);
-
+	public void create_invalidTitle() {
+		Blog invalidBlog = new Blog(creatorId, invalidTitle, contents);
 		Exception e = assertThrows(Exception.class,
-			() -> blogService.create(creatorId,invalidBlogForm));
-		assertEquals(e.getMessage(),"제목을 입력해주세요.");
+			() -> blogService.create(invalidBlog));
+		assertEquals(e.getMessage(), "제목을 입력해주세요.");
 	}
 
 	@DisplayName("블로그 생성 실패 -> 잘못된 내용")
 	@Test
-	public void create_invalidContents(){
-		BlogForm invalidBlogForm = new BlogForm(title,invalidContents);
+	public void create_invalidContents() {
+		Blog invalidBlog = new Blog(creatorId, title, invalidContents);
 
 		Exception e = assertThrows(Exception.class,
-			() -> blogService.create(creatorId,invalidBlogForm));
-		assertEquals(e.getMessage(),"내용을 입력해주세요.");
+			() -> blogService.create(invalidBlog));
+		assertEquals(e.getMessage(), "내용을 입력해주세요.");
 	}
 
 	@DisplayName("블로그 업데이트 성공")
 	@Test
-	public void update(){
-		when(blogRepository.findByBlogId(any(Long.class))).thenReturn(Optional.ofNullable(updateBlog));
-		when(blogRepository.update(any(Long.class),any(Blog.class))).thenReturn(blogId);
+	public void update() {
+		when(blogRepository.update(any(Long.class), any(Blog.class))).thenReturn(blogId);
+		when(blogRepository.findByBlogId(blogId)).thenReturn(Optional.ofNullable(updateBlog));
 
-		Long updateBlogId = blogService.update(updateForm);
-		Blog targetBlog = blogService.findByBlogId(updateBlogId);
+		Long updateBlogId = blogService.update(updateBlog);
+		Blog targetBlog = blogService.findByBlogId(blogId);
 
-		assertEquals(blogId,updateBlogId);
-		assertEquals(updatedTitle,targetBlog.getTitle());
-		assertEquals(updatedContents,targetBlog.getContents());
+		assertEquals(blogId, updateBlogId);
+		assertEquals(updatedTitle, targetBlog.getTitle());
+		assertEquals(updatedContents, targetBlog.getContents());
 		verify(blogRepository, times(1)).update(any(Long.class), any(Blog.class));
 	}
 
 	@DisplayName("블로그 업데이트 실패 -> 잘못된 제목")
 	@Test
-	public void update_invalidTitle(){
-		BlogUpdateForm invalidUpdateForm = new BlogUpdateForm(creatorId,blogId,invalidTitle,updatedContents);
+	public void update_invalidTitle() {
+		Blog invalidUpdateBlog = new Blog(creatorId, invalidTitle, updatedContents);
 
 		Exception e = assertThrows(Exception.class,
-			() -> blogService.update(invalidUpdateForm));
-		assertEquals(e.getMessage(),"제목을 입력해주세요.");
+			() -> blogService.update(invalidUpdateBlog));
+		assertEquals(e.getMessage(), "제목을 입력해주세요.");
 	}
 
 	@DisplayName("블로그 업데이트 실패 -> 잘못된 내용")
 	@Test
-	public void update_invalidContents(){
-		BlogUpdateForm invalidUpdateForm = new BlogUpdateForm(creatorId,blogId,updatedTitle,invalidContents);
+	public void update_invalidContents() {
+		Blog invalidUpdateBlog = new Blog(creatorId, updatedTitle, invalidContents);
 
 		Exception e = assertThrows(Exception.class,
-			() -> blogService.update(invalidUpdateForm));
-		assertEquals(e.getMessage(),"내용을 입력해주세요.");
+			() -> blogService.update(invalidUpdateBlog));
+		assertEquals(e.getMessage(), "내용을 입력해주세요.");
 	}
 
 	@DisplayName("블로그 삭제 성공")
@@ -138,17 +136,18 @@ public class BlogServiceTest {
 
 		blogService.delete(blogId);
 
-		verify(blogRepository,times(1)).delete(blogId);
+		verify(blogRepository, times(1)).delete(blogId);
 	}
+
 	@DisplayName("블로그 삭제 실패")
 	@Test
 	public void delete_fail() {
 
-		blogService.create(creatorId, blogForm);
+		blogService.create(blog);
 
 		Exception e = assertThrows(Exception.class,
 			() -> blogService.delete(0L));
-		assertEquals(e.getMessage(),"존재하지 않는 블로그입니다.");
+		assertEquals(e.getMessage(), "존재하지 않는 블로그입니다.");
 
 		verify(blogRepository, times(1)).findByBlogId(any(Long.class));
 		verify(blogRepository, never()).delete(any(Long.class));

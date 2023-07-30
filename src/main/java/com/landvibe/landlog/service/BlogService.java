@@ -19,20 +19,18 @@ public class BlogService {
 		this.memberService = memberService;
 	}
 
-	public Long create(Long creatorId, BlogForm blogForm) {
-		Blog blog = new Blog(creatorId, blogForm.getTitle(), blogForm.getContents());
-
-		validateCreator(creatorId);
+	public Long create(Blog blog) {
+		validateCreator(blog.getCreatorId());
 		validateBlog(blog.getTitle(), blog.getContents());
 		return blogRepository.save(blog);
 	}
 
-	public Long update(BlogUpdateForm updateForm) {
-		validateCreator(updateForm.getCreatorId());
-		validateBlog(updateForm.getTitle(), updateForm.getContents());
+	public Long update(Blog blog) {
+		validateCreator(blog.getCreatorId());
+		validateBlog(blog.getTitle(), blog.getContents());
 
-		Long blogId = findByBlogId(updateForm.getId()).getId();
-		Blog newBlog = new Blog(updateForm.getCreatorId(), updateForm.getTitle(), updateForm.getContents());
+		Long blogId = findByBlogId(blog.getId()).getId();
+		Blog newBlog = new Blog(blog.getCreatorId(), blog.getTitle(), blog.getContents());
 
 		return blogRepository.update(blogId, newBlog);
 	}
