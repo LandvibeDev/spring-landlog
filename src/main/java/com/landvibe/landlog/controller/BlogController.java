@@ -27,8 +27,6 @@ public class BlogController {
     @GetMapping("/blogs")
     public String blog(@RequestParam Long creatorId, Model model) {
         Optional<Member> member = memberService.findOne(creatorId);
-        List<Blog> blogs = blogService.findBlogs(creatorId);
-        model.addAttribute("blogs", blogs);
         model.addAttribute("creatorId", creatorId);
         model.addAttribute("name", member.get().getName());
         return "blogList";
@@ -43,49 +41,16 @@ public class BlogController {
         return "createBlogForm";
     }
 
-    @PostMapping("/blogs/new")
-    public String createBlog(@RequestParam String title,
-                             @RequestParam String contents,
-                             @RequestParam Long creatorId,
-                             RedirectAttributes redirectAttributes
-    ) {
-        Blog blog = new Blog(creatorId, title, contents);
-        Optional<Member> member = memberService.findOne(creatorId);
-        redirectAttributes.addAttribute("creatorId", creatorId);
-        blogService.create(blog);
-        return "redirect:/blogs";
-    }
-
     @GetMapping("/blogs/update")
     public String updateForm(@RequestParam Long blogId,
                              @RequestParam Long creatorId,
                              Model model) {
         Blog blog = blogService.findOne(blogId, creatorId);
         Optional<Member> member = memberService.findOne(creatorId);
+        model.addAttribute("blogId", blogId);
         model.addAttribute("name", member.get().getName());
         model.addAttribute("blog", blog);
         model.addAttribute("creatorId", creatorId);
         return "updateBlogForm";
     }
-
-    @PutMapping("/blogs/update")
-    public String update(@RequestParam Long id,
-                         @RequestParam(required = false) Long creatorId,
-                         @ModelAttribute UpdateBlogForm updateBlogForm,
-                         RedirectAttributes redirectAttributes) {
-        blogService.update(id, creatorId, updateBlogForm);
-        redirectAttributes.addAttribute("creatorId", creatorId);
-        return "redirect:/blogs";
-    }
-
-    @PostMapping("/blogs/delete")
-    public String delete(@RequestParam Long blogId,
-                         @RequestParam Long creatorId,
-                         RedirectAttributes redirectAttributes) {
-        blogService.delete(blogId, creatorId);
-        redirectAttributes.addAttribute("creatorId", creatorId);
-        return "redirect:/blogs";
-    }
-  
-  
 }
