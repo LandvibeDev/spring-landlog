@@ -1,8 +1,9 @@
 package com.landvibe.landlog.controller;
 
 import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 public class MemberForm {
     private String name;
     private String email;
