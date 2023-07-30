@@ -8,13 +8,15 @@ import java.util.Optional;
 
 public interface BlogRepository {
 
-    Blog save(Blog blog);
+    Long save(Blog blog);
 
-    void update(Long blogId, BlogForm updatedForm);
+    Long update(Long blogId, BlogForm updatedForm);
 
-    void delete(Long blogId);
+    boolean delete(Long blogId);
 
     Optional<Blog> findBlogByCreatorIdAndBlogId(Long memberId, Long blogId);
+
+    Optional<Blog> findByBlogId(Long blogId);
 
     List<Blog> findAllBlogsByCreatorId(Long creatorId);
 }

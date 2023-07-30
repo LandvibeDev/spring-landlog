@@ -49,9 +49,8 @@ public class BlogController {
     @PostMapping(value = "/new")
     public String registerBlog(@RequestParam(name = "creatorId") Long creatorId, BlogForm form,
                                RedirectAttributes redirect) {
-        Blog blog = new Blog(creatorId, form.getTitle(), form.getContents());
 
-        blogService.register(creatorId, blog);
+        blogService.register(creatorId, form);
 
         redirect.addAttribute("creatorId", creatorId);
 
@@ -62,7 +61,7 @@ public class BlogController {
     public String createUpdateForm(@RequestParam(name = "blogId") Long blogId, @RequestParam(name = "creatorId") Long creatorId,
                                    Model model) {
         Member member = memberService.findMemberById(creatorId);
-        Blog blog = blogService.findBlogByBlogIdAndCreatorId(creatorId, blogId);
+        Blog blog = blogService.findBlogByBlogId(blogId);
 
         model.addAttribute("name", member.getName());
         model.addAttribute("creatorId", creatorId);
@@ -74,7 +73,7 @@ public class BlogController {
     @PatchMapping(value = "/update")
     public String updateBlog(@RequestParam(name = "creatorId") Long creatorId, @RequestParam(name = "id") Long blogId,
                              BlogForm form, RedirectAttributes redirect) {
-        blogService.updateBlog(creatorId, blogId, form);
+        blogService.updateBlog(blogId, form);
 
         redirect.addAttribute("creatorId", creatorId);
 
@@ -84,7 +83,7 @@ public class BlogController {
     @DeleteMapping(value = "/delete")
     public String deleteBlog(@RequestParam(name = "blogId") Long blogId, @RequestParam(name = "creatorId") Long creatorId,
                              RedirectAttributes redirect){
-        blogService.deleteBlog(creatorId, blogId);
+        blogService.deleteBlog(blogId);
 
         redirect.addAttribute("creatorId", creatorId);
 

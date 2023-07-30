@@ -12,10 +12,10 @@ public class MemoryBlogRepository implements BlogRepository {
     private static long blogNumber = 0L;
 
     @Override
-    public Blog save(Blog blog) {
+    public Long save(Blog blog) {
         blog.setId(++blogNumber);
         blogStore.put(blog.getId(), blog);
-        return blog;
+        return blog.getId();
     }
 
     @Override
@@ -26,14 +26,21 @@ public class MemoryBlogRepository implements BlogRepository {
     }
 
     @Override
-    public void update(Long blogId, BlogForm form) {
-        blogStore.get(blogId).setTitle(form.getTitle());
-        blogStore.get(blogId).setContents(form.getContents());
+    public Optional<Blog> findByBlogId(Long blogId) {
+        return Optional.ofNullable(blogStore.get(blogId));
     }
 
     @Override
-    public void delete(Long deleteBlogId){
+    public Long update(Long blogId, BlogForm form) {
+        blogStore.get(blogId).setTitle(form.getTitle());
+        blogStore.get(blogId).setContents(form.getContents());
+        return blogId;
+    }
+
+    @Override
+    public boolean delete(Long deleteBlogId){
         blogStore.remove(deleteBlogId);
+        return true;
     }
     @Override
     public List<Blog> findAllBlogsByCreatorId(Long creatorId) {
