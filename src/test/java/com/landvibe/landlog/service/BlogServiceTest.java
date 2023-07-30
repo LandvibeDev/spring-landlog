@@ -11,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,6 +33,10 @@ class BlogServiceTest {
 
     // member
     Long memberId = 1L;
+    String name = "name";
+    String email = "email@gmail.com";
+    String password = "1234";
+
 
     // blog
     Long blogId = 1L;
@@ -44,28 +49,41 @@ class BlogServiceTest {
 
     // error
     Long wrongCreatorId = -1L;
+    Long wrongBlogId = -1L;
+
+    Member createMember(Long memberId, String name, String email, String password) {
+        Member member = Member.createMember(name, email, password);
+        member.setId(memberId);
+        return member;
+    }
 
     Blog createBlog(Long blogId, String title, String contents, Long memberId) {
         Blog blog = Blog.createBlog(title, contents, memberId);
         blog.setId(blogId);
-
         return blog;
+    }
+
+    List<Blog> createBlogs(Long memberId) {
+        Blog blog = Blog.createBlog(title, contents, memberId);
+        blog.setId(blogId);
+        return List.of(blog);
     }
 
     @Test
     @DisplayName("createBlog_정상인풋_생성성공")
     void createBlog_whenBlogDetailProvided_returnBlogId() {
         //given
-        when(memberService.findMemberById(eq(memberId))).thenReturn(mockMember);
-        when(memoryBlogRepository.save(eq(memberId), anyString(), anyString())).thenReturn(blogId);
+        Member member = createMember(memberId, title, contents, password);
+        when(memberService.findMemberById(memberId)).thenReturn(member);
+        when(memoryBlogRepository.save(memberId, title, contents)).thenReturn(blogId);
 
         //when & then
         Long actual = blogService.createBlog(memberId, title, contents);
         assertThat(actual).isEqualTo(blogId);
 
         //then
-        verify(memberService).findMemberById(eq(memberId));
-        verify(memoryBlogRepository).save(eq(memberId), anyString(), anyString());
+        verify(memberService).findMemberById(memberId);
+        verify(memoryBlogRepository).save(memberId, title, contents);
     }
 
 
@@ -87,11 +105,12 @@ class BlogServiceTest {
     @DisplayName("findBlogsByCreatorId_정상수행")
     void findBlogsByCreatorId_whenNormalInput_Success() {
         //given
-        when(memoryBlogRepository.findByCreatorId(eq(memberId))).thenReturn(mockBlogs);
+        List<Blog> blogs = createBlogs(memberId);
+        when(memoryBlogRepository.findByCreatorId(eq(memberId))).thenReturn(blogs);
 
         //when & then
         List<Blog> actual = blogService.findBlogsByCreatorId(memberId);
-        assertThat(actual).isEqualTo(mockBlogs);
+        assertThat(actual).isEqualTo(blogs);
 
         //then
         verify(memoryBlogRepository).findByCreatorId(eq(memberId));
@@ -169,17 +188,18 @@ class BlogServiceTest {
     }
 
     @Test
-    @DisplayName("updateBlog_creatorId와 blog의 creatorId 불일치_에러")
+    @DisplayName("updateBlog_BlogId조회불가_에러")
     void updateBlog_BlogIdInvalid_Error() {
         //given
-        when(memberService.findMemberById(eq(wrongCreatorId))).thenReturn(mockMember);
+        Member member = createMember(memberId, name, email, password);
+        when(memberService.findMemberById(eq(memberId))).thenReturn(member);
 
         //when & then
         assertThrows(LandLogException.class,
-                () -> blogService.updateBlog(wrongCreatorId, blogId, title, contents));
+                () -> blogService.updateBlog(memberId, wrongBlogId, title, contents));
 
         //then
-        verify(memberService).findMemberById(eq(wrongCreatorId));
+        verify(memberService).findMemberById(eq(memberId));
     }
 
     @Test
@@ -197,16 +217,17 @@ class BlogServiceTest {
     }
 
     @Test
-    @DisplayName("deleteBlog_creatorId와 blog의 creatorId 불일치_에러")
+    @DisplayName("deleteBlog_BlogId조회불가_에러")
     void deleteBlog_BlogIdInvalid_Error() {
         //given
-        when(memberService.findMemberById(eq(wrongCreatorId))).thenReturn(mockMember);
+        Member member = createMember(memberId, name, email, password);
+        when(memberService.findMemberById(eq(memberId))).thenReturn(member);
 
         //when & then
         assertThrows(LandLogException.class,
-                () -> blogService.deleteBlog(wrongCreatorId, blogId));
+                () -> blogService.deleteBlog(memberId,wrongBlogId));
 
         //then
-        verify(memberService).findMemberById(eq(wrongCreatorId));
+        verify(memberService).findMemberById(eq(memberId));
     }
 }
