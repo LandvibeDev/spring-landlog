@@ -27,16 +27,8 @@ public class MemberController {
 
     @PostMapping(value = "/new")
     public String create(MemberForm form) {
-        String email = form.getEmail();
-        String password = form.getPassword();
-        String name = form.getPassword();
-        Member member = Member.builder()
-                .email(email)
-                .password(password)
-                .name(name)
-                .build();
         try {
-            memberService.join(member);
+            memberService.join(form);
             return "redirect:/";
         } catch (IllegalStateException e) {
             return "redirect:/members/new";

@@ -59,14 +59,6 @@ public class BlogController {
     @PostMapping("/new")
     public String createBlog(BlogCreateForm form, @RequestParam("creatorId") Long creatorId) {
         try {
-            String title = form.getTitle();
-            String content = form.getContents();
-            System.out.println(form.getContents());
-            Blog blog = Blog.builder()
-                    .title(title)
-                    .contents(content)
-                    .creatorId(creatorId)
-                    .build();
             blogService.createBlog(creatorId, form);
             return "redirect:/blogs?creatorId=" + creatorId;
         } catch (Exception e) {
@@ -79,7 +71,6 @@ public class BlogController {
     public String updateBlogForm(@RequestParam("blogId") Long blogId, @RequestParam("creatorId") Long creatorId, Model model) {
         try {
             Member member = memberService.findById(creatorId);
-            Blog blog = blogService.findBlogById(blogId);
             model.addAttribute("name", member.getName());
             model.addAttribute("creatorId", creatorId);
             model.addAttribute("blogId", blogId);

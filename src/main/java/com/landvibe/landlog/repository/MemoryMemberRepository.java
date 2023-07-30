@@ -13,7 +13,6 @@ public class MemoryMemberRepository implements MemberRepository {
 
     @Override
     public Member save(Member member) {
-        member.getEmail();
         String name = member.getName();
         String email = member.getEmail();
         String password = member.getPassword();
