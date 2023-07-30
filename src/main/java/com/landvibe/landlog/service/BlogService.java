@@ -40,16 +40,16 @@ public class BlogService {
         }
     }
 
-    public Long write(Blog blog) throws IllegalArgumentException {
+    public Blog write(Blog blog) throws IllegalArgumentException {
         validateCreatorId(blog.getCreatorId());
         blogRepository.save(blog);
-        return blog.getId();
+        return blog;
     }
 
-    public Long update(Blog blog) throws IllegalArgumentException {
+    public Blog update(Blog blog) throws IllegalArgumentException {
         validateCreatorId(blog.getCreatorId());
         blogRepository.update(blog);
-        return blog.getId();
+        return blog;
     }
 
     public List<Blog> findBlogsByCreatorId(Long creatorId) throws IllegalArgumentException {
