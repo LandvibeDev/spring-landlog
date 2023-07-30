@@ -19,20 +19,15 @@ public class Blog {
         this.contents = contents;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setContents(String contents) {
-        this.contents = contents;
-    }
-
-    public Long getCreatorId() {
-        return creatorId;
+    public Blog() {
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getCreatorId() {
+        return creatorId;
     }
 
     public Long getId() {

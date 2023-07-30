@@ -1,15 +1,12 @@
 package com.landvibe.landlog.service;
 
 import com.landvibe.landlog.domain.Blog;
-import com.landvibe.landlog.dto.BlogForm;
-import com.landvibe.landlog.dto.BlogUpdateForm;
 import com.landvibe.landlog.repository.BlogRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 import static com.landvibe.landlog.ErrorMessage.NO_BLOG;
-import static com.landvibe.landlog.ErrorMessage.NO_USER;
 
 @Service
 public class BlogService {
@@ -21,10 +18,10 @@ public class BlogService {
         this.memberService = memberService;
     }
 
-    public void registerBlog(Long creatorId, BlogForm blogForm) {
+    public Blog registerBlog(Long creatorId, Blog blog) {
         validateCreatorId(creatorId);
-        Blog blog = new Blog(creatorId, blogForm.getTitle(), blogForm.getContent());
         blogRepository.save(blog);
+        return blog;
     }
 
     public List<Blog> findBlogsByCreatorId(Long creatorId) {
@@ -32,26 +29,29 @@ public class BlogService {
         return blogRepository.findByCreatorId(creatorId);
     }
 
-    public Blog findById(Long blogId) {
-        return blogRepository.findByBlogId(blogId)
+    public Blog findById(Long creatorId, Long id) {
+        validateCreatorId(creatorId);
+        return blogRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(NO_BLOG.message));
     }
 
-    public void deleteBlog(Long blogId, Long creatorId) {
+    public void deleteBlog(Long creatorId, Long id) {
         validateCreatorId(creatorId);
-        blogRepository.delete(blogId);
+        blogRepository.delete(id);
     }
 
-    public Blog updateBlog(BlogUpdateForm blogUpdateForm, Long creatorId) {
+    public Blog updateBlog(Long creatorId, Long id, Blog blog) {
         validateCreatorId(creatorId);
-        Blog blog = blogRepository.findByBlogId(blogUpdateForm.getId())
-                .orElseThrow(() -> new IllegalArgumentException(NO_BLOG.message));
-        blog.setTitle(blogUpdateForm.getTitle());
-        blog.setContents(blogUpdateForm.getContents());
-        return blogRepository.update(blog);
+        isValidBlogId(id);
+        return blogRepository.update(id, blog);
     }
 
     public void validateCreatorId(Long creatorId) {
         memberService.isValidCreatorId(creatorId);
+    }
+
+    public void isValidBlogId(Long id) {
+        blogRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException(NO_BLOG.message));
     }
 }

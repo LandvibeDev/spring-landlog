@@ -21,8 +21,8 @@ public class MemoryBlogRepository implements BlogRepository {
     }
 
     @Override
-    public Optional<Blog> findByBlogId(Long blogId) {
-        return Optional.ofNullable(store.get(blogId));
+    public Optional<Blog> findById(Long id) {
+        return Optional.ofNullable(store.get(id));
     }
 
     @Override
@@ -31,8 +31,8 @@ public class MemoryBlogRepository implements BlogRepository {
     }
 
     @Override
-    public Blog update(Blog blog) {
-        store.put(blog.getId(), blog);
+    public Blog update(Long id, Blog blog) {
+        store.put(id, blog);
         return blog;
     }
 
