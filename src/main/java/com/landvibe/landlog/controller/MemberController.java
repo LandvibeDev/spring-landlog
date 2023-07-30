@@ -30,7 +30,11 @@ public class MemberController {
         String email = form.getEmail();
         String password = form.getPassword();
         String name = form.getPassword();
-        Member member = new Member(name, email, password);
+        Member member = Member.builder()
+                .email(email)
+                .password(password)
+                .name(name)
+                .build();
         try {
             memberService.join(member);
             return "redirect:/";
@@ -62,7 +66,6 @@ public class MemberController {
         }
 
     }
-
 
 
 }

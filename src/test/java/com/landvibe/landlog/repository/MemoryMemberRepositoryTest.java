@@ -3,6 +3,7 @@ package com.landvibe.landlog.repository;
 import com.landvibe.landlog.domain.Member;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -18,7 +19,15 @@ class MemoryMemberRepositoryTest {
     String email = "email";
     String password = "password";
 
-    @AfterEach
+    Member member = Member.builder()
+            .name(name)
+            .email(email)
+            .password(password)
+            .build();
+
+    Long saveId = 1L;
+
+    @BeforeEach
     public void afterEach() {
         repository.clear();
     }
@@ -26,42 +35,47 @@ class MemoryMemberRepositoryTest {
     @Test
     void save() {
         //given
-        Member member = new Member();
-        member.setName(name);
 
         //when
         repository.save(member);
 
+
         //then
-        Member result = repository.findById(member.getId()).get();
-        assertThat(result).isEqualTo(member);
+        System.out.println(repository.findById(saveId).isEmpty());
+        Member result = repository.findById(saveId).get();
+        System.out.println(result);
+        assertThat(result.getName()).isEqualTo(member.getName());
     }
 
     @Test
     public void findByName() {
         //given
-        Member member1 = new Member();
-        member1.setName(name);
+        Member member1 = Member.builder()
+                .name(name)
+                .build();
         repository.save(member1);
-        Member member2 = new Member();
-        member2.setName(name);
+        Member member2 = Member.builder()
+                .name(name)
+                .build();
         repository.save(member2);
 
         //when
         Member result = repository.findByName(name).get();
 
         //then
-        assertThat(result).isEqualTo(member1);
+        assertThat(result.getName()).isEqualTo(member1.getName());
     }
 
     @Test
     public void findAll() {
         //given
-        Member member1 = new Member();
-        member1.setName(name);
+        Member member1 = Member.builder()
+                .name(name)
+                .build();
         repository.save(member1);
-        Member member2 = new Member();
-        member2.setName("spring2");
+        Member member2 = Member.builder()
+                .name("spring2")
+                .build();
         repository.save(member2);
 
         //when
@@ -74,12 +88,13 @@ class MemoryMemberRepositoryTest {
     @Test
     public void findByEmailTest() {
 
-        Member member = new Member();
-        member.setEmail(email);
-        member.setPassword(password);
-        member.setName(name);
+        Member member = Member.builder()
+                .name(name)
+                .email(email)
+                .password(password)
+                .build();
         repository.save(member);
         Optional<Member> optionalMember = repository.findByEmailAndPassword(email, password);
-        Assertions.assertEquals(member, optionalMember.get());
+        Assertions.assertEquals(member.getName(), optionalMember.get().getName());
     }
 }

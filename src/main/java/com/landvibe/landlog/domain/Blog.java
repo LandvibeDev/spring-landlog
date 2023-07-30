@@ -1,5 +1,11 @@
 package com.landvibe.landlog.domain;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Builder
 public class Blog {
 
     private Long id;
@@ -7,33 +13,6 @@ public class Blog {
 
     private Long creatorId;
     private String contents;
-
-
-    public Blog(String title, Long creatorId, String content) {
-        this.title = title;
-        this.creatorId = creatorId;
-        this.contents = content;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public Long getCreatorId() {
-        return creatorId;
-    }
-
-    public String getContents() {
-        return contents;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
 
 }

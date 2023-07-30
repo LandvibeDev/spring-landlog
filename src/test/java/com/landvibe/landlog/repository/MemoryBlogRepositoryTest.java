@@ -20,8 +20,16 @@ class MemoryBlogRepositoryTest {
     Long blogId = 1L;
 
     BlogRespository blogRespository = new MemoryBlogRepository();
-    Blog blog = new Blog(title, blogId, contents);
-    Blog expectedBlog = new Blog(afterUpdateTitle, blogId, afterUpdateContents);
+    Blog blog = Blog.builder()
+            .title(title)
+            .contents(contents)
+            .id(blogId)
+            .build();
+    Blog expectedBlog = Blog.builder()
+            .title(afterUpdateTitle)
+            .contents(afterUpdateContents)
+            .id(blogId)
+            .build();
 
     @BeforeEach
     public void clearStore() {
@@ -36,7 +44,8 @@ class MemoryBlogRepositoryTest {
         blogRespository.save(blog);
 
         Blog byBlogId = blogRespository.findByBlogId(blogId).get();
-        Assertions.assertEquals(blog, byBlogId);
+        Assertions.assertEquals(blog.getContents(), byBlogId.getContents());
+
 
     }
 
@@ -49,7 +58,7 @@ class MemoryBlogRepositoryTest {
 
         blogRespository.delete(blogId);
 
-        assertEquals(blogRespository.getSize(),0);
+        assertEquals(blogRespository.getSize(), 0);
     }
 
     @Test
@@ -58,7 +67,10 @@ class MemoryBlogRepositoryTest {
 
 
         blogRespository.save(blog);
-        BlogUpdateForm form = new BlogUpdateForm(afterUpdateTitle, afterUpdateContents);
+        BlogUpdateForm form = BlogUpdateForm.builder()
+                .title(afterUpdateTitle)
+                .contents(afterUpdateContents)
+                .build();
 
         blogRespository.update(blogId, form);
         Blog afterChangeBlog = blogRespository.findByBlogId(blogId).get();

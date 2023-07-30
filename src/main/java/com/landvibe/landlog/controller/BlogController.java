@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 
-
 @Controller
 @RequestMapping("/blogs")
 public class BlogController {
@@ -63,7 +62,11 @@ public class BlogController {
             String title = form.getTitle();
             String content = form.getContents();
             System.out.println(form.getContents());
-            Blog blog = new Blog(title, creatorId, content);
+            Blog blog = Blog.builder()
+                    .title(title)
+                    .contents(content)
+                    .creatorId(creatorId)
+                    .build();
             blogService.createBlog(creatorId, form);
             return "redirect:/blogs?creatorId=" + creatorId;
         } catch (Exception e) {

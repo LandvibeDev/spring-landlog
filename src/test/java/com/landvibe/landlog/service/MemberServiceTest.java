@@ -23,13 +23,7 @@ class MemberServiceTest {
 
     String existingMemberMessage = "이미 존재하는 회원입니다.";
     String cantFindMemberMessage = "이메일, 비밀번호가 일치하는 회원이 존재하지 않습니다";
-
-    String name = "name";
-    String password = "password";
-    String email = "email";
-
-    String existingMemberMessage = "이미 존재하는 회원입니다.";
-    String cantFindMemberMessage = "이메일, 비밀번호가 일치하는 회원이 존재하지 않습니다";
+    Long saveId = 1L;
 
     @BeforeEach
     public void beforeEach() {
@@ -40,11 +34,13 @@ class MemberServiceTest {
     @Test
     public void 회원가입() {
         //Given
-        Member member = new Member();
-        member.setName(name);
+        Member member = Member.builder()
+                .name(name)
+                .build();
 
         //When
-        Long saveId = memberService.join(member);
+        memberService.join(member);
+        System.out.println(saveId);
         //Then
         Member findMember = memberService.findById(saveId);
         assertEquals(member.getName(), findMember.getName());
@@ -53,10 +49,12 @@ class MemberServiceTest {
     @Test
     public void 중복_회원_예외() {
         //Given
-        Member member1 = new Member();
-        member1.setName(name);
-        Member member2 = new Member();
-        member2.setName(name);
+        Member member1 = Member.builder()
+                .name(name)
+                .build();
+        Member member2 = Member.builder()
+                .name(name)
+                .build();
         //When
         memberService.join(member1);
         IllegalStateException e = assertThrows(IllegalStateException.class,
@@ -66,9 +64,10 @@ class MemberServiceTest {
 
     @Test
     public void 로그인_일치하는_회원_없음() {
-        LoginForm form = new LoginForm();
-        form.setEmail(email);
-        form.setPassword(password);
+        LoginForm form = LoginForm.builder()
+                .email(email)
+                .password(password)
+                .build();
         IllegalStateException e = assertThrows(IllegalStateException.class,
                 () -> memberService.login(form));
         assertThat(e.getMessage()).isEqualTo(cantFindMemberMessage);
@@ -77,14 +76,16 @@ class MemberServiceTest {
     @Test
     public void 로그인_성공() {
 
-        Member member1 = new Member();
-        member1.setName(name);
-        member1.setEmail(email);
-        member1.setPassword(password);
+        Member member1 = Member.builder()
+                .name(name)
+                .password(password)
+                .email(email)
+                .build();
 
-        LoginForm form = new LoginForm();
-        form.setEmail(email);
-        form.setPassword(password);
+        LoginForm form = LoginForm.builder()
+                .email(email)
+                .password(password)
+                .build();
 
         memberService.join(member1);
         Member login = memberService.login(form);

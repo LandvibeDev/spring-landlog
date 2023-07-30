@@ -22,7 +22,11 @@ public class BlogService {
     public void createBlog(Long creatorId, BlogCreateForm form) {
         String title = form.getTitle();
         String content = form.getContents();
-        Blog blog = new Blog(title, creatorId, content);
+        Blog blog = Blog.builder()
+                .title(title)
+                .contents(content)
+                .creatorId(creatorId)
+                .build();
         blogRespository.save(blog);
     }
 
