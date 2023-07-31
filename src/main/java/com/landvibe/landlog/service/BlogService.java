@@ -21,17 +21,17 @@ public class BlogService {
     }
 
     // <-- 수정,생성 -->
-    public Long createBlog(Long creatorId, String title, String contents) {
+    public Blog createBlog(Long creatorId, String title, String contents) {
         memberService.findMemberById(creatorId); // 예외
-
-        return blogRepository.save(creatorId, title, contents);
+        Blog newBlog = blogRepository.save(creatorId, title, contents);
+        return newBlog;
     }
 
-    public void updateBlog(Long creatorId, Long blogId, String title, String contents) {
+    public Blog updateBlog(Long creatorId, Long blogId, String title, String contents) {
         memberService.findMemberById(creatorId); // 예외
         findBlogByBlogIdAndCreatorId(creatorId, blogId); // 예외
-
-        blogRepository.modify(blogId, title, contents, creatorId);
+        Blog updatedBlog = blogRepository.modify(blogId, title, contents, creatorId);
+        return updatedBlog;
     }
 
     public void deleteBlog(Long creatorId, Long blogId) {
