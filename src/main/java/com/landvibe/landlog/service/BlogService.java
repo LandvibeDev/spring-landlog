@@ -26,8 +26,23 @@ public class BlogService {
         return blogRepository.findBlogsByCreatorId(creatorId);
     }
 
+    public Long create(Blog blog) {
+        validateEmptyInput(blog);
+        blogRepository.save(blog);
+        return blog.getId();
+    }
+
     private void validateCreatorId(Long creatorId) {
         memberRepository.findById(creatorId)
                 .orElseThrow(() -> new IllegalArgumentException(Message.NO_USER.message));
+    }
+
+    private void validateEmptyInput(Blog blog) {
+        if (blog.getContents().equals("")) {
+            throw new IllegalArgumentException(Message.NO_INPUT_NAME.message);
+        }
+        if (blog.getTitle().equals("")) {
+            throw new IllegalArgumentException(Message.NO_INPUT_EMAIL.message);
+        }
     }
 }
