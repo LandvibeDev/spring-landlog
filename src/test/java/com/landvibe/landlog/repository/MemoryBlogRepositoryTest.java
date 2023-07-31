@@ -1,14 +1,13 @@
 package com.landvibe.landlog.repository;
 
 import com.landvibe.landlog.domain.Blog;
-import com.landvibe.landlog.domain.Member;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class MemoryBlogRepositoryTest {
     MemoryBlogRepository blogRepository = new MemoryBlogRepository();
