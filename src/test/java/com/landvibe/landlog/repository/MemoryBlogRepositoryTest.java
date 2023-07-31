@@ -21,11 +21,12 @@ class MemoryBlogRepositoryTest {
     @Test
     void save() {
         //given
-        Blog blog = new Blog();
-        blog.setTitle("title");
-        blog.setContents("content");
-        blog.setCreatorId(1L);
-        blog.setId(1L);
+        Blog blog = Blog.builder()
+                .title("title")
+                .contents("content")
+                .id(1L)
+                .creatorId(1L)
+                .build();
 
         //when
         blogRepository.save(blog);
@@ -38,8 +39,8 @@ class MemoryBlogRepositoryTest {
     @Test
     void findAllByCreatorId() {
         //given
-        Blog blog1 = new Blog();
-        Blog blog2 = new Blog();
+        Blog blog1 = Blog.builder().build();
+        Blog blog2 = Blog.builder().build();
         setBlog(blog1,blog2);
 
         blogRepository.save(blog1);
@@ -55,8 +56,8 @@ class MemoryBlogRepositoryTest {
     @Test
     void findOneByBlogIdAndCreatorId() {
         //given
-        Blog blog1 = new Blog();
-        Blog blog2 = new Blog();
+        Blog blog1 = Blog.builder().build();
+        Blog blog2 = Blog.builder().build();
         setBlog(blog1,blog2);
 
 
@@ -73,8 +74,8 @@ class MemoryBlogRepositoryTest {
     @Test
     void deleteBlog() {
         //given
-        Blog blog1 = new Blog();
-        Blog blog2 = new Blog();
+        Blog blog1 = Blog.builder().build();
+        Blog blog2 = Blog.builder().build();
         setBlog(blog1,blog2);
 
         blogRepository.save(blog1);
@@ -90,7 +91,18 @@ class MemoryBlogRepositoryTest {
         assertThat(e.getMessage()).isEqualTo("해당 블로그가 존재하지 않습니다.");
     }
     void setBlog(Blog blog1, Blog blog2) {
-        blog1 = new Blog(1L,1L, "title1","content1");
-        blog2 = new Blog(1L,2L, "title2","content2");
+        blog1 = Blog.builder()
+                .creatorId(1L)
+                .id(1L)
+                .title("title1")
+                .contents("content1")
+                .build();
+
+        blog1 = Blog.builder()
+                .creatorId(1L)
+                .id(2L)
+                .title("title2")
+                .contents("content2")
+                .build();
     }
 }

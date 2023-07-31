@@ -1,6 +1,7 @@
 package com.landvibe.landlog.controller;
 
 import com.landvibe.landlog.domain.Blog;
+import com.landvibe.landlog.form.UpdateBlogForm;
 import com.landvibe.landlog.service.BlogService;
 import com.landvibe.landlog.service.MemberService;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +29,10 @@ public class BlogApiController {
     @GetMapping("/{blogId}")
     public UpdateBlogForm blogUpdate(@RequestParam long creatorId, @PathVariable long blogId) {
         Blog blog = blogService.findOne(blogId, creatorId);
-        UpdateBlogForm updateBlogForm = new UpdateBlogForm(blog.getTitle(), blog.getContents());
+        UpdateBlogForm updateBlogForm = UpdateBlogForm.builder()
+                .title(blog.getTitle())
+                .contents(blog.getContents())
+                .build();
         return updateBlogForm;
     }
 
@@ -42,7 +46,10 @@ public class BlogApiController {
 
     @PutMapping("/{blogId}")
     public Blog update(@RequestParam long creatorId, @PathVariable long blogId, @RequestBody Blog blog) {
-        UpdateBlogForm updateBlogForm = new UpdateBlogForm(blog.getTitle(), blog.getContents());
+        UpdateBlogForm updateBlogForm = UpdateBlogForm.builder()
+                .title(blog.getTitle())
+                .contents(blog.getContents())
+                .build();
         blogService.update(blogId, creatorId, updateBlogForm);
 
         return blog;

@@ -32,8 +32,9 @@ class MemberServiceTest {
     @Test
     public void 회원가입() throws Exception {
         //Given
-        Member member = new Member();
-        member.setName("hello");
+        Member member = Member.builder()
+                        .name("hello")
+                        .build();
         //When
         Long saveId = memberService.join(member);
         //Then
@@ -44,10 +45,12 @@ class MemberServiceTest {
     @Test
     public void 중복_회원_예외() throws Exception {
         //Given
-        Member member1 = new Member();
-        member1.setName("spring");
-        Member member2 = new Member();
-        member2.setName("spring");
+        Member member1 = Member.builder()
+                        .name("spring")
+                        .build();
+        Member member2 = Member.builder()
+                        .name("spring")
+                        .build();
         //When
         memberService.join(member1);
         IllegalStateException e = assertThrows(IllegalStateException.class,
@@ -59,12 +62,17 @@ class MemberServiceTest {
     @DisplayName("로그인 성공")
     public void login_whenSuchMemberInRepository_thenReturnTrue() {
         //given
-        Member member1 = new Member();
+        Member member1 = Member.builder().build();
         createNewMember(member1);
 
         memberService.join(member1);
 
-        Member loginMember = new Member(1L, "aaN", "aaE", "aaP");
+        Member loginMember = Member.builder()
+                .id(1L)
+                .name("aaN")
+                .email("aaE")
+                .password("aaP")
+                .build();
 
         //when
         Optional<Member> logined = memberService.login(loginMember.getEmail(), loginMember.getPassword());
@@ -83,12 +91,17 @@ class MemberServiceTest {
     @DisplayName("로그인실패")
     public void login_whenNoSuchMemberInRepository_thenReturnTrue() {
         //given
-        Member member1 = new Member();
+        Member member1 = Member.builder().build();
         createNewMember(member1);
 
         memberService.join(member1);
 
-        Member loginMember = new Member(1L, "bbN", "bbE", "bbP");
+        Member loginMember = Member.builder()
+                .id(1L)
+                .name("bbN")
+                .email("bbE")
+                .password("bbP")
+                .build();
 
         //when
         Optional<Member> logined = memberService.login(loginMember.getEmail(), loginMember.getPassword());

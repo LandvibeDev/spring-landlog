@@ -1,4 +1,4 @@
-package com.landvibe.landlog.domain;
+package com.landvibe.landlog.form;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -7,9 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class Blog {
-    private Long creatorId;
-    private Long id;
+public class UpdateBlogForm {
     private String title;
     private String contents;
 }
