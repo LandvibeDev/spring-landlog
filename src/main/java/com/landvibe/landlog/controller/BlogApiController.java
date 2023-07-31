@@ -1,6 +1,7 @@
 package com.landvibe.landlog.controller;
 
 import com.landvibe.landlog.domain.Blog;
+import com.landvibe.landlog.form.UpdateBlogForm;
 import com.landvibe.landlog.service.BlogService;
 import com.landvibe.landlog.service.MemberService;
 import org.springframework.web.bind.annotation.*;

@@ -1,6 +1,6 @@
 package com.landvibe.landlog.service;
 
-import com.landvibe.landlog.controller.UpdateBlogForm;
+import com.landvibe.landlog.form.UpdateBlogForm;
 import com.landvibe.landlog.domain.Blog;
 import com.landvibe.landlog.repository.BlogRepository;
 import org.springframework.stereotype.Service;

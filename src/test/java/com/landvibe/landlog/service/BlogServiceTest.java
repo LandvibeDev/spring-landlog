@@ -1,12 +1,7 @@
 package com.landvibe.landlog.service;
 
-import com.landvibe.landlog.controller.UpdateBlogForm;
 import com.landvibe.landlog.domain.Blog;
-import com.landvibe.landlog.domain.Member;
 import com.landvibe.landlog.repository.MemoryBlogRepository;
-import com.landvibe.landlog.repository.MemoryMemberRepository;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

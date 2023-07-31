@@ -1,10 +1,8 @@
 package com.landvibe.landlog.repository;
 
-import com.landvibe.landlog.controller.UpdateBlogForm;
 import com.landvibe.landlog.domain.Blog;
 import org.springframework.stereotype.Repository;
 
-import javax.swing.text.html.Option;
 import java.util.*;
 import java.util.stream.Collectors;
 
