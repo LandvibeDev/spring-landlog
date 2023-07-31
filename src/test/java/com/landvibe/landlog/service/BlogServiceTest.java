@@ -43,10 +43,6 @@ class BlogServiceTest {
     String title = "title";
     String contents = "contents";
 
-    //mock
-    Member mockMember = mock(Member.class);
-    List<Blog> mockBlogs = mock(List.class);
-
     // error
     Long wrongCreatorId = -1L;
     Long wrongBlogId = -1L;
@@ -74,11 +70,12 @@ class BlogServiceTest {
     void createBlog_whenBlogDetailProvided_returnBlogId() {
         //given
         Member member = createMember(memberId, title, contents, password);
+        Blog blog = createBlog(blogId, title, contents, memberId);
         when(memberService.findMemberById(memberId)).thenReturn(member);
-        when(memoryBlogRepository.save(memberId, title, contents)).thenReturn(blogId);
+        when(memoryBlogRepository.save(memberId, title, contents)).thenReturn(blog);
 
         //when & then
-        Long actual = blogService.createBlog(memberId, title, contents);
+        Long actual = blogService.createBlog(memberId, title, contents).getId();
         assertThat(actual).isEqualTo(blogId);
 
         //then
@@ -225,7 +222,7 @@ class BlogServiceTest {
 
         //when & then
         assertThrows(LandLogException.class,
-                () -> blogService.deleteBlog(memberId,wrongBlogId));
+                () -> blogService.deleteBlog(memberId, wrongBlogId));
 
         //then
         verify(memberService).findMemberById(eq(memberId));

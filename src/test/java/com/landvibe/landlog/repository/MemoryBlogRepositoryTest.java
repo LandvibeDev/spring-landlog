@@ -36,7 +36,7 @@ class MemoryBlogRepositoryTest {
     @DisplayName("save_정상인풋_정상수행")
     void save() {
         //when
-        Long blogId = memoryBlogRepository.save(memberId, title, contents);
+        Long blogId = memoryBlogRepository.save(memberId, title, contents).getId();
         Blog actualBlog = memoryBlogRepository.findById(blogId).get();
 
         //then
@@ -47,7 +47,7 @@ class MemoryBlogRepositoryTest {
     @DisplayName("findById_정상수행")
     void findById() {
         //given
-        Long blogId = memoryBlogRepository.save(memberId, title, contents);
+        Long blogId = memoryBlogRepository.save(memberId, title, contents).getId();
 
         //when
         Blog blog = memoryBlogRepository.findById(blogId).get();
@@ -60,7 +60,7 @@ class MemoryBlogRepositoryTest {
     @DisplayName("memberId로_blogs_조회_정상수행")
     void findByMemberId() {
         //given
-        Long blogId = memoryBlogRepository.save(memberId, title, contents);
+        Long blogId = memoryBlogRepository.save(memberId, title, contents).getId();
 
         //when
         List<Blog> blogs = memoryBlogRepository.findByCreatorId(memberId);
@@ -74,7 +74,7 @@ class MemoryBlogRepositoryTest {
     @DisplayName("blog_수정_정상수행")
     void modify() {
         //given
-        Long blogId = memoryBlogRepository.save(memberId, title, contents);
+        Long blogId = memoryBlogRepository.save(memberId, title, contents).getId();
 
         //when
         memoryBlogRepository.modify(blogId, updateTitle, updateContents, memberId);
@@ -90,7 +90,7 @@ class MemoryBlogRepositoryTest {
     @Test
     void erase() {
         //given
-        Long blogId = memoryBlogRepository.save(memberId, title, contents);
+        Long blogId = memoryBlogRepository.save(memberId, title, contents).getId();
 
         //when
         memoryBlogRepository.erase(blogId);
