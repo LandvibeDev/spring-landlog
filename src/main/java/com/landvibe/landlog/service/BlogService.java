@@ -25,14 +25,13 @@ public class BlogService {
 		return blogRepository.save(blog);
 	}
 
-	public Long update(Blog blog) {
-		validateCreator(blog.getCreatorId());
-		validateBlog(blog.getTitle(), blog.getContents());
+	public Long update(Blog updateBlog) {
+		validateCreator(updateBlog.getCreatorId());
+		validateBlog(updateBlog.getTitle(), updateBlog.getContents());
 
-		Long blogId = findByBlogId(blog.getId()).getId();
-		Blog newBlog = new Blog(blog.getCreatorId(), blog.getTitle(), blog.getContents());
+		Long blogId = findByBlogId(updateBlog.getId()).getId();
 
-		return blogRepository.update(blogId, newBlog);
+		return blogRepository.update(blogId, updateBlog);
 	}
 
 	public Long delete(Long blogId) {
