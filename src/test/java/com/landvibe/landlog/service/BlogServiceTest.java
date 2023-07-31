@@ -15,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static com.landvibe.landlog.constants.ErrorMessages.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
@@ -77,7 +78,7 @@ public class BlogServiceTest {
 		Blog invalidBlog = new Blog(creatorId, invalidTitle, contents);
 		Exception e = assertThrows(Exception.class,
 			() -> blogService.create(invalidBlog));
-		assertEquals(e.getMessage(), "제목을 입력해주세요.");
+		assertEquals(e.getMessage(), NO_CONTENTS.get());
 	}
 
 	@DisplayName("블로그 생성 실패 -> 잘못된 내용")
@@ -87,7 +88,7 @@ public class BlogServiceTest {
 
 		Exception e = assertThrows(Exception.class,
 			() -> blogService.create(invalidBlog));
-		assertEquals(e.getMessage(), "내용을 입력해주세요.");
+		assertEquals(e.getMessage(), NO_CONTENTS.get());
 	}
 
 	@DisplayName("블로그 업데이트 성공")
@@ -112,7 +113,7 @@ public class BlogServiceTest {
 
 		Exception e = assertThrows(Exception.class,
 			() -> blogService.update(invalidUpdateBlog));
-		assertEquals(e.getMessage(), "제목을 입력해주세요.");
+		assertEquals(e.getMessage(), NO_TITLE.get());
 	}
 
 	@DisplayName("블로그 업데이트 실패 -> 잘못된 내용")
@@ -122,7 +123,7 @@ public class BlogServiceTest {
 
 		Exception e = assertThrows(Exception.class,
 			() -> blogService.update(invalidUpdateBlog));
-		assertEquals(e.getMessage(), "내용을 입력해주세요.");
+		assertEquals(e.getMessage(), NO_CONTENTS.get());
 	}
 
 	@DisplayName("블로그 삭제 성공")
@@ -143,7 +144,7 @@ public class BlogServiceTest {
 
 		Exception e = assertThrows(Exception.class,
 			() -> blogService.delete(0L));
-		assertEquals(e.getMessage(), "존재하지 않는 블로그입니다.");
+		assertEquals(e.getMessage(), NO_BLOG.get());
 
 		verify(blogRepository, times(1)).findByBlogId(0L);
 		verify(blogRepository, never()).delete(any(Long.class));

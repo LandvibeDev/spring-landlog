@@ -1,11 +1,11 @@
 package com.landvibe.landlog.service;
 
+import static com.landvibe.landlog.constants.ErrorMessages.*;
+
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.landvibe.landlog.controller.form.BlogForm;
-import com.landvibe.landlog.controller.form.BlogUpdateForm;
 import com.landvibe.landlog.domain.Blog;
 import com.landvibe.landlog.repository.BlogRepository;
 
@@ -47,7 +47,7 @@ public class BlogService {
 
 	public Blog findByBlogId(Long blogId) {
 		return blogRepository.findByBlogId(blogId)
-			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 블로그입니다."));
+			.orElseThrow(() -> new IllegalArgumentException(NO_BLOG.get()));
 	}
 
 	public void validateCreator(Long creatorId) {
@@ -56,10 +56,10 @@ public class BlogService {
 
 	public void validateBlog(String title, String contents) {
 		if (title.equals("")) {
-			throw new IllegalArgumentException("제목을 입력해주세요.");
+			throw new IllegalArgumentException(NO_TITLE.get());
 		}
 		if (contents.equals("")) {
-			throw new IllegalArgumentException("내용을 입력해주세요.");
+			throw new IllegalArgumentException(NO_CONTENTS.get());
 		}
 	}
 
