@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BlogRepository {
-    Long save(Long memberId, String title, String contents);
+    Blog save(Long creatorId, String title, String contents);
 
     Optional<Blog> findById(Long blogId);
 
     List<Blog> findByCreatorId(Long creatorId);
 
-    void modify(Long blogId, String title, String contents, Long memberId);
+    Blog modify(Long blogId, String title, String contents, Long creatorId);
 
     void erase(Long blogId);
 }
