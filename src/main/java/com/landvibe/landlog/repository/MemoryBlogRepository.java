@@ -42,6 +42,7 @@ public class MemoryBlogRepository implements BlogRepository {
         blogStore.remove(deleteBlogId);
         return true;
     }
+
     @Override
     public List<Blog> findAllBlogsByCreatorId(Long creatorId) {
         List<Blog> creatorBlogList = new ArrayList<>();

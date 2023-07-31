@@ -58,7 +58,7 @@ public class MemberController {
 
         try {
             redirectId = memberService.logIn(form);
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
             return "redirect:/";
         }

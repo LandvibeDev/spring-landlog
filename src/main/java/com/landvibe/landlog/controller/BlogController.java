@@ -82,12 +82,11 @@ public class BlogController {
 
     @DeleteMapping(value = "/delete")
     public String deleteBlog(@RequestParam(name = "blogId") Long blogId, @RequestParam(name = "creatorId") Long creatorId,
-                             RedirectAttributes redirect){
+                             RedirectAttributes redirect) {
         blogService.deleteBlog(blogId);
 
         redirect.addAttribute("creatorId", creatorId);
 
         return "redirect:/blogs";
     }
-
 }

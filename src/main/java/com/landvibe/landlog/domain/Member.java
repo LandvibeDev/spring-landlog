@@ -6,7 +6,6 @@ public class Member {
     private String name;
     private String email;
     private String password;
-    private int blogCount;
 
     public Member() {
     }
@@ -48,5 +47,4 @@ public class Member {
     public void setPassword(String password) {
         this.password = password;
     }
-
 }
