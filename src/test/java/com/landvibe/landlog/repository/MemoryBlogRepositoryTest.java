@@ -13,6 +13,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 class MemoryBlogRepositoryTest {
 
     MemoryBlogRepository repository = new MemoryBlogRepository();
+    Blog blog1 = new Blog(1L, "aa", "bb");
+    Blog blog2 = new Blog(1L, "bb", "cc");
 
     @AfterEach
     public void afterEach() {
@@ -22,39 +24,32 @@ class MemoryBlogRepositoryTest {
 
     @Test
     void save() {
-        //given
-        Blog blog = new Blog(1L, "aa", "bb");
 
         //when
-        repository.save(blog);
+        repository.save(blog1);
 
         //then
-        Blog result = repository.findById(blog.getId()).get();
-        assertThat(result).isEqualTo(blog);
+        Blog result = repository.findById(blog1.getId()).get();
+        assertThat(result).isEqualTo(blog1);
     }
 
     @Test
     void deleteById() {
-        //given
-        Blog blog = new Blog(1L, "aa", "bb");
-        repository.save(blog);
+
+        repository.save(blog1);
 
         //when
-        repository.delete(blog.getId());
+        repository.delete(blog1.getId());
 
         //then
-        assertThat(repository.findById(blog.getId())).isEqualTo(Optional.empty());
+        assertThat(repository.findById(blog1.getId())).isEqualTo(Optional.empty());
     }
 
     @Test
     void findBlogByCreatorId() {
 
-        //given
-        Blog blog1 = new Blog(1L, "aa", "bb");
         repository.save(blog1);
-        Blog blog2 = new Blog(1L, "bb", "cc");
         repository.save(blog2);
-
         //when
         List<Blog> blogs = repository.findByCreatorId(blog1.getCreatorId());
 
