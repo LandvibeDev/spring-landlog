@@ -53,7 +53,7 @@ public class BlogController {
 	@PostMapping("/new")
 	public String createBlog(@RequestParam(name = "creatorId") Long creatorId, BlogForm blogForm,
 		RedirectAttributes redirectAttributes) {
-		Blog blog = new Blog(creatorId,blogForm.getTitle(),blogForm.getContents());
+		Blog blog = new Blog(creatorId, blogForm.getTitle(), blogForm.getContents());
 		blogService.create(blog);
 
 		redirectAttributes.addAttribute("creatorId", creatorId);
@@ -76,7 +76,7 @@ public class BlogController {
 
 	@PostMapping("/update")
 	public String updateBlog(BlogUpdateForm updateForm, RedirectAttributes redirectAttributes) {
-		Blog newBlog = new Blog(updateForm.getCreatorId(),updateForm.getTitle(),updateForm.getContents());
+		Blog newBlog = new Blog(updateForm.getCreatorId(), updateForm.getTitle(), updateForm.getContents());
 		blogService.update(newBlog);
 		Long creatorId = updateForm.getCreatorId();
 

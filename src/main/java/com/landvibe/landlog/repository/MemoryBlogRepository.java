@@ -27,6 +27,7 @@ public class MemoryBlogRepository implements BlogRepository {
 		store.put(blogId, updateBlog);
 		return blogId;
 	}
+
 	@Override
 	public Long delete(Long blogId) {
 		store.remove(blogId);
@@ -39,6 +40,7 @@ public class MemoryBlogRepository implements BlogRepository {
 			.filter(blog -> blog.getCreatorId().equals(creatorId))
 			.toList();
 	}
+
 	@Override
 	public Optional<Blog> findByBlogId(Long blogId) {
 		return Optional.ofNullable(store.get(blogId));

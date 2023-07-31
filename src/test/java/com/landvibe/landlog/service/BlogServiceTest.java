@@ -139,14 +139,13 @@ public class BlogServiceTest {
 	@DisplayName("블로그 삭제 실패")
 	@Test
 	public void delete_fail() {
-
 		blogService.create(blog);
 
 		Exception e = assertThrows(Exception.class,
 			() -> blogService.delete(0L));
 		assertEquals(e.getMessage(), "존재하지 않는 블로그입니다.");
 
-		verify(blogRepository, times(1)).findByBlogId(any(Long.class));
+		verify(blogRepository, times(1)).findByBlogId(0L);
 		verify(blogRepository, never()).delete(any(Long.class));
 	}
 }
