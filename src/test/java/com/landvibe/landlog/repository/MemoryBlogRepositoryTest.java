@@ -21,7 +21,6 @@ class MemoryBlogRepositoryTest {
         repository.clearStore();
     }
 
-
     @Test
     void save() {
 
@@ -36,6 +35,7 @@ class MemoryBlogRepositoryTest {
     @Test
     void deleteById() {
 
+        //given
         repository.save(blog1);
 
         //when
@@ -47,9 +47,10 @@ class MemoryBlogRepositoryTest {
 
     @Test
     void findBlogByCreatorId() {
-
+        //given
         repository.save(blog1);
         repository.save(blog2);
+
         //when
         List<Blog> blogs = repository.findByCreatorId(blog1.getCreatorId());
 
