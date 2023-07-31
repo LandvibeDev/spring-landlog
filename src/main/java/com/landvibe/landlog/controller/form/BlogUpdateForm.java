@@ -3,9 +3,6 @@ package com.landvibe.landlog.controller.form;
 public class BlogUpdateForm {
 	Long id;
 	Long creatorId;
-
-
-
 	String title;
 	String contents;
 

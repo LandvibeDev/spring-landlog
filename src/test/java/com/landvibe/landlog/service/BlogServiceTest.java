@@ -29,9 +29,6 @@ public class BlogServiceTest {
 	@Mock
 	private MemberService memberService;
 
-	@Mock
-	private MemoryMemberRepository memberRepository;
-
 	BlogService blogService;
 
 	String title = "제목";
@@ -71,7 +68,7 @@ public class BlogServiceTest {
 	public void create() {
 		when(blogRepository.save(blog)).thenReturn(blogId);
 		assertEquals(blogId, blogService.create(blog));
-		verify(blogRepository, times(1)).save(any(Blog.class));
+		verify(blogRepository, times(1)).save(blog);
 	}
 
 	@DisplayName("블로그 생성 실패 -> 잘못된 제목")
@@ -96,7 +93,7 @@ public class BlogServiceTest {
 	@DisplayName("블로그 업데이트 성공")
 	@Test
 	public void update() {
-		when(blogRepository.update(any(Long.class), any(Blog.class))).thenReturn(blogId);
+		when(blogRepository.update(blogId, updateBlog)).thenReturn(blogId);
 		when(blogRepository.findByBlogId(blogId)).thenReturn(Optional.ofNullable(updateBlog));
 
 		Long updateBlogId = blogService.update(updateBlog);
@@ -105,7 +102,7 @@ public class BlogServiceTest {
 		assertEquals(blogId, updateBlogId);
 		assertEquals(updatedTitle, targetBlog.getTitle());
 		assertEquals(updatedContents, targetBlog.getContents());
-		verify(blogRepository, times(1)).update(any(Long.class), any(Blog.class));
+		verify(blogRepository, times(1)).update(blogId,updateBlog);
 	}
 
 	@DisplayName("블로그 업데이트 실패 -> 잘못된 제목")

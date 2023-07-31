@@ -22,8 +22,9 @@ public class MemoryBlogRepository implements BlogRepository {
 	}
 
 	@Override
-	public Long update(Long blogId, Blog newBlog) {
-		store.put(blogId, newBlog);
+	public Long update(Long blogId, Blog updateBlog) {
+		updateBlog.setId(blogId);
+		store.put(blogId, updateBlog);
 		return blogId;
 	}
 	@Override
