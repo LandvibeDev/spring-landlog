@@ -5,18 +5,14 @@ import com.landvibe.landlog.domain.Member;
 import com.landvibe.landlog.form.BlogForm;
 import com.landvibe.landlog.repository.MemoryBlogRepository;
 import com.landvibe.landlog.repository.MemoryMemberRepository;
-import jakarta.annotation.Nullable;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
 import java.util.Optional;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -78,6 +74,7 @@ class BlogServiceTest {
     @DisplayName("게시물 틍록 실패 : 유효하지 않은 creatorId")
     void registerException() {
         BlogForm examForm = new BlogForm(blog.getTitle(), blog.getContents());
+
         assertThrows(IllegalArgumentException.class, () -> {
             blogService.register(0L, examForm);
         });
@@ -87,6 +84,7 @@ class BlogServiceTest {
     @DisplayName("게시물 등록 실패 : 유효하지 않은 게시물")
     void registerException2() {
         BlogForm examForm = new BlogForm("", "");
+
         assertThrows(IllegalArgumentException.class, () -> {
             blogService.register(1L, examForm);
         });
