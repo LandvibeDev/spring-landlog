@@ -25,5 +25,4 @@ public class Blog {
         this.title = title;
         this.contents = contents;
     }
-
 }

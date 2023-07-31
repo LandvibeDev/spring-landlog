@@ -42,6 +42,7 @@ class MemoryBlogRepositoryTest {
         repository.delete(blog1.getId());
 
         //then
+
         assertThat(repository.findById(blog1.getId())).isEqualTo(Optional.empty());
     }
 
