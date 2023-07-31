@@ -32,13 +32,23 @@ class BlogServiceTest {
     long blogId = 1L;
 
     private Member createMember() {
-        Member member = new Member("name", "email", "password");
-        member.setId(creatorId);
+        Member member = Member.builder()
+                .id(creatorId)
+                .name("name")
+                .email("email")
+                .password("password")
+                .build();
         return member;
     }
 
     private Blog createBlog() {
-        return new Blog(blogId, creatorId, "title", "contents");
+        Blog blog = Blog.builder()
+                .id(blogId)
+                .creatorId(creatorId)
+                .title("title")
+                .contents("contents")
+                .build();
+        return blog;
     }
 
     @Test
@@ -46,8 +56,8 @@ class BlogServiceTest {
     void validateCreatorId_success() {
         Member member = createMember();
 
-        Mockito.when(memberRepository.findById(creatorId))
-                .thenReturn(Optional.of(member));
+        Mockito.when(memberRepository.existsById(creatorId))
+                .thenReturn(true);
 
         assertDoesNotThrow(() -> {
             blogService.validateCreatorId(creatorId);
@@ -57,8 +67,8 @@ class BlogServiceTest {
     @Test
     @DisplayName("[creatorId 유효성검정 실패] 존재하지 않는 멤버")
     void validateCreatorId_fail_empty_Optional() {
-        Mockito.when(memberRepository.findById(creatorId))
-                .thenReturn(Optional.empty());
+        Mockito.when(memberRepository.existsById(creatorId))
+                .thenReturn(false);
 
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class, () -> {
@@ -85,8 +95,8 @@ class BlogServiceTest {
         Blog blog = createBlog();
         blog.setId(blogId);
 
-        Mockito.when(blogRepository.findById(blogId))
-                .thenReturn(Optional.of(blog));
+        Mockito.when(blogRepository.existsById(blogId))
+                .thenReturn(true);
 
         assertDoesNotThrow(() -> {
             blogService.validateBlogId(blogId);
@@ -96,8 +106,8 @@ class BlogServiceTest {
     @Test
     @DisplayName("[blogId 유효성검정 실패] 존재하지 않는 게시글")
     void validateBlogId_fail_empty_Optional() {
-        Mockito.when(blogRepository.findById(blogId))
-                .thenReturn(Optional.empty());
+        Mockito.when(blogRepository.existsById(blogId))
+                .thenReturn(false);
 
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class, () -> {
@@ -125,8 +135,8 @@ class BlogServiceTest {
         Member member = createMember();
         Blog blog = createBlog();
 
-        Mockito.when(memberRepository.findById(creatorId))
-                .thenReturn(Optional.of(member));
+        Mockito.when(memberRepository.existsById(creatorId))
+                .thenReturn(true);
         //
         blogService.write(blog);
         //
@@ -140,8 +150,8 @@ class BlogServiceTest {
         //
         Blog blog = createBlog();
 
-        Mockito.when(memberRepository.findById(creatorId))
-                .thenReturn(Optional.empty());
+        Mockito.when(memberRepository.existsById(creatorId))
+                .thenReturn(false);
         //
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class, () -> {
@@ -157,11 +167,14 @@ class BlogServiceTest {
         //
         Member member = createMember();
         blogRepository.save(createBlog());
-        Blog updateBlog = new Blog(
-                creatorId, "updateTitle", "updateContents");
+        Blog updateBlog = Blog.builder()
+                .creatorId(creatorId)
+                .title("updateTitle")
+                .contents("updateContents")
+                .build();
 
-        Mockito.when(memberRepository.findById(creatorId))
-                .thenReturn(Optional.of(member));
+        Mockito.when(memberRepository.existsById(creatorId))
+                .thenReturn(true);
         //
         blogService.update(updateBlog);
         //
@@ -174,11 +187,14 @@ class BlogServiceTest {
     void update_fail_no_creatorId() {
         //
         blogRepository.save(createBlog());
-        Blog updateBlog = new Blog(
-                creatorId, "updateTitle", "updateContents");
+        Blog updateBlog = Blog.builder()
+                .creatorId(creatorId)
+                .title("updateTitle")
+                .contents("updateContents")
+                .build();
 
-        Mockito.when(memberRepository.findById(creatorId))
-                .thenReturn(Optional.empty());
+        Mockito.when(memberRepository.existsById(creatorId))
+                .thenReturn(false);
         //
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class, () -> {
@@ -195,8 +211,8 @@ class BlogServiceTest {
         Member member = createMember();
         Blog blog = createBlog();
 
-        Mockito.when(memberRepository.findById(creatorId))
-                .thenReturn(Optional.of(member));
+        Mockito.when(memberRepository.existsById(creatorId))
+                .thenReturn(true);
         Mockito.when(blogRepository.findById(blogId))
                 .thenReturn(Optional.of(blog));
         //
@@ -212,8 +228,8 @@ class BlogServiceTest {
         //
         Blog blog = createBlog();
 
-        Mockito.when(memberRepository.findById(creatorId))
-                .thenReturn(Optional.empty());
+        Mockito.when(memberRepository.existsById(creatorId))
+                .thenReturn(false);
         Mockito.when(blogRepository.findById(blogId))
                 .thenReturn(Optional.of(blog));
         //
@@ -232,8 +248,8 @@ class BlogServiceTest {
         //
         Member member = createMember();
 
-        Mockito.when(memberRepository.findById(creatorId))
-                .thenReturn(Optional.of(member));
+        Mockito.when(memberRepository.existsById(creatorId))
+                .thenReturn(true);
         //
         blogService.findBlogsByCreatorId(creatorId);
         //
@@ -245,8 +261,8 @@ class BlogServiceTest {
     @DisplayName("[게시글 creatorId 기반으로 찾기 실패] creatorId 없음")
     void findBlogsByCreatorId_fail() {
         //
-        Mockito.when(memberRepository.findById(creatorId))
-                .thenReturn(Optional.empty());
+        Mockito.when(memberRepository.existsById(creatorId))
+                .thenReturn(false);
         //
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class, () -> {

@@ -1,6 +1,7 @@
 package com.landvibe.landlog.controller;
 
 import com.landvibe.landlog.domain.Blog;
+import com.landvibe.landlog.form.BlogForm;
 import com.landvibe.landlog.service.BlogService;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +24,12 @@ public class BlogApiController {
     }
 
     @PostMapping()
-    public Blog create(@RequestParam long creatorId, @RequestBody Blog blog) {
+    public Blog create(@RequestParam long creatorId, @RequestBody BlogForm blogForm) {
+        Blog blog = Blog.builder()
+                .creatorId(blogForm.getCreatorId())
+                .title(blogForm.getTitle())
+                .contents(blogForm.getContents())
+                .build();
         Blog write = blogService.write(blog);
         return write;
     }

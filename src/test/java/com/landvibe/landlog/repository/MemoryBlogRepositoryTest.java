@@ -21,19 +21,36 @@ class MemoryBlogRepositoryTest {
     }
 
     private Blog createBlog() {
-        Blog blog = new Blog(1L, "title", "contents");
+        Blog blog = Blog.builder()
+                .creatorId(1L)
+                .title("title")
+                .contents("contents")
+                .build();
         repository.save(blog);
         return blog;
     }
 
     private List<Blog> createBlogList() {
         List<Blog> blogList = new ArrayList<>();
-        Blog blog = new Blog(1L, "title", "contents");
+
+        Blog blog = Blog.builder()
+                .creatorId(1L)
+                .title("title")
+                .contents("contents")
+                .build();
+
         repository.save(blog);
         blogList.add(blog);
-        Blog blog2 = new Blog(1L, "title2", "contents2");
+
+        Blog blog2 = Blog.builder()
+                .creatorId(1L)
+                .title("title2")
+                .contents("contents2")
+                .build();
+
         repository.save(blog2);
         blogList.add(blog2);
+
         return blogList;
     }
 
@@ -56,7 +73,12 @@ class MemoryBlogRepositoryTest {
     void update() {
         //given
         Blog blog = createBlog();
-        Blog updateBlog = new Blog(blog.getId(), 1L, "updateTitle", "updateContents");
+        Blog updateBlog = Blog.builder()
+                .id(blog.getId())
+                .creatorId(1L)
+                .title("title")
+                .contents("updateContents")
+                .build();
 
         //when
         repository.update(updateBlog);
