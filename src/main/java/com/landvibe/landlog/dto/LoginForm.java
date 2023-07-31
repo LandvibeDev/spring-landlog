@@ -1,5 +1,10 @@
 package com.landvibe.landlog.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class LoginForm {
     private String email;
     private String password;
@@ -7,13 +12,5 @@ public class LoginForm {
     public LoginForm(String email, String password) {
         this.email = email;
         this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getPassword() {
-        return password;
     }
 }
