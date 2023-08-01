@@ -22,12 +22,12 @@ public class MemberController {
         this.memberService = memberService;
     }
 
-    @GetMapping(value = "/login")
+    @GetMapping("/login")
     public String loginForm() {
         return "members/loginForm";
     }
 
-    @PostMapping(value = "/login")
+    @PostMapping("/login")
     public String login(MemberLoginForm form, RedirectAttributes redirectAttributes) {
         try {
             Long memberId = memberService.login(form);
@@ -38,12 +38,12 @@ public class MemberController {
         return "redirect:/blogs";
     }
 
-    @GetMapping(value = "/new")
+    @GetMapping("/new")
     public String createForm() {
         return "members/createMemberForm";
     }
 
-    @PostMapping(value = "/new")
+    @PostMapping("/new")
     public String create(MemberNewForm form) {
         Member member = new Member(form.getName(), form.getEmail(), form.getPassword());
         memberService.join(member);

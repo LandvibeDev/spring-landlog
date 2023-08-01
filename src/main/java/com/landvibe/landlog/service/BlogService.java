@@ -3,8 +3,6 @@ package com.landvibe.landlog.service;
 import com.landvibe.landlog.Message;
 import com.landvibe.landlog.domain.Blog;
 import com.landvibe.landlog.form.BlogForm;
-import com.landvibe.landlog.form.MemberLoginForm;
-import com.landvibe.landlog.domain.Member;
 import com.landvibe.landlog.form.BlogUpdateForm;
 import com.landvibe.landlog.repository.BlogRepository;
 import com.landvibe.landlog.repository.MemberRepository;
@@ -27,7 +25,14 @@ public class BlogService {
         return blogRepository.findBlogsByCreatorId(creatorId);
     }
 
-    public Long create(Blog blog) {
+    public Blog findBlogByBlogId(Long blogId) {
+        return blogRepository.findBlogByBlogId(blogId)
+                .orElseThrow(() -> new IllegalArgumentException(Message.NO_BLOG.message));
+    }
+
+    public Long create(Long creatorId, BlogForm form) {
+        validateCreatorId(creatorId);
+        Blog blog = new Blog(form.getTitle(), form.getContents(), creatorId);
         validateEmptyInput(blog);
         blogRepository.save(blog);
         return blog.getId();

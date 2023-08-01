@@ -17,7 +17,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
-
 @Controller
 @RequestMapping("/blogs")
 public class BlogController {
@@ -32,10 +31,9 @@ public class BlogController {
     @GetMapping
     public String blog(@RequestParam Long creatorId, Model model) {
         Member member = memberService.findOne(creatorId);
-        List<Blog> blogs = blogService.findBlogsByCreatorId(creatorId);
         model.addAttribute("name", member.getName());
         model.addAttribute("creatorId", member.getId());
-        model.addAttribute("blogs", blogs);
+        model.addAttribute("blogs", blogService.findBlogsByCreatorId(creatorId));
         return "blog/blogList";
     }
 
@@ -49,8 +47,10 @@ public class BlogController {
 
     @PostMapping("/new")
     public String create(@RequestParam Long creatorId, BlogForm form, RedirectAttributes redirectAttributes) {
-        Blog blog = new Blog(form.getTitle(), form.getContents(), creatorId);
-        blogService.create(blog);
+        blogService.create(creatorId, form);
+        redirectAttributes.addAttribute("creatorId", creatorId);
+        return "redirect:/blogs";
+    }
 
     @GetMapping("/update")
     public String updateForm(@RequestParam Long creatorId, @RequestParam Long blogId, Model model) {
