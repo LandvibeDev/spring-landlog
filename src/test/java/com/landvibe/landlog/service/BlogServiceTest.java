@@ -28,9 +28,24 @@ class BlogServiceTest {
     MemoryBlogRepository repository;
     @Mock
     MemberService memberService;
-    Blog blog1 = new Blog(1L, 1L, "aa", "bb");
-    Blog blog2 = new Blog(2L, 1L, "bb", "cc");
-    Blog blog3 = new Blog(1L, 1L, "bb", "cc");
+    Blog blog1 = Blog.builder()
+            .id(1L)
+            .creatorId(1L)
+            .title("aa")
+            .contents("bb")
+            .build();
+    Blog blog2 = Blog.builder()
+            .id(2L)
+            .creatorId(1L)
+            .title("bb")
+            .contents("cc")
+            .build();
+    Blog blog3 = Blog.builder()
+            .id(1L)
+            .creatorId(1L)
+            .title("bb")
+            .contents("cc")
+            .build();
     List<Blog> blogs = Arrays.asList(blog1, blog2);
 
 

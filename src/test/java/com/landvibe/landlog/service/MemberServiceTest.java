@@ -57,11 +57,18 @@ class MemberServiceTest {
     @Test
     public void 없는_이메일_예외() {
         //Given
-        Member member = new Member("오형석", "1234", "123@naver.com");
+        Member member = Member.builder()
+                .name("오형석")
+                .password("1234")
+                .email("123@naver.com")
+                .build();
 
         //when
         memberService.join(member);
-        LoginForm loginForm = new LoginForm("123@inha.edu", "123");
+        LoginForm loginForm = LoginForm.builder()
+                .email("123@inha.edu")
+                .password("123")
+                .build();
 
         //then
         Exception e = assertThrows(Exception.class,
@@ -72,11 +79,18 @@ class MemberServiceTest {
     @Test
     public void 로그인_성공() {
         //Given
-        Member member = new Member("오형석", "123@naver.com", "1234");
+        Member member = Member.builder()
+                .name("오형석")
+                .password("1234")
+                .email("123@naver.com")
+                .build();
 
         //when
         memberService.join(member);
-        LoginForm loginForm = new LoginForm("123@naver.com", "1234");
+        LoginForm loginForm = LoginForm.builder()
+                .email("123@naver.com")
+                .password("1234")
+                .build();
 
         //then
         Long memberId = memberService.login(loginForm);
@@ -86,11 +100,18 @@ class MemberServiceTest {
     @Test
     public void 틀린_비밀번호() {
         //Given
-        Member member = new Member("오형석", "123@naver.com", "1234");
+        Member member = Member.builder()
+                .name("오형석")
+                .password("1234")
+                .email("123@naver.com")
+                .build();
 
         //when
         memberService.join(member);
-        LoginForm loginForm = new LoginForm("123@naver.com", "123");
+        LoginForm loginForm = LoginForm.builder()
+                .email("123@naver.com")
+                .password("123")
+                .build();
 
         //then
         Exception e = assertThrows(Exception.class,
