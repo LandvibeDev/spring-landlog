@@ -41,6 +41,12 @@ public class BlogService {
         validateEmptyInput(blog);
         blogRepository.update(blog);
     }
+
+    public void delete(Long creatorId, Long blogId) {
+        validateCreatorId(creatorId);
+        blogRepository.delete(findBlogByBlogId(blogId));
+    }
+
     private void validateCreatorId(Long creatorId) {
         memberRepository.findById(creatorId)
                 .orElseThrow(() -> new IllegalArgumentException(Message.NO_USER.message));
