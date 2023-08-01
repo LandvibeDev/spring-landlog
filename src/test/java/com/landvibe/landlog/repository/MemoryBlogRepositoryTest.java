@@ -1,12 +1,16 @@
 package com.landvibe.landlog.repository;
 
 import com.landvibe.landlog.domain.Blog;
+import com.landvibe.landlog.domain.Member;
 import com.landvibe.landlog.form.BlogForm;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -16,9 +20,16 @@ class MemoryBlogRepositoryTest {
     MemoryBlogRepository memoryBlogRepository = new MemoryBlogRepository();
 
     Long creatorId = 1L;
-    Long blogId = 1L;
-    String title = "제목";
-    String contents = "내용";
+    String title = "testTitle";
+    String contents = "testContents";
+
+    Blog testBlog;
+
+    @BeforeEach
+    public void beforeEach(){
+        this.testBlog = new Blog(creatorId, title, contents);
+        memoryBlogRepository.save(testBlog);
+    }
 
     @AfterEach
     public void afterEach() {
@@ -27,12 +38,8 @@ class MemoryBlogRepositoryTest {
 
     @Test
     void save() {
-        Blog blog = new Blog(creatorId, title, contents);
-
-        memoryBlogRepository.save(blog);
-
-        Blog result = memoryBlogRepository.findBlogByCreatorIdAndBlogId(blog.getCreatorId(),blog.getId()).get();
-        assertEquals(blog.getId(), result.getId());
+        Blog result = memoryBlogRepository.findBlogByCreatorIdAndBlogId(testBlog.getCreatorId(),testBlog.getId()).get();
+        assertEquals(testBlog.getId(), result.getId());
     }
 
     @Test
@@ -40,13 +47,11 @@ class MemoryBlogRepositoryTest {
         String updatedTitle = "updated title";
         String updatedContents = "updated contents";
 
-        Blog blog = new Blog(creatorId, title, contents);
         BlogForm updatedBlogForm = new BlogForm(updatedTitle, updatedContents);
 
-        memoryBlogRepository.save(blog);
-        memoryBlogRepository.update(blog.getId(),updatedBlogForm);
+        memoryBlogRepository.update(testBlog.getId(),updatedBlogForm);
 
-        Blog result = memoryBlogRepository.findBlogByCreatorIdAndBlogId(blog.getCreatorId(),blog.getId()).get();
+        Blog result = memoryBlogRepository.findBlogByCreatorIdAndBlogId(testBlog.getCreatorId(),testBlog.getId()).get();
 
         assertEquals(result.getTitle(), updatedTitle);
         assertEquals(result.getContents(), updatedContents);
@@ -54,12 +59,21 @@ class MemoryBlogRepositoryTest {
 
     @Test
     void delete() {
-        Blog blog = new Blog(creatorId, title, contents);
-        memoryBlogRepository.save(blog);
+        memoryBlogRepository.delete(testBlog.getId());
 
-        memoryBlogRepository.delete(blog.getId());
-
-        Optional<Blog> result = memoryBlogRepository.findBlogByCreatorIdAndBlogId(blog.getCreatorId(),blog.getId());
+        Optional<Blog> result = memoryBlogRepository.findBlogByCreatorIdAndBlogId(testBlog.getCreatorId(),testBlog.getId());
         assertEquals(result.isEmpty(), true);
+    }
+
+    @Test
+    void findAllBlogsByCreatorId(){
+        Blog testBlog2 = new Blog(creatorId, title, contents);
+        Blog testBlog3 = new Blog(creatorId, title, contents);
+        memoryBlogRepository.save(testBlog2);
+        memoryBlogRepository.save(testBlog3);
+
+        List<Blog> result = memoryBlogRepository.findAllBlogsByCreatorId(creatorId);
+
+        Assertions.assertThat(result.size()).isEqualTo(3);
     }
 }
