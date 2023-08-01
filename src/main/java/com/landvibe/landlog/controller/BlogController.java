@@ -68,6 +68,9 @@ public class BlogController {
         return "redirect:/blogs";
     }
 
+    @PostMapping("/delete")
+    public String delete(@RequestParam Long blogId, @RequestParam Long creatorId, RedirectAttributes redirectAttributes) {
+        blogService.delete(creatorId, blogId);
         redirectAttributes.addAttribute("creatorId", creatorId);
         return "redirect:/blogs";
     }
