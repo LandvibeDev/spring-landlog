@@ -49,10 +49,12 @@ public class BlogService {
     }
 
     private void validCreatorId(Long creatorId){
+        if(creatorId <= 0) throw new IllegalArgumentException(NO_MATCH_MEMBERID_EXCEPTION.getMessage());
         memberService.findMemberById(creatorId);
     }
 
     private void validBlogId(Long blogId){
+        if(blogId <= 0) throw new IllegalArgumentException(NO_MATCH_BLOGID_EXCEPTION.getMessage());
         blogRepository.findBlogByBlogId(blogId).
                 orElseThrow(() -> new IllegalArgumentException(NO_MATCH_BLOGID_EXCEPTION.getMessage()));
     }

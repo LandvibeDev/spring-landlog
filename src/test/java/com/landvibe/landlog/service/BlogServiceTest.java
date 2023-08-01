@@ -1,7 +1,6 @@
 package com.landvibe.landlog.service;
 
 import com.landvibe.landlog.domain.Blog;
-import com.landvibe.landlog.domain.Member;
 import com.landvibe.landlog.form.BlogForm;
 import com.landvibe.landlog.repository.MemoryBlogRepository;
 import com.landvibe.landlog.repository.MemoryMemberRepository;
@@ -19,7 +18,6 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class BlogServiceTest {
-
     @InjectMocks
     BlogService blogService;
 
@@ -30,31 +28,27 @@ class BlogServiceTest {
     @Mock
     MemberService memberService;
 
-    String title = "blogTitle";
-    String contents = "blogContents";
+    String testTitle = "blogTitle";
+    String testContents = "blogContents";
     String updatedTitle = "updatedTitle";
     String updatedContents = "updatedContents";
 
     Long validCreatorId = 1L;
     Long validBlogId = 1L;
 
-    BlogForm blogForm;
-    Blog blog;
+    BlogForm testBlogForm;
+    Blog testBlog;
     Blog updateBlog;
-    Member member;
 
     @BeforeEach
-    void before(){
-        blogForm = new BlogForm(title, contents);
-        blog = new Blog(validCreatorId, blogForm.getTitle(), blogForm.getContents());
+    void beforeEach(){
+        testBlogForm = new BlogForm(testTitle, testContents);
+        testBlog = new Blog(validCreatorId, testTitle, testContents);
         updateBlog = new Blog(validCreatorId, updatedTitle, updatedContents);
-        blog.setId(validBlogId);
-        updateBlog.setId(validBlogId);
-        member = new Member("양재승","jaeseung@inha.kr","1234");
     }
 
     @AfterEach
-    void after(){
+    void afterEach() {
         blogRepository.clearStore();
         memberRepository.clearStore();
     }
@@ -62,57 +56,63 @@ class BlogServiceTest {
     @Test
     @DisplayName("게시물 등록 성공")
     void write_success() {
-        when(blogRepository.save(any(Blog.class))).thenReturn(any(Long.class));
+        when(blogRepository.save(any(Blog.class))).thenReturn(validCreatorId);
 
-        memberService.join(member);
-
-        assertEquals(validBlogId, blogService.register(validCreatorId, blogForm)+1);
+        assertEquals(validBlogId, blogService.register(validCreatorId, testBlogForm));
         verify(blogRepository).save(any(Blog.class));
     }
 
     @Test
     @DisplayName("게시물 틍록 실패 : 유효하지 않은 creatorId")
-    void registerException() {
-        BlogForm examForm = new BlogForm(blog.getTitle(), blog.getContents());
-
+    void register_fail_validCreatorId() {
         assertThrows(IllegalArgumentException.class, () -> {
-            blogService.register(0L, examForm);
+            blogService.register(0L, testBlogForm);
         });
     }
 
     @Test
-    @DisplayName("게시물 등록 실패 : 유효하지 않은 게시물")
-    void registerException2() {
-        BlogForm examForm = new BlogForm("", "");
+    @DisplayName("게시물 등록 실패 : 비어있는 게시물")
+    void register_fail_validateBlogForm() {
+        BlogForm emptyForm = new BlogForm("", "");
 
         assertThrows(IllegalArgumentException.class, () -> {
-            blogService.register(1L, examForm);
+            blogService.register(1L, emptyForm);
         });
     }
 
     @Test
     @DisplayName("게시물 수정 성공")
-    void updateBlog() {
+    void updateBlog_success() {
+        when(blogRepository.update(any(Long.class), any(BlogForm.class))).thenReturn(validBlogId);
         when(blogRepository.findBlogByBlogId(any(Long.class))).thenReturn(Optional.ofNullable(updateBlog));
-        when(blogRepository.update(any(Long.class),any(BlogForm.class))).thenReturn(validBlogId);
 
-        Long updateBlogId = blogService.updateBlog(validBlogId, blogForm);
-        Blog targetBlog = blogService.findBlogByBlogId(validBlogId);
+        BlogForm updateBlogForm = new BlogForm(updatedTitle, updatedContents);
+        Long updateBlogId = blogService.updateBlog(validBlogId, updateBlogForm);
+        Blog resultBlog = blogService.findBlogByBlogId(validBlogId);
 
-        assertEquals(validBlogId,updateBlogId);
-        assertEquals(updatedTitle,targetBlog.getTitle());
-        assertEquals(updatedContents,targetBlog.getContents());
+        assertEquals(updatedTitle, resultBlog.getTitle());
+        assertEquals(updatedContents, resultBlog.getContents());
+        assertEquals(validBlogId, updateBlogId);
         verify(blogRepository).update(any(Long.class), any(BlogForm.class));
     }
 
     @Test
+    @DisplayName("게시물 수정 실패 : 유효하지 않은 게시물 BlogId")
+    void updateBlog_fail_validBlogId(){
+        assertThrows(IllegalArgumentException.class, () -> {
+            blogService.updateBlog(0L, testBlogForm);
+        });
+    }
+
+    @Test
     @DisplayName("게시물 삭제 성공")
-    void deleteBlog() {
+    void deleteBlog_success() {
         when(blogRepository.delete(validBlogId)).thenReturn(true);
-        when(blogRepository.findBlogByBlogId(validBlogId)).thenReturn(Optional.ofNullable(blog));
+        when(blogRepository.findBlogByBlogId(validBlogId)).thenReturn(Optional.ofNullable(testBlog));
 
-        blogService.deleteBlog(validBlogId);
+        boolean deleteSuccess = blogService.deleteBlog(validBlogId);
 
+        assertEquals(true, deleteSuccess);
         verify(blogRepository).delete(validBlogId);
     }
 }

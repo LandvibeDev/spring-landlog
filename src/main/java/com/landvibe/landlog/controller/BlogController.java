@@ -49,7 +49,6 @@ public class BlogController {
     @PostMapping(value = "/new")
     public String registerBlog(@RequestParam(name = "creatorId") Long creatorId, BlogForm form,
                                RedirectAttributes redirect) {
-
         blogService.register(creatorId, form);
 
         redirect.addAttribute("creatorId", creatorId);
