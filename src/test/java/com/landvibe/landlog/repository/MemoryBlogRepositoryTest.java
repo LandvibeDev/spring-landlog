@@ -20,15 +20,18 @@ class MemoryBlogRepositoryTest {
     MemoryBlogRepository memoryBlogRepository = new MemoryBlogRepository();
 
     Long creatorId = 1L;
+    Long blogId = 1L;
     String title = "testTitle";
     String contents = "testContents";
 
+    BlogForm testBlogForm;
     Blog testBlog;
 
     @BeforeEach
     public void beforeEach(){
-        this.testBlog = new Blog(creatorId, title, contents);
-        memoryBlogRepository.save(testBlog);
+        this.testBlogForm = new BlogForm(title, contents);
+        this.testBlog = new Blog(blogId, creatorId, title, contents);
+        memoryBlogRepository.save(creatorId,testBlogForm);
     }
 
     @AfterEach
@@ -38,7 +41,7 @@ class MemoryBlogRepositoryTest {
 
     @Test
     void save() {
-        Blog result = memoryBlogRepository.findBlogByCreatorIdAndBlogId(testBlog.getCreatorId(),testBlog.getId()).get();
+        Blog result = memoryBlogRepository.findBlogByBlogId(blogId).get();
         assertEquals(testBlog.getId(), result.getId());
     }
 
@@ -67,10 +70,10 @@ class MemoryBlogRepositoryTest {
 
     @Test
     void findAllBlogsByCreatorId(){
-        Blog testBlog2 = new Blog(creatorId, title, contents);
-        Blog testBlog3 = new Blog(creatorId, title, contents);
-        memoryBlogRepository.save(testBlog2);
-        memoryBlogRepository.save(testBlog3);
+        BlogForm testBlogForm2 = new BlogForm(title, contents);
+        BlogForm testBlogForm3 = new BlogForm(title, contents);
+        memoryBlogRepository.save(creatorId, testBlogForm2);
+        memoryBlogRepository.save(creatorId, testBlogForm3);
 
         List<Blog> result = memoryBlogRepository.findAllBlogsByCreatorId(creatorId);
 

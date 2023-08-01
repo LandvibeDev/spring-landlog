@@ -60,7 +60,7 @@ public class BlogController {
     public String createUpdateForm(@RequestParam(name = "blogId") Long blogId, @RequestParam(name = "creatorId") Long creatorId,
                                    Model model) {
         Member member = memberService.findMemberById(creatorId);
-        Blog blog = blogService.findBlogByBlogId(blogId);
+        Blog blog = blogService.findBlogById(blogId);
 
         model.addAttribute("name", member.getName());
         model.addAttribute("creatorId", creatorId);
@@ -72,7 +72,7 @@ public class BlogController {
     @PatchMapping(value = "/update")
     public String updateBlog(@RequestParam(name = "creatorId") Long creatorId, @RequestParam(name = "id") Long blogId,
                              BlogForm form, RedirectAttributes redirect) {
-        blogService.updateBlog(blogId, form);
+        blogService.update(blogId, form);
 
         redirect.addAttribute("creatorId", creatorId);
 
@@ -82,7 +82,7 @@ public class BlogController {
     @DeleteMapping(value = "/delete")
     public String deleteBlog(@RequestParam(name = "blogId") Long blogId, @RequestParam(name = "creatorId") Long creatorId,
                              RedirectAttributes redirect) {
-        blogService.deleteBlog(blogId);
+        blogService.delete(blogId);
 
         redirect.addAttribute("creatorId", creatorId);
 

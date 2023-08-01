@@ -55,12 +55,14 @@ class BlogServiceTest {
 
     @Test
     @DisplayName("게시물 등록 성공")
-    void write_success() {
-        when(blogRepository.save(any(Blog.class))).thenReturn(validCreatorId);
+    void register_success() {
+        when(blogRepository.save(validCreatorId, testBlogForm)).thenReturn(validBlogId);
 
         assertEquals(validBlogId, blogService.register(validCreatorId, testBlogForm));
-        verify(blogRepository).save(any(Blog.class));
+
+        verify(blogRepository).save(validCreatorId, testBlogForm);
     }
+
 
     @Test
     @DisplayName("게시물 틍록 실패 : 유효하지 않은 creatorId")
@@ -87,20 +89,21 @@ class BlogServiceTest {
         when(blogRepository.findBlogByBlogId(any(Long.class))).thenReturn(Optional.ofNullable(updateBlog));
 
         BlogForm updateBlogForm = new BlogForm(updatedTitle, updatedContents);
-        Long updateBlogId = blogService.updateBlog(validBlogId, updateBlogForm);
-        Blog resultBlog = blogService.findBlogByBlogId(validBlogId);
+        Long updateBlogId = blogService.update(validBlogId, updateBlogForm);
+        Blog resultBlog = blogService.findBlogById(validBlogId);
 
         assertEquals(updatedTitle, resultBlog.getTitle());
         assertEquals(updatedContents, resultBlog.getContents());
         assertEquals(validBlogId, updateBlogId);
-        verify(blogRepository).update(any(Long.class), any(BlogForm.class));
+
+        verify(blogRepository).update(validBlogId, updateBlogForm);
     }
 
     @Test
     @DisplayName("게시물 수정 실패 : 유효하지 않은 게시물 BlogId")
     void updateBlog_fail_validBlogId(){
         assertThrows(IllegalArgumentException.class, () -> {
-            blogService.updateBlog(0L, testBlogForm);
+            blogService.update(0L, testBlogForm);
         });
     }
 
@@ -110,9 +113,8 @@ class BlogServiceTest {
         when(blogRepository.delete(validBlogId)).thenReturn(true);
         when(blogRepository.findBlogByBlogId(validBlogId)).thenReturn(Optional.ofNullable(testBlog));
 
-        boolean deleteSuccess = blogService.deleteBlog(validBlogId);
+        assertEquals(true, blogService.delete(validBlogId));
 
-        assertEquals(true, deleteSuccess);
         verify(blogRepository).delete(validBlogId);
     }
 }

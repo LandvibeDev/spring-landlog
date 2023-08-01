@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface BlogRepository {
 
-    Long save(Blog blog);
+    Long save(Long creatorId, BlogForm blogForm);
 
     Long update(Long blogId, BlogForm updatedForm);
 
