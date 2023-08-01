@@ -5,6 +5,7 @@ import com.landvibe.landlog.domain.Blog;
 import com.landvibe.landlog.form.BlogForm;
 import com.landvibe.landlog.form.MemberLoginForm;
 import com.landvibe.landlog.domain.Member;
+import com.landvibe.landlog.form.BlogUpdateForm;
 import com.landvibe.landlog.repository.BlogRepository;
 import com.landvibe.landlog.repository.MemberRepository;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,14 @@ public class BlogService {
         return blog.getId();
     }
 
+    public void update(Long creatorId, BlogUpdateForm form) {
+        validateCreatorId(creatorId);
+        Blog blog = findBlogByBlogId(form.getId());
+        blog.setTitle(form.getTitle());
+        blog.setContents(form.getContents());
+        validateEmptyInput(blog);
+        blogRepository.update(blog);
+    }
     private void validateCreatorId(Long creatorId) {
         memberRepository.findById(creatorId)
                 .orElseThrow(() -> new IllegalArgumentException(Message.NO_USER.message));
