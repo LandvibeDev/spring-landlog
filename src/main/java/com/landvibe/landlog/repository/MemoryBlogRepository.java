@@ -24,6 +24,12 @@ public class MemoryBlogRepository implements BlogRepository {
     public void update(Blog blog) {
         store.put(blog.getId(), blog);
     }
+
+    @Override
+    public void delete(Blog blog) {
+        store.remove(blog.getId());
+    }
+
     @Override
     public List<Blog> findBlogsByCreatorId(Long creatorId) {
         return store.values().stream()

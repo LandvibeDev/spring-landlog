@@ -10,6 +10,8 @@ public interface BlogRepository {
 
     void update(Blog blog);
 
+    void delete(Blog blog);
+
     List<Blog> findBlogsByCreatorId(Long creatorId);
 
     Optional<Blog> findBlogByBlogId(Long blogId);
