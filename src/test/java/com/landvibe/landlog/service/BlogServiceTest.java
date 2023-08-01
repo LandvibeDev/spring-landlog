@@ -93,7 +93,7 @@ class BlogServiceTest {
     @Test
     @DisplayName("게시물 수정 성공")
     void updateBlog() {
-        when(blogRepository.findByBlogId(any(Long.class))).thenReturn(Optional.ofNullable(updateBlog));
+        when(blogRepository.findBlogByBlogId(any(Long.class))).thenReturn(Optional.ofNullable(updateBlog));
         when(blogRepository.update(any(Long.class),any(BlogForm.class))).thenReturn(validBlogId);
 
         Long updateBlogId = blogService.updateBlog(validBlogId, blogForm);
@@ -109,7 +109,7 @@ class BlogServiceTest {
     @DisplayName("게시물 삭제 성공")
     void deleteBlog() {
         when(blogRepository.delete(validBlogId)).thenReturn(true);
-        when(blogRepository.findByBlogId(validBlogId)).thenReturn(Optional.ofNullable(blog));
+        when(blogRepository.findBlogByBlogId(validBlogId)).thenReturn(Optional.ofNullable(blog));
 
         blogService.deleteBlog(validBlogId);
 

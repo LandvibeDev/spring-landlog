@@ -5,6 +5,7 @@ import com.landvibe.landlog.form.BlogForm;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Repository
 public class MemoryBlogRepository implements BlogRepository {
@@ -26,7 +27,7 @@ public class MemoryBlogRepository implements BlogRepository {
     }
 
     @Override
-    public Optional<Blog> findByBlogId(Long blogId) {
+    public Optional<Blog> findBlogByBlogId(Long blogId) {
         return Optional.ofNullable(blogStore.get(blogId));
     }
 
@@ -45,16 +46,9 @@ public class MemoryBlogRepository implements BlogRepository {
 
     @Override
     public List<Blog> findAllBlogsByCreatorId(Long creatorId) {
-        List<Blog> creatorBlogList = new ArrayList<>();
-
-        for (Map.Entry<Long, Blog> entry : blogStore.entrySet()) {
-            Blog blog = entry.getValue();
-            if(blog.getCreatorId() == creatorId){
-                creatorBlogList.add(blog);
-            }
-        }
-
-        return creatorBlogList;
+        return blogStore.values().stream()
+                .filter(blog -> blog.getCreatorId().equals(creatorId))
+                .collect(Collectors.toList());
     }
 
     public void clearStore() {
