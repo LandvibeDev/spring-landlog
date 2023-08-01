@@ -3,6 +3,7 @@ package com.landvibe.landlog.controller;
 import com.landvibe.landlog.domain.Blog;
 import com.landvibe.landlog.domain.Member;
 import com.landvibe.landlog.form.BlogForm;
+import com.landvibe.landlog.form.BlogUpdateForm;
 import com.landvibe.landlog.form.MemberNewForm;
 import com.landvibe.landlog.service.BlogService;
 import com.landvibe.landlog.service.MemberService;
@@ -50,6 +51,23 @@ public class BlogController {
     public String create(@RequestParam Long creatorId, BlogForm form, RedirectAttributes redirectAttributes) {
         Blog blog = new Blog(form.getTitle(), form.getContents(), creatorId);
         blogService.create(blog);
+
+    @GetMapping("/update")
+    public String updateForm(@RequestParam Long creatorId, @RequestParam Long blogId, Model model) {
+        Member member = memberService.findOne(creatorId);
+        model.addAttribute("name", member.getName());
+        model.addAttribute("creatorId", member.getId());
+        model.addAttribute("blog", blogService.findBlogByBlogId(blogId));
+        return "blog/updateBlogForm";
+    }
+
+    @PostMapping("/update")
+    public String update(@RequestParam Long creatorId, BlogUpdateForm form, RedirectAttributes redirectAttributes) {
+        blogService.update(creatorId, form);
+        redirectAttributes.addAttribute("creatorId", creatorId);
+        return "redirect:/blogs";
+    }
+
         redirectAttributes.addAttribute("creatorId", creatorId);
         return "redirect:/blogs";
     }
