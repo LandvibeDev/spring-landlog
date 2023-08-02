@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/blogs")
 public class BlogController {
-    // issue4 구현
+
     private final MemberService memberService;
     private final BlogService blogService;
 
