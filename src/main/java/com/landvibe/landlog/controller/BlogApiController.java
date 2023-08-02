@@ -24,12 +24,7 @@ public class BlogApiController {
     }
 
     @PostMapping()
-    public Blog create(@RequestParam long creatorId, @RequestBody BlogForm blogForm) {
-        Blog blog = Blog.builder()
-                .creatorId(blogForm.getCreatorId())
-                .title(blogForm.getTitle())
-                .contents(blogForm.getContents())
-                .build();
+    public Blog create(@RequestParam long creatorId, @RequestBody Blog blog) {
         Blog write = blogService.write(blog);
         return write;
     }
