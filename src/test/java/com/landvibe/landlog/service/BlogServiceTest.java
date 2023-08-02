@@ -78,7 +78,7 @@ public class BlogServiceTest {
 		Blog invalidBlog = new Blog(creatorId, invalidTitle, contents);
 		Exception e = assertThrows(Exception.class,
 			() -> blogService.create(invalidBlog));
-		assertEquals(e.getMessage(), NO_CONTENTS.get());
+		assertEquals(e.getMessage(), NO_TITLE.get());
 	}
 
 	@DisplayName("블로그 생성 실패 -> 잘못된 내용")
