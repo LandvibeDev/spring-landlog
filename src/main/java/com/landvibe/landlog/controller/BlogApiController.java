@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("v1/api")
+@RequestMapping("v1/api/blogs")
 public class BlogApiController {
 
     private final MemberService memberService;
@@ -20,28 +20,28 @@ public class BlogApiController {
         this.blogService = blogService;
     }
 
-    @GetMapping(value = "/blogs")
+    @GetMapping(value = "")
     public List<Blog> list(@RequestParam Long creatorId) {
         return blogService.findBlogsByCreatorId(creatorId);
     }
 
-    @PostMapping(value = "/blogs")
+    @PostMapping(value = "")
     public Blog create(@RequestParam Long creatorId, @RequestBody BlogForm blogForm) {
         memberService.findMemberById(creatorId);
         return blogService.createBlog(creatorId, blogForm.getTitle(), blogForm.getContents());
     }
 
-    @GetMapping(value = "/blogs/{blogId}")
+    @GetMapping(value = "/{blogId}")
     public Blog getBlogWhenUpdate(@RequestParam Long creatorId, @PathVariable("blogId") Long blogId) {
         return blogService.findBlogByBlogIdAndCreatorId(creatorId, blogId);
     }
 
-    @PutMapping(value = "/blogs/{blogId}")
+    @PutMapping(value = "/{blogId}")
     public Blog update(@RequestParam Long creatorId, @PathVariable("blogId") Long blogId, @RequestBody BlogForm blogForm) {
         return blogService.updateBlog(creatorId, blogId, blogForm.getTitle(), blogForm.getContents());
     }
 
-    @DeleteMapping(value = "/blogs/{blogId}")
+    @DeleteMapping(value = "/{blogId}")
     public void delete(@RequestParam Long creatorId, @PathVariable("blogId") Long blogId) {
         blogService.deleteBlog(creatorId, blogId);
     }
