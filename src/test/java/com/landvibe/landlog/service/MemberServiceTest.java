@@ -39,14 +39,14 @@ class MemberServiceTest {
 	}
 
 	@Test
-	public void 회원가입_성공() throws Exception {
+	public void 회원가입_성공() {
 		//Given
 
 		//When
 		Long saveId = memberService.join(member);
 		//Then
 		Member findMember = memberRepository.findById(saveId).get();
-		assertEquals(member.getName(), findMember.getName());
+		assertEquals(member, findMember);
 	}
 
 	@Test
