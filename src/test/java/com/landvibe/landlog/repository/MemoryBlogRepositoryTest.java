@@ -1,7 +1,6 @@
 package com.landvibe.landlog.repository;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Optional;
 
@@ -9,7 +8,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import com.landvibe.landlog.domain.Blog;
-import com.landvibe.landlog.domain.Member;
 
 class MemoryBlogRepositoryTest {
 
