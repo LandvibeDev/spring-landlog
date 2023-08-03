@@ -27,7 +27,11 @@ public class MemberController {
 
     @PostMapping(value = "/new")
     public String create(MemberJoinForm form) {
-        Member member = new Member(form.getName(), form.getEmail(), form.getPassword());
+        Member member = Member.builder()
+                .name(form.getName())
+                .email(form.getEmail())
+                .password(form.getPassword())
+                .build();
         try {
             Long join = memberService.join(member);
             return "redirect:/";

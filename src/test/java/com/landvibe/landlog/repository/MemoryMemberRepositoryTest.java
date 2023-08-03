@@ -68,17 +68,18 @@ class MemoryMemberRepositoryTest {
     }
 
     private Member createMember() {
-        Member member1 = new Member();
-        member1.setName("name1");
-        member1.setEmail("email1");
-        member1.setPassword("password1");
-        repository.save(member1);
-        return member1;
+        Member member = Member.builder()
+                .name("name1")
+                .email("email1")
+                .password("password1")
+                .build();
+        repository.save(member);
+        return member;
     }
 
     @Test
     @DisplayName("이메일과 비밀번호로 회원 조회 성공 테스트")
-    public void findByEmailAndPassword_success(){
+    public void findByEmailAndPassword_success() {
         //given
         Member member1 = createMember();
 
@@ -92,7 +93,7 @@ class MemoryMemberRepositoryTest {
 
     @Test
     @DisplayName("이메일과 비밀번호로 회원 조회 실패 테스트")
-    public void findByEmailAndPassword_fail(){
+    public void findByEmailAndPassword_fail() {
         //given
         Member member1 = createMember();
 

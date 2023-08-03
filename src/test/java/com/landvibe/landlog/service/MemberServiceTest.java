@@ -56,7 +56,11 @@ class MemberServiceTest {
     }
 
     private Member createMember() {
-        Member member = new Member("name", "email", "password");
+        Member member = Member.builder()
+                .name("name")
+                .email("email")
+                .password("password")
+                .build();
         memberService.join(member);
         return member;
     }
