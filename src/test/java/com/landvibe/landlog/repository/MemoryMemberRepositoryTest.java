@@ -9,7 +9,6 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class MemoryMemberRepositoryTest {
-
     MemoryMemberRepository repository = new MemoryMemberRepository();
 
     @AfterEach
