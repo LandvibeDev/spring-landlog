@@ -15,12 +15,12 @@ public class MemoryBlogRepository implements BlogRepository {
     private static long sequence = 0L;
 
     @Override
-    public Long save(Long memberId, String title, String contents) {
-        Blog blog = Blog.createBlog(title, contents, memberId);
+    public Blog save(Long creatorId, String title, String contents) {
+        Blog blog = Blog.createBlog(title, contents, creatorId);
         blog.setId(++sequence);
         store.put(blog.getId(), blog);
 
-        return blog.getId();
+        return blog;
     }
 
     @Override
@@ -35,10 +35,12 @@ public class MemoryBlogRepository implements BlogRepository {
     }
 
     @Override
-    public void modify(Long blogId, String title, String contents, Long memberId) {
-        Blog blog = Blog.createBlog(title, contents, memberId);
+    public Blog modify(Long blogId, String title, String contents, Long creatorId) {
+        Blog blog = Blog.createBlog(title, contents, creatorId);
         blog.setId(blogId);
         store.replace(blogId, blog);
+
+        return blog;
     }
 
     @Override
