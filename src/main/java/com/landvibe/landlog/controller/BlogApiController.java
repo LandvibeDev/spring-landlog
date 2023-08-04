@@ -3,7 +3,6 @@ package com.landvibe.landlog.controller;
 import com.landvibe.landlog.domain.Blog;
 import com.landvibe.landlog.form.BlogForm;
 import com.landvibe.landlog.service.BlogService;
-import com.landvibe.landlog.service.MemberService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,11 +11,9 @@ import java.util.List;
 @RequestMapping("/v1/api/blogs")
 public class BlogApiController {
     private final BlogService blogService;
-    private final MemberService memberService;
 
-    BlogApiController(BlogService blogService, MemberService memberService){
+    BlogApiController(BlogService blogService){
         this.blogService = blogService;
-        this.memberService = memberService;
     }
 
     @GetMapping("")
@@ -27,26 +24,28 @@ public class BlogApiController {
     }
 
     @PostMapping("")
-    public Blog create(@RequestParam long creatorId, @RequestBody Blog blog){
-        BlogForm createBlogForm = new BlogForm(blog.getTitle(), blog.getContents());
-        return blogService.register(creatorId, createBlogForm);
+    public Blog create(@RequestParam long creatorId, @RequestBody BlogForm blogForm){
+        return blogService.register(creatorId, blogForm);
     }
 
     @GetMapping(value = "/{blogId}")
-    public Blog get(@RequestParam long creatorId, @PathVariable("blogId") Long blogId){
+    public Blog getForUpdate(@RequestParam long creatorId, @PathVariable("blogId") long blogId){
         blogService.validCreatorId(creatorId);
+
         return blogService.findBlogById(blogId);
     }
 
     @PutMapping(value = "/{blogId}")
-    public Blog update(@RequestParam long creatorId, @PathVariable("blogId") Long blogId, @RequestBody Blog blog){
-        BlogForm updateBlogForm = new BlogForm(blog.getTitle(), blog.getContents());
-        return blogService.update(blogId, updateBlogForm);
+    public Blog update(@RequestParam long creatorId, @PathVariable("blogId") long blogId, @RequestBody BlogForm blogForm){
+        blogService.validCreatorId(creatorId);
+
+        return blogService.update(blogId, blogForm);
     }
 
     @DeleteMapping(value = "/{blogId}")
     public void delete(@RequestParam long creatorId, @PathVariable("blogId") Long blogId){
         blogService.validCreatorId(creatorId);
+
         blogService.delete(blogId);
     }
 }
