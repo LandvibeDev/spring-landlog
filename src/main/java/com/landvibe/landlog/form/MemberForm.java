@@ -1,17 +1,14 @@
-package com.landvibe.landlog.domain;
+package com.landvibe.landlog.form;
 
-import com.landvibe.landlog.form.MemberForm;
 import lombok.Builder;
 import lombok.Getter;
 
-@Getter
 @Builder
-public class Member {
+@Getter
+public class MemberForm {
 
-    private Long id;
     private String name;
     private String email;
     private String password;
-
 
 }
