@@ -13,12 +13,12 @@ public class MemoryBlogRepository implements BlogRepository {
     private static long blogNumber = 0L;
 
     @Override
-    public Long save(Long creatorId, BlogForm blogForm) {
+    public Blog save(Long creatorId, BlogForm blogForm) {
         Blog blog = new Blog(creatorId, blogForm.getTitle(), blogForm.getContents());
         blog.setId(++blogNumber);
 
         blogStore.put(blog.getId(), blog);
-        return blog.getId();
+        return blog;
     }
 
     @Override
@@ -34,10 +34,13 @@ public class MemoryBlogRepository implements BlogRepository {
     }
 
     @Override
-    public Long update(Long blogId, BlogForm form) {
-        blogStore.get(blogId).setTitle(form.getTitle());
-        blogStore.get(blogId).setContents(form.getContents());
-        return blogId;
+    public Blog update(Long blogId, BlogForm form) {
+        Blog updatedBlog = blogStore.get(blogId);
+
+        updatedBlog.setTitle(form.getTitle());
+        updatedBlog.setContents(form.getContents());
+
+        return updatedBlog;
     }
 
     @Override

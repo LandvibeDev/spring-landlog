@@ -18,7 +18,7 @@ public class BlogService {
         this.memberService = memberService;
     }
 
-    public Long register(Long creatorId, BlogForm form) {
+    public Blog register(Long creatorId, BlogForm form) {
         validCreatorId(creatorId);
         validateBlogForm(form.getTitle(), form.getContents());
 
@@ -31,13 +31,11 @@ public class BlogService {
         return blogRepository.findBlogByBlogId(blogId).get();
     }
 
-    public Long update(Long blogId, BlogForm form){
+    public Blog update(Long blogId, BlogForm form){
         validBlogId(blogId);
         validateBlogForm(form.getTitle(), form.getContents());
 
-        blogRepository.update(blogId, form);
-
-        return blogId;
+        return blogRepository.update(blogId, form);
     }
 
     public boolean delete(Long blogId){
@@ -46,7 +44,7 @@ public class BlogService {
         return true;
     }
 
-    private void validCreatorId(Long creatorId){
+    public void validCreatorId(Long creatorId){
         if(creatorId <= 0) throw new IllegalArgumentException(NO_MATCH_MEMBERID_EXCEPTION.getMessage());
         memberService.findMemberById(creatorId);
     }

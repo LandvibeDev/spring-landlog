@@ -8,9 +8,9 @@ import java.util.Optional;
 
 public interface BlogRepository {
 
-    Long save(Long creatorId, BlogForm blogForm);
+    Blog save(Long creatorId, BlogForm blogForm);
 
-    Long update(Long blogId, BlogForm updatedForm);
+    Blog update(Long blogId, BlogForm updatedForm);
 
     boolean delete(Long blogId);
 

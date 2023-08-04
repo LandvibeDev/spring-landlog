@@ -56,9 +56,9 @@ class BlogServiceTest {
     @Test
     @DisplayName("게시물 등록 성공")
     void register_success() {
-        when(blogRepository.save(validCreatorId, testBlogForm)).thenReturn(validBlogId);
+        when(blogRepository.save(validCreatorId, testBlogForm)).thenReturn(testBlog);
 
-        assertEquals(validBlogId, blogService.register(validCreatorId, testBlogForm));
+        assertEquals(testBlog, blogService.register(validCreatorId, testBlogForm));
 
         verify(blogRepository).save(validCreatorId, testBlogForm);
     }
@@ -85,16 +85,14 @@ class BlogServiceTest {
     @Test
     @DisplayName("게시물 수정 성공")
     void updateBlog_success() {
-        when(blogRepository.update(any(Long.class), any(BlogForm.class))).thenReturn(validBlogId);
+        when(blogRepository.update(any(Long.class), any(BlogForm.class))).thenReturn(updateBlog);
         when(blogRepository.findBlogByBlogId(any(Long.class))).thenReturn(Optional.ofNullable(updateBlog));
 
         BlogForm updateBlogForm = new BlogForm(updatedTitle, updatedContents);
-        Long updateBlogId = blogService.update(validBlogId, updateBlogForm);
-        Blog resultBlog = blogService.findBlogById(validBlogId);
+        Blog resultBlog = blogService.update(validBlogId, updateBlogForm);
 
         assertEquals(updatedTitle, resultBlog.getTitle());
         assertEquals(updatedContents, resultBlog.getContents());
-        assertEquals(validBlogId, updateBlogId);
 
         verify(blogRepository).update(validBlogId, updateBlogForm);
     }
