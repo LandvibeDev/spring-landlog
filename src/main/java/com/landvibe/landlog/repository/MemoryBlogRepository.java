@@ -14,8 +14,16 @@ public class MemoryBlogRepository implements BlogRespository {
 
     @Override
     public Long save(Blog blog) {
-        blog.setId(++sequence);
-        store.put(sequence, blog);
+        String title = blog.getTitle();
+        String content = blog.getContents();
+        Long creatorId = blog.getCreatorId();
+        Blog newBlog = Blog.builder()
+                .id(++sequence)
+                .creatorId(creatorId)
+                .contents(content)
+                .title(title)
+                .build();
+        store.put(sequence, newBlog);
         return sequence;
     }
 
@@ -31,8 +39,12 @@ public class MemoryBlogRepository implements BlogRespository {
         String title = form.getTitle();
         String content = form.getContents();
         Long memberId = blog.getCreatorId();
-        Blog updatedBlog = new Blog(title, memberId, content);
-        updatedBlog.setId(id);
+        Blog updatedBlog = Blog.builder()
+                .title(title)
+                .contents(content)
+                .creatorId(memberId)
+                .id(id)
+                .build();
         store.replace(id, updatedBlog);
         return id;
     }
@@ -53,6 +65,7 @@ public class MemoryBlogRepository implements BlogRespository {
     @Override
     public void clear() {
         store.clear();
+        sequence = 0L;
     }
 
     @Override

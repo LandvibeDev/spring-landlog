@@ -35,9 +35,19 @@ public class BlogServiceTest {
     Long creatorId = 1L;
     Long blogId = 1L;
 
-    BlogCreateForm createForm = new BlogCreateForm(title, content);
-    BlogUpdateForm updateForm = new BlogUpdateForm(afterUpdateTitle, afterUpdateContent);
-    Blog blog = new Blog(title, creatorId, content);
+    BlogCreateForm createForm = BlogCreateForm.builder()
+            .title(title)
+            .contents(content)
+            .build();
+    BlogUpdateForm updateForm = BlogUpdateForm.builder()
+            .contents(afterUpdateContent)
+            .title(afterUpdateTitle).build();
+    Blog blog = Blog.builder()
+            .id(blogId)
+            .title(title)
+            .contents(content)
+            .creatorId(creatorId)
+            .build();
 
     @BeforeEach
     public void 초기화() {

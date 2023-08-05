@@ -7,12 +7,18 @@ import com.landvibe.landlog.form.BlogUpdateForm;
 public class BlogConverter {
 
     public static BlogUpdateForm getBlogUpdateForm(Blog blog) {
-        BlogUpdateForm blogUpdateForm = new BlogUpdateForm(blog.getTitle(), blog.getContents());
+        BlogUpdateForm blogUpdateForm = BlogUpdateForm.builder()
+                .contents(blog.getContents())
+                .title(blog.getTitle())
+                .build();
         return blogUpdateForm;
     }
 
     public static BlogCreateForm getBlogCreateForm(Blog blog) {
-        BlogCreateForm blogCreateForm = new BlogCreateForm(blog.getTitle(), blog.getContents());
+        BlogCreateForm blogCreateForm = BlogCreateForm.builder()
+                .contents(blog.getContents())
+                .title(blog.getTitle())
+                .build();
         return blogCreateForm;
     }
 }
