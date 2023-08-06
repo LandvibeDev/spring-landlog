@@ -40,7 +40,7 @@ public class MemberController {
         return "redirect:/";
     }
 
-    @GetMapping(value = "")
+    @GetMapping
     public String memberList(Model model) {
         List<Member> members = memberService.findMembers();
         model.addAttribute("members", members);

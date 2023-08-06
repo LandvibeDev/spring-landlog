@@ -27,18 +27,21 @@ public class BlogService {
 
     public Blog findBlogById(Long blogId){
         validBlogId(blogId);
-
-        return blogRepository.findBlogByBlogId(blogId).get();
+        Blog blog = blogRepository.findBlogByBlogId(blogId).get();
+        validCreatorId(blog.getCreatorId());
+        return blog;
     }
 
-    public Blog update(Long blogId, BlogForm form){
+    public Blog update(Long creatorId, Long blogId, BlogForm form){
         validBlogId(blogId);
+        validCreatorId(creatorId);
         validateBlogForm(form.getTitle(), form.getContents());
 
         return blogRepository.update(blogId, form);
     }
 
-    public boolean delete(Long blogId){
+    public boolean delete(Long creatorId, Long blogId){
+        validCreatorId(creatorId);
         validBlogId(blogId);
         blogRepository.delete(blogId);
         return true;
@@ -65,6 +68,7 @@ public class BlogService {
     }
 
     public List<Blog> findBlogs(Long creatorId) {
+        validCreatorId(creatorId);
         return blogRepository.findAllBlogsByCreatorId(creatorId);
     }
 }

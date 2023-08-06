@@ -89,7 +89,7 @@ class BlogServiceTest {
         when(blogRepository.findBlogByBlogId(any(Long.class))).thenReturn(Optional.ofNullable(updateBlog));
 
         BlogForm updateBlogForm = new BlogForm(updatedTitle, updatedContents);
-        Blog resultBlog = blogService.update(validBlogId, updateBlogForm);
+        Blog resultBlog = blogService.update(validCreatorId, validBlogId, updateBlogForm);
 
         assertEquals(updatedTitle, resultBlog.getTitle());
         assertEquals(updatedContents, resultBlog.getContents());
@@ -101,7 +101,7 @@ class BlogServiceTest {
     @DisplayName("게시물 수정 실패 : 유효하지 않은 게시물 BlogId")
     void updateBlog_fail_validBlogId(){
         assertThrows(IllegalArgumentException.class, () -> {
-            blogService.update(0L, testBlogForm);
+            blogService.update(validCreatorId,0L, testBlogForm);
         });
     }
 
@@ -111,7 +111,7 @@ class BlogServiceTest {
         when(blogRepository.delete(validBlogId)).thenReturn(true);
         when(blogRepository.findBlogByBlogId(validBlogId)).thenReturn(Optional.ofNullable(testBlog));
 
-        assertEquals(true, blogService.delete(validBlogId));
+        assertEquals(true, blogService.delete(validCreatorId, validBlogId));
 
         verify(blogRepository).delete(validBlogId);
     }
