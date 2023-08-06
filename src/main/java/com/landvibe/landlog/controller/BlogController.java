@@ -22,7 +22,7 @@ public class BlogController {
         this.memberService = memberService;
     }
 
-    @GetMapping(value = "")
+    @GetMapping
     public String blogList(@RequestParam Long creatorId, Model model) {
         Member member = memberService.findMemberById(creatorId);
 
