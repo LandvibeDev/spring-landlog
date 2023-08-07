@@ -4,6 +4,7 @@ import com.landvibe.landlog.domain.Blog;
 import com.landvibe.landlog.form.BlogCreateForm;
 import com.landvibe.landlog.form.BlogUpdateForm;
 import com.landvibe.landlog.repository.BlogRespository;
+import com.landvibe.landlog.utility.BlogConverter;
 import org.springframework.boot.web.servlet.server.Session;
 import org.springframework.stereotype.Service;
 
@@ -21,13 +22,7 @@ public class BlogService {
 
 
     public void createBlog(Long creatorId, BlogCreateForm form) {
-        String title = form.getTitle();
-        String content = form.getContents();
-        Blog blog = Blog.builder()
-                .title(title)
-                .contents(content)
-                .creatorId(creatorId)
-                .build();
+        Blog blog = BlogConverter.getBlogFromCreateForm(form, creatorId);
         blogRespository.save(blog);
     }
 

@@ -2,6 +2,7 @@ package com.landvibe.landlog.repository;
 
 import com.landvibe.landlog.domain.Blog;
 import com.landvibe.landlog.form.BlogUpdateForm;
+import com.landvibe.landlog.utility.BlogConverter;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
@@ -14,16 +15,8 @@ public class MemoryBlogRepository implements BlogRespository {
 
     @Override
     public Long save(Blog blog) {
-        String title = blog.getTitle();
-        String content = blog.getContents();
-        Long creatorId = blog.getCreatorId();
-        Blog newBlog = Blog.builder()
-                .id(++sequence)
-                .creatorId(creatorId)
-                .contents(content)
-                .title(title)
-                .build();
-        store.put(sequence, newBlog);
+        blog.setId(++sequence);
+        store.put(sequence, blog);
         return sequence;
     }
 
@@ -36,22 +29,14 @@ public class MemoryBlogRepository implements BlogRespository {
     @Override
     public Long update(Long id, BlogUpdateForm form) {
         Blog blog = store.get(id);
-        String title = form.getTitle();
-        String content = form.getContents();
-        Long memberId = blog.getCreatorId();
-        Blog updatedBlog = Blog.builder()
-                .title(title)
-                .contents(content)
-                .creatorId(memberId)
-                .id(id)
-                .build();
+        Long creatorId = blog.getCreatorId();
+        Blog updatedBlog = BlogConverter.getBlogFromUpdateForm(form, creatorId, id);
         store.replace(id, updatedBlog);
         return id;
     }
 
     @Override
     public List<Blog> findAllByMemberId(Long memberId) {
-        List<Blog> blogList = new ArrayList<>();
         return store.values().stream()
                 .filter(blog -> blog.getCreatorId() == memberId).toList();
     }
