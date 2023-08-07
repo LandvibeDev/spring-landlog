@@ -2,6 +2,7 @@ package com.landvibe.landlog.repository;
 
 import com.landvibe.landlog.domain.Blog;
 import com.landvibe.landlog.form.BlogUpdateForm;
+import com.landvibe.landlog.utility.BlogConverter;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
@@ -28,18 +29,14 @@ public class MemoryBlogRepository implements BlogRespository {
     @Override
     public Long update(Long id, BlogUpdateForm form) {
         Blog blog = store.get(id);
-        String title = form.getTitle();
-        String content = form.getContents();
-        Long memberId = blog.getCreatorId();
-        Blog updatedBlog = new Blog(title, memberId, content);
-        updatedBlog.setId(id);
+        Long creatorId = blog.getCreatorId();
+        Blog updatedBlog = BlogConverter.getBlogFromUpdateForm(form, creatorId, id);
         store.replace(id, updatedBlog);
         return id;
     }
 
     @Override
     public List<Blog> findAllByMemberId(Long memberId) {
-        List<Blog> blogList = new ArrayList<>();
         return store.values().stream()
                 .filter(blog -> blog.getCreatorId() == memberId).toList();
     }
@@ -53,6 +50,7 @@ public class MemoryBlogRepository implements BlogRespository {
     @Override
     public void clear() {
         store.clear();
+        sequence = 0L;
     }
 
     @Override

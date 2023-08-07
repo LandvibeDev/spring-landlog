@@ -2,6 +2,7 @@ package com.landvibe.landlog.service;
 
 import com.landvibe.landlog.domain.Member;
 import com.landvibe.landlog.form.LoginForm;
+import com.landvibe.landlog.form.MemberForm;
 import com.landvibe.landlog.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,15 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
 
-    public Long join(Member member) {
+    public Long join(MemberForm form) {
+        String name = form.getName();
+        String email = form.getEmail();
+        String password = form.getPassword();
+        Member member = Member.builder()
+                .name(name)
+                .password(password)
+                .email(email)
+                .build();
         validateDuplicateMember(member); //중복 회원 검증
         memberRepository.save(member);
         return member.getId();
