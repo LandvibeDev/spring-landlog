@@ -30,21 +30,20 @@ public class BlogService {
                 .orElseThrow(() -> new IllegalArgumentException(Message.NO_BLOG.message));
     }
 
-    public Long create(Long creatorId, BlogForm form) {
+    public Blog create(Long creatorId, BlogForm form) {
         validateCreatorId(creatorId);
         Blog blog = new Blog(form.getTitle(), form.getContents(), creatorId);
         validateEmptyInput(blog);
-        blogRepository.save(blog);
-        return blog.getId();
+        return blogRepository.save(blog);
     }
 
-    public void update(Long creatorId, BlogUpdateForm form) {
+    public Blog update(Long creatorId, BlogUpdateForm form) {
         validateCreatorId(creatorId);
         Blog blog = findBlogByBlogId(form.getId());
         blog.setTitle(form.getTitle());
         blog.setContents(form.getContents());
         validateEmptyInput(blog);
-        blogRepository.update(blog);
+        return blogRepository.update(blog);
     }
 
     public void delete(Long creatorId, Long blogId) {
@@ -59,10 +58,10 @@ public class BlogService {
 
     private void validateEmptyInput(Blog blog) {
         if (blog.getContents().equals("")) {
-            throw new IllegalArgumentException(Message.NO_INPUT_NAME.message);
+            throw new IllegalArgumentException(Message.NO_INPUT_CONTENTS.message);
         }
         if (blog.getTitle().equals("")) {
-            throw new IllegalArgumentException(Message.NO_INPUT_EMAIL.message);
+            throw new IllegalArgumentException(Message.NO_INPUT_TITLE.message);
         }
     }
 }

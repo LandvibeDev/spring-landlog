@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface BlogRepository {
     Blog save(Blog blog);
 
-    void update(Blog blog);
+    Blog update(Blog blog);
 
     void delete(Blog blog);
 

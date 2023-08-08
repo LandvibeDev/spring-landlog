@@ -21,8 +21,9 @@ public class MemoryBlogRepository implements BlogRepository {
     }
 
     @Override
-    public void update(Blog blog) {
+    public Blog update(Blog blog) {
         store.put(blog.getId(), blog);
+        return blog;
     }
 
     @Override
@@ -40,5 +41,9 @@ public class MemoryBlogRepository implements BlogRepository {
     @Override
     public Optional<Blog> findBlogByBlogId(Long blogId) {
         return Optional.ofNullable(store.get(blogId));
+    }
+
+    public void clearStore() {
+        store.clear();
     }
 }

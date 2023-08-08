@@ -13,24 +13,23 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class MemberServiceTest {
-
     MemberService memberService;
     MemoryMemberRepository memberRepository;
     Member member = new Member("gildong", "abc@def.com", "1234");
 
     @BeforeEach
-    public void beforeEach() {
+    void beforeEach() {
         memberRepository = new MemoryMemberRepository();
         memberService = new MemberService(memberRepository);
     }
 
     @AfterEach
-    public void afterEach() {
+    void afterEach() {
         memberRepository.clearStore();
     }
 
     @Test
-    public void 회원가입_정상() throws Exception {
+    void 회원가입_정상() throws Exception {
         //when
         Long id = memberService.join(member);
 
@@ -40,7 +39,7 @@ class MemberServiceTest {
     }
 
     @Test
-    public void 회원가입_이름_누락() throws Exception {
+    void 회원가입_이름_누락() throws Exception {
         //given
         Member member = new Member("", "abc@def.com", "1234");
 
@@ -51,7 +50,7 @@ class MemberServiceTest {
     }
 
     @Test
-    public void 회원가입_이메일_누락() throws Exception {
+    void 회원가입_이메일_누락() throws Exception {
         //given
         Member member = new Member("elice", "", "1234");
 
@@ -62,7 +61,7 @@ class MemberServiceTest {
     }
 
     @Test
-    public void 회원가입_비밀번호_누락() throws Exception {
+    void 회원가입_비밀번호_누락() throws Exception {
         //given
         Member member = new Member("july", "abc@def.com", "");
 
@@ -73,7 +72,7 @@ class MemberServiceTest {
     }
 
     @Test
-    public void 로그인_정상() throws Exception {
+    void 로그인_정상() throws Exception {
         //given
         MemberLoginForm loginForm = new MemberLoginForm();
         loginForm.setEmail("abc@def.com");
@@ -89,7 +88,7 @@ class MemberServiceTest {
     }
 
     @Test
-    public void 중복_이름_예외() throws Exception {
+    void 중복_이름_예외() throws Exception {
         //given
         memberService.join(member);
         Member anotherMember = new Member("gildong", "qwe@def.com", "1234");
@@ -101,7 +100,7 @@ class MemberServiceTest {
     }
 
     @Test
-    public void 중복_이메일_예외() throws Exception {
+    void 중복_이메일_예외() throws Exception {
         //given
         memberService.join(member);
         Member anotherMember = new Member("jiwoo", "abc@def.com", "1234");
