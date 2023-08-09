@@ -1,19 +1,15 @@
 package com.landvibe.landlog.repository;
 
 import com.landvibe.landlog.domain.Blog;
-import com.landvibe.landlog.domain.Member;
 import com.landvibe.landlog.form.BlogForm;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.Optional;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MemoryBlogRepositoryTest {
@@ -29,8 +25,17 @@ class MemoryBlogRepositoryTest {
 
     @BeforeEach
     public void beforeEach(){
-        this.testBlogForm = new BlogForm(title, contents);
-        this.testBlog = new Blog(blogId, creatorId, title, contents);
+        this.testBlogForm = BlogForm.builder()
+                .title(title)
+                .contents(contents)
+                .build();
+        this.testBlog = Blog.builder()
+                .creatorId(creatorId)
+                .title(title)
+                .contents(contents)
+                .build();
+        testBlog.setId(blogId);
+
         memoryBlogRepository.save(creatorId,testBlogForm);
     }
 
@@ -50,7 +55,10 @@ class MemoryBlogRepositoryTest {
         String updatedTitle = "updated title";
         String updatedContents = "updated contents";
 
-        BlogForm updatedBlogForm = new BlogForm(updatedTitle, updatedContents);
+        BlogForm updatedBlogForm = BlogForm.builder()
+                .title(updatedTitle)
+                .contents(updatedContents)
+                .build();
 
         memoryBlogRepository.update(testBlog.getId(),updatedBlogForm);
 
@@ -70,8 +78,9 @@ class MemoryBlogRepositoryTest {
 
     @Test
     void findAllBlogsByCreatorId(){
-        BlogForm testBlogForm2 = new BlogForm(title, contents);
-        BlogForm testBlogForm3 = new BlogForm(title, contents);
+        BlogForm testBlogForm2 = testBlogForm;
+        BlogForm testBlogForm3 = testBlogForm;
+
         memoryBlogRepository.save(creatorId, testBlogForm2);
         memoryBlogRepository.save(creatorId, testBlogForm3);
 

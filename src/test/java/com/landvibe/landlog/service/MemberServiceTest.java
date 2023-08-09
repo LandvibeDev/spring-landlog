@@ -34,7 +34,7 @@ class MemberServiceTest {
     @Test
     @DisplayName("회원가입 성공")
     public void join() {
-        Member member = new Member();
+        Member member = Member.builder().build();
         member.setName("hello");
 
         Long saveId = memberService.join(member);
@@ -46,9 +46,9 @@ class MemberServiceTest {
     @Test
     @DisplayName("회원가입 실패 : 중복 회원 예외처리")
     public void validateDuplicateMember() {
-        Member member1 = new Member();
+        Member member1 = Member.builder().build();
         member1.setName("spring");
-        Member member2 = new Member();
+        Member member2 = Member.builder().build();
         member2.setName("spring");
 
         memberService.join(member1);
@@ -89,7 +89,10 @@ class MemberServiceTest {
 
         memberService.join(member);
 
-        LoginForm loginForm = new LoginForm("jaeseung@naver.com", "123");
+        LoginForm loginForm = LoginForm.builder()
+                .email("jaeseung@naver.com")
+                .password("123")
+                .build();
 
         Long loginId = memberService.logIn(loginForm);
         assertThat(loginId).isEqualTo(member.getId());
@@ -102,7 +105,10 @@ class MemberServiceTest {
         Member member = new Member("양재승", testEmail, "123");
 
         memberService.join(member);
-        LoginForm loginForm = new LoginForm(testEmail, "456");
+        LoginForm loginForm = LoginForm.builder()
+                .email(testEmail)
+                .password("456")
+                .build();
 
         Exception e = assertThrows(Exception.class,
                 () -> memberService.logIn(loginForm));

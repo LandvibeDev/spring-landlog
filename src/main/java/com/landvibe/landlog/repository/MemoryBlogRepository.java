@@ -14,7 +14,12 @@ public class MemoryBlogRepository implements BlogRepository {
 
     @Override
     public Blog save(Long creatorId, BlogForm blogForm) {
-        Blog blog = new Blog(creatorId, blogForm.getTitle(), blogForm.getContents());
+        Blog blog = Blog.builder()
+                .creatorId(creatorId)
+                .title(blogForm.getTitle())
+                .contents(blogForm.getContents())
+                .build();
+
         blog.setId(++blogNumber);
 
         blogStore.put(blog.getId(), blog);
@@ -44,7 +49,7 @@ public class MemoryBlogRepository implements BlogRepository {
     }
 
     @Override
-    public boolean delete(Long deleteBlogId){
+    public boolean delete(Long deleteBlogId) {
         blogStore.remove(deleteBlogId);
         return true;
     }
