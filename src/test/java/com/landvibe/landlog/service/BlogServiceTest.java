@@ -37,14 +37,30 @@ class BlogServiceTest {
     Long validBlogId = 1L;
 
     BlogForm testBlogForm;
+    BlogForm updateBlogForm;
     Blog testBlog;
     Blog updateBlog;
 
     @BeforeEach
     void beforeEach(){
-        testBlogForm = new BlogForm(testTitle, testContents);
-        testBlog = new Blog(validCreatorId, testTitle, testContents);
-        updateBlog = new Blog(validCreatorId, updatedTitle, updatedContents);
+        testBlogForm = BlogForm.builder()
+                .title(testTitle)
+                .contents(testContents)
+                .build();
+        updateBlogForm = BlogForm.builder()
+                .title(updatedTitle)
+                .contents(updatedContents)
+                .build();
+        testBlog = Blog.builder()
+                .creatorId(validCreatorId)
+                .title(testTitle)
+                .contents(testContents)
+                .build();
+        updateBlog = Blog.builder()
+                .creatorId(validCreatorId)
+                .title(updatedTitle)
+                .contents(updatedContents)
+                .build();
     }
 
     @AfterEach
@@ -75,7 +91,10 @@ class BlogServiceTest {
     @Test
     @DisplayName("게시물 등록 실패 : 비어있는 게시물")
     void register_fail_validateBlogForm() {
-        BlogForm emptyForm = new BlogForm("", "");
+        BlogForm emptyForm = BlogForm.builder()
+                .title("")
+                .contents("")
+                .build();
 
         assertThrows(IllegalArgumentException.class, () -> {
             blogService.register(1L, emptyForm);
@@ -88,7 +107,6 @@ class BlogServiceTest {
         when(blogRepository.update(any(Long.class), any(BlogForm.class))).thenReturn(updateBlog);
         when(blogRepository.findBlogByBlogId(any(Long.class))).thenReturn(Optional.ofNullable(updateBlog));
 
-        BlogForm updateBlogForm = new BlogForm(updatedTitle, updatedContents);
         Blog resultBlog = blogService.update(validCreatorId, validBlogId, updateBlogForm);
 
         assertEquals(updatedTitle, resultBlog.getTitle());

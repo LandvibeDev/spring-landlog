@@ -19,7 +19,7 @@ class MemoryMemberRepositoryTest {
     @Test
     void save() {
         //given
-        Member member = new Member();
+        Member member = Member.builder().build();
         member.setName("spring");
 
         //when
@@ -33,10 +33,10 @@ class MemoryMemberRepositoryTest {
     @Test
     public void findByName() {
         //given
-        Member member1 = new Member();
+        Member member1 = Member.builder().build();
         member1.setName("spring1");
         repository.save(member1);
-        Member member2 = new Member();
+        Member member2 = Member.builder().build();
         member2.setName("spring2");
         repository.save(member2);
 
@@ -50,10 +50,10 @@ class MemoryMemberRepositoryTest {
     @Test
     public void findAll() {
         //given
-        Member member1 = new Member();
+        Member member1 = Member.builder().build();
         member1.setName("spring1");
         repository.save(member1);
-        Member member2 = new Member();
+        Member member2 = Member.builder().build();
         member2.setName("spring2");
         repository.save(member2);
 
@@ -67,10 +67,10 @@ class MemoryMemberRepositoryTest {
     @Test
     void findByEmail() {
         //given
-        Member member1 = new Member();
+        Member member1 = Member.builder().build();
         member1.setEmail("spring1");
         repository.save(member1);
-        Member member2 = new Member();
+        Member member2 = Member.builder().build();
         member2.setEmail("spring2");
         repository.save(member2);
 
