@@ -20,22 +20,18 @@ public class MemberController {
         this.memberService = memberService;
     }
 
-    @GetMapping(value = "/new")
+    @GetMapping("/new")
     public String createForm() {
         return "members/createMemberForm";
     }
 
-    @PostMapping(value = "/new")
+    @PostMapping("/new")
     public String create(MemberForm form) {
-        try {
-            memberService.join(form);
-            return "redirect:/";
-        } catch (IllegalStateException e) {
-            return "redirect:/members/new";
-        }
+        memberService.join(form);
+        return "redirect:/members/login";
     }
 
-    @GetMapping()
+    @GetMapping
     public String list(Model model) {
         List<Member> members = memberService.findMembers();
         model.addAttribute("members", members);
@@ -49,16 +45,9 @@ public class MemberController {
 
     @PostMapping("/login")
     public String login(LoginForm form) {
-
-        try {
-            Member loginMember = memberService.login(form);
-            return "redirect:/blogs?creatorId=" + loginMember.getId();
-        } catch (IllegalStateException e) {
-            return "redirect:/";
-        }
-
+        Member loginMember = memberService.login(form);
+        return "redirect:/blogs?creatorId=" + loginMember.getId();
     }
-
 
 }
 

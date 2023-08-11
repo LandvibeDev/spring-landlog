@@ -1,6 +1,7 @@
 package com.landvibe.landlog.service;
 
 import com.landvibe.landlog.domain.Blog;
+import com.landvibe.landlog.exception.BlogNotFoundException;
 import com.landvibe.landlog.form.BlogCreateForm;
 import com.landvibe.landlog.form.BlogUpdateForm;
 import com.landvibe.landlog.repository.BlogRespository;
@@ -33,7 +34,7 @@ public class BlogService {
 
     public Blog findBlogById(Long blogId) {
         return blogRespository.findByBlogId(blogId)
-                .orElseThrow(() -> new IllegalStateException("해당하는 블로그를 찾을 수 없습니다."));
+                .orElseThrow(() -> new BlogNotFoundException("해당하는 블로그를 찾을 수 없습니다."));
     }
 
     public Long update(Long id, BlogUpdateForm form) {

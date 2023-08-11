@@ -29,80 +29,49 @@ public class BlogController {
 
     @GetMapping
     public String blogForm(@RequestParam("creatorId") Long creatorId, Model model) {
-        try {
-            Member member = memberService.findById(creatorId);
-            List<Blog> blogList = blogService.findAllBlogs(creatorId);
-            model.addAttribute("name", member.getName());
-            model.addAttribute("creatorId", creatorId);
-            model.addAttribute("blogs", blogList);
-            return "/blogs/blogList";
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return "redirect:/";
-        }
-
+        Member member = memberService.findById(creatorId);
+        List<Blog> blogList = blogService.findAllBlogs(creatorId);
+        model.addAttribute("name", member.getName());
+        model.addAttribute("creatorId", creatorId);
+        model.addAttribute("blogs", blogList);
+        return "/blogs/blogList";
     }
 
     @GetMapping("/new")
     public String createBlogForm(@RequestParam("creatorId") Long creatorId, Model model) {
-        try {
-            Member member = memberService.findById(creatorId);
-            model.addAttribute("name", member.getName());
-            model.addAttribute("creatorId", creatorId);
-            return "blogs/createBlogForm";
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return "redirect:/";
-        }
+        Member member = memberService.findById(creatorId);
+        model.addAttribute("name", member.getName());
+        model.addAttribute("creatorId", creatorId);
+        return "blogs/createBlogForm";
     }
 
     @PostMapping("/new")
     public String createBlog(BlogCreateForm form, @RequestParam("creatorId") Long creatorId) {
-        try {
-            blogService.createBlog(creatorId, form);
-            return "redirect:/blogs?creatorId=" + creatorId;
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return "redirect:/";
-        }
+        blogService.createBlog(creatorId, form);
+        return "redirect:/blogs?creatorId=" + creatorId;
     }
 
     @GetMapping("/update")
     public String updateBlogForm(@RequestParam("blogId") Long blogId, @RequestParam("creatorId") Long creatorId, Model model) {
-        try {
-            Member member = memberService.findById(creatorId);
-            model.addAttribute("name", member.getName());
-            model.addAttribute("creatorId", creatorId);
-            model.addAttribute("blogId", blogId);
-            return "blogs/updateBlogForm";
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return "redirect:/";
-        }
+        Member member = memberService.findById(creatorId);
+        model.addAttribute("name", member.getName());
+        model.addAttribute("creatorId", creatorId);
+        model.addAttribute("blogId", blogId);
+        return "blogs/updateBlogForm";
     }
 
 
     @PatchMapping("/update")
     public String updateBlog(@RequestParam("creatorId") Long creatorId, @RequestParam("id") Long id, BlogUpdateForm form) {
-        try {
-            blogService.update(id, form);
-            return "redirect:/blogs?creatorId=" + creatorId;
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return "redirect:/";
-        }
+        blogService.update(id, form);
+        return "redirect:/blogs?creatorId=" + creatorId;
     }
 
 
     @DeleteMapping("/delete")
     public String deleteBlog(@RequestParam("blogId") Long blogId, @RequestParam("creatorId") Long creatorId) {
-        try {
-            blogService.delete(blogId);
-            return "redirect:/blogs?creatorId=" + creatorId;
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return "redirect:/";
-        }
+        blogService.delete(blogId);
+        return "redirect:/blogs?creatorId=" + creatorId;
     }
 }
 
