@@ -1,6 +1,11 @@
-package com.landvibe.landlog.validator;
+package com.landvibe.landlog.exceptionHandler;
 
-public enum ErrorMassage {
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@AllArgsConstructor
+@Getter
+public enum ErrorCode {
     NO_MATCH_MEMBERID_EXCEPTION("존재하지 않는 id 입니다."),
     DUPLICATE_NAME_SIGNUP_EXCEPTION("이미 존재하는 회원입니다."),
     DUPLICATE_EMAIL_SIGNUP_EXCEPTION("이미 존재하는 이메일입니다."),
@@ -12,14 +17,5 @@ public enum ErrorMassage {
     NO_VALID_BLOG_TITLE("제목을 입력해주세요."),
     NO_VALID_BLOG_CONTENTS("내용을 입력해주세요.");
 
-
     private final String exceptionMessage;
-
-    ErrorMassage(String exceptionMessage){
-        this.exceptionMessage = exceptionMessage;
-    }
-
-    public String getMessage(){
-        return this.exceptionMessage;
-    }
 }

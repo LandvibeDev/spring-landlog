@@ -30,12 +30,7 @@ public class MemberController {
     @PostMapping(value = "/new")
     public String createMemberForm(SignUpForm form) {
         Member member = new Member(form.getName(), form.getEmail(), form.getPassword());
-
-        try {
-            memberService.join(member);
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-        }
+        memberService.join(member);
 
         return "redirect:/";
     }
