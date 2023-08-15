@@ -28,27 +28,29 @@ class MemberServiceTest {
     String name = "spring1";
     String email = "spring1@spring.com";
     String password = "1234";
+    Member member = createMember(memberId, name, email, password);
 
     Member createMember(Long id, String name, String email, String password) {
-        Member member = Member.createMember(name, email, password);
-        member.setId(id);
-
-        return member;
+        return Member.builder()
+                .id(id)
+                .name(name)
+                .email(email)
+                .password(password)
+                .build();
     }
 
     @Test
     @DisplayName("join_회원가입_성공")
     void join_whenDetailsProvided_Success() throws Exception {
         //given
-        when(memberRepository.save(any(Member.class))).thenReturn(any(Member.class));
+        when(memberRepository.save(name, email, password)).thenReturn(member);
 
         //when
-        Member member = createMember(memberId, name, email, password);
-        Long actualMemberId = memberService.join(member);
+        Long actualMemberId = memberService.join(name, email, password);
         assertThat(actualMemberId).isEqualTo(memberId);
 
         //Then
-        verify(memberRepository).save(any(Member.class));
+        verify(memberRepository).save(name, email, password);
     }
 
 
@@ -56,29 +58,27 @@ class MemberServiceTest {
     @DisplayName("join_중복이름_예외발생")
     void join_whenDuplicateName_Exception() throws Exception {
         //given
-        Member member = createMember(memberId, name, email, password);
-        when(memberRepository.save(member)).thenThrow(LandLogException.class);
+        when(memberRepository.save(name, email, password)).thenThrow(LandLogException.class);
 
         //when & then
         assertThrows(LandLogException.class,
-                () -> memberService.join(member));
+                () -> memberService.join(name, email, password));
 
         //Then
-        verify(memberRepository, times(1)).save(member);
+        verify(memberRepository, times(1)).save(name, email, password);
     }
 
     @Test
     @DisplayName("join_중복이메일_예외발생")
     void join_whenDuplicateEmail_Exception() throws Exception {
         //given
-        Member member = createMember(memberId, name, email, password);
-        when(memberRepository.save(member)).thenThrow(LandLogException.class);
+        when(memberRepository.save(name, email, password)).thenThrow(LandLogException.class);
 
         //when & then
         assertThrows(LandLogException.class,
-                () -> memberService.join(member));
+                () -> memberService.join(name, email, password));
 
         //Then
-        verify(memberRepository, times(1)).save(member);
+        verify(memberRepository, times(1)).save(name, email, password);
     }
 }

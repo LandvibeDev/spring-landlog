@@ -48,20 +48,31 @@ class BlogServiceTest {
     Long wrongBlogId = -1L;
 
     Member createMember(Long memberId, String name, String email, String password) {
-        Member member = Member.createMember(name, email, password);
-        member.setId(memberId);
-        return member;
+        return Member.builder()
+                .id(memberId)
+                .name(name)
+                .email(email)
+                .password(password)
+                .build();
     }
 
-    Blog createBlog(Long blogId, String title, String contents, Long memberId) {
-        Blog blog = Blog.createBlog(title, contents, memberId);
-        blog.setId(blogId);
-        return blog;
+    Blog createBlog(Long blogId, String title, String contents, Long creatorId) {
+        return Blog.builder()
+                .id(blogId)
+                .title(title)
+                .contents(contents)
+                .creatorId(creatorId)
+                .build();
     }
 
     List<Blog> createBlogs(Long memberId) {
-        Blog blog = Blog.createBlog(title, contents, memberId);
-        blog.setId(blogId);
+        Blog blog = Blog.builder()
+                .id(blogId)
+                .title(title)
+                .contents(contents)
+                .creatorId(memberId)
+                .build();
+
         return List.of(blog);
     }
 

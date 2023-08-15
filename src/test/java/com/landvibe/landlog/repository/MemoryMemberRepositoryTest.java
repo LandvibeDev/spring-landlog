@@ -15,12 +15,10 @@ class MemoryMemberRepositoryTest {
     String name = "a";
     String email = "a@spring.com";
     String password = "1234";
-    Member member = Member.createMember(name, email, password);
 
     @BeforeEach
     public void beforeEach() {
         repository = new MemoryMemberRepository();
-        repository.save(member);
     }
 
     @AfterEach
@@ -30,8 +28,11 @@ class MemoryMemberRepositoryTest {
 
     @Test
     public void findByName() {
+        //given
+        Member member = repository.save(name, email, password);
+
         //when
-        Member result = repository.findByName(name).get();
+        Member result = repository.findByName(member.getName()).get();
 
         //then
         assertThat(member).isEqualTo(result);
@@ -39,6 +40,9 @@ class MemoryMemberRepositoryTest {
 
     @Test
     public void findByEmail() {
+        //given
+        Member member = repository.save(name, email, password);
+
         //when
         Member result = repository.findByEmail(member.getEmail()).get();
 
@@ -50,7 +54,9 @@ class MemoryMemberRepositoryTest {
     @Test
     public void findAll() {
         //given
+        repository.save(name, email, password);
         int expectedSize = 1;
+
 
         //when
         int resultSize = repository.findAll().size();
@@ -61,6 +67,9 @@ class MemoryMemberRepositoryTest {
 
     @Test
     public void findById() {
+        //given
+        Member member = repository.save(name, email, password);
+
         //when
         Member result = repository.findById(member.getId()).get();
 

@@ -34,10 +34,12 @@ class LoginServiceTest {
 
 
     Member createMember(Long id, String name, String email, String password) {
-        Member member = Member.createMember(name, email, password);
-        member.setId(id);
-
-        return member;
+        return Member.builder()
+                .id(id)
+                .name(name)
+                .email(email)
+                .password(password)
+                .build();
     }
 
     @Test
