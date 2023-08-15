@@ -1,6 +1,8 @@
 package com.landvibe.landlog.controller;
 
 import com.landvibe.landlog.domain.Member;
+import com.landvibe.landlog.exception.LoginException;
+import com.landvibe.landlog.exception.MemberException;
 import com.landvibe.landlog.form.MemberJoinForm;
 import com.landvibe.landlog.form.MemberLoginForm;
 import com.landvibe.landlog.service.MemberService;
@@ -26,19 +28,15 @@ public class MemberController {
     }
 
     @PostMapping(value = "/new")
-    public String create(MemberJoinForm form) {
+    public String create(MemberJoinForm form) throws MemberException {
         Member member = Member.builder()
                 .name(form.getName())
                 .email(form.getEmail())
                 .password(form.getPassword())
                 .build();
-        try {
-            Long join = memberService.join(member);
-            return "redirect:/";
-        } catch (IllegalStateException e) {
-            System.out.println(e.getMessage());
-            return "redirect:/";
-        }
+
+        Long join = memberService.join(member);
+        return "redirect:/";
     }
 
     @GetMapping()
@@ -54,14 +52,9 @@ public class MemberController {
     }
 
     @PostMapping(value = "/login")
-    public String login(MemberLoginForm memberLoginForm, RedirectAttributes redirect) {
-        try {
-            Long loginId = memberService.login(memberLoginForm.getEmail(), memberLoginForm.getPassword());
-            redirect.addAttribute("creatorId", loginId);
-            return "redirect:/blogs";
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-            return "redirect:/";
-        }
+    public String login(MemberLoginForm memberLoginForm, RedirectAttributes redirect) throws LoginException {
+        Long loginId = memberService.login(memberLoginForm.getEmail(), memberLoginForm.getPassword());
+        redirect.addAttribute("creatorId", loginId);
+        return "redirect:/blogs";
     }
 }

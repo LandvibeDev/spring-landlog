@@ -1,6 +1,8 @@
 package com.landvibe.landlog.service;
 
 import com.landvibe.landlog.domain.Member;
+import com.landvibe.landlog.exception.LoginException;
+import com.landvibe.landlog.exception.MemberException;
 import com.landvibe.landlog.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +18,7 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
 
-    public Long join(Member member) throws IllegalStateException {
+    public Long join(Member member) throws MemberException {
         validateDuplicateMember(member); //중복 회원 검증
         memberRepository.save(member);
         return member.getId();
@@ -25,7 +27,7 @@ public class MemberService {
     private void validateDuplicateMember(Member member) {
         memberRepository.findByName(member.getName())
                 .ifPresent(m -> {
-                    throw new IllegalStateException(EXIST_MEMBER.message);
+                    throw new MemberException(EXIST_MEMBER.message);
                 });
     }
 
@@ -35,15 +37,15 @@ public class MemberService {
 
     public Member findById(Long memberId) {
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException(NO_MATCH_MEMBER_WITH_CREATOR_ID.message));
+                .orElseThrow(() -> new MemberException(NO_MATCH_MEMBER_WITH_CREATOR_ID.message));
         return member;
     }
 
     public Long login(String email, String password) {
         Member member = memberRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException(WRONG_EMAIL.message));
+                .orElseThrow(() -> new LoginException(WRONG_EMAIL.message));
         if (!password.equals(member.getPassword())) {
-            throw new IllegalArgumentException(WRONG_PASSWORD.message);
+            throw new LoginException(WRONG_PASSWORD.message);
         }
         return member.getId();
     }

@@ -2,6 +2,8 @@ package com.landvibe.landlog.controller;
 
 import com.landvibe.landlog.domain.Blog;
 import com.landvibe.landlog.domain.Member;
+import com.landvibe.landlog.exception.BlogException;
+import com.landvibe.landlog.exception.MemberException;
 import com.landvibe.landlog.service.BlogService;
 import com.landvibe.landlog.service.MemberService;
 import org.springframework.stereotype.Controller;
@@ -21,48 +23,35 @@ public class BlogController {
     }
 
     @GetMapping()
-    public String blogs(@RequestParam(value = "creatorId", required = false) Long creatorId, Model model) {
-        try {
-            Member member = memberService.findById(creatorId);
+    public String blogs(@RequestParam(value = "creatorId", required = false) Long creatorId, Model model)
+            throws MemberException {
+        Member member = memberService.findById(creatorId);
 
-            model.addAttribute("name", member.getName());
-            model.addAttribute("creatorId", creatorId);
-            return "blogs/blogList";
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-            return "redirect:/";
-        }
+        model.addAttribute("name", member.getName());
+        model.addAttribute("creatorId", creatorId);
+        return "blogs/blogList";
     }
 
     @GetMapping(value = "/new")
-    public String createForm(@RequestParam(value = "creatorId", required = false) Long creatorId, Model model) {
-        try {
-            Member member = memberService.findById(creatorId);
+    public String createForm(@RequestParam(value = "creatorId", required = false) Long creatorId, Model model)
+            throws MemberException {
+        Member member = memberService.findById(creatorId);
 
-            model.addAttribute("name", member.getName());
-            model.addAttribute("creatorId", creatorId);
-            return "blogs/createBlogForm";
-
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-            return "redirect:/";
-        }
+        model.addAttribute("name", member.getName());
+        model.addAttribute("creatorId", creatorId);
+        return "blogs/createBlogForm";
     }
 
     @GetMapping(value = "/update")
     public String updateForm(@RequestParam(value = "blogId", required = false) Long blogId,
-                             @RequestParam(value = "creatorId", required = false) Long creatorId, Model model) {
-        try {
-            Member member = memberService.findById(creatorId);
-            Blog blog = blogService.findById(blogId);
+                             @RequestParam(value = "creatorId", required = false) Long creatorId, Model model)
+            throws MemberException, BlogException {
+        Member member = memberService.findById(creatorId);
+        Blog blog = blogService.findById(blogId);
 
-            model.addAttribute("name", member.getName());
-            model.addAttribute("creatorId", creatorId);
-            model.addAttribute("blogId", blogId);
-            return "blogs/updateBlogForm";
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-            return "redirect:/";
-        }
+        model.addAttribute("name", member.getName());
+        model.addAttribute("creatorId", creatorId);
+        model.addAttribute("blogId", blogId);
+        return "blogs/updateBlogForm";
     }
 }
