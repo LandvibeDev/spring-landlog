@@ -1,9 +1,9 @@
 package com.landvibe.landlog.service;
 
-import com.landvibe.landlog.exceptionHandler.DuplicateLoginInfoException;
-import com.landvibe.landlog.exceptionHandler.IllegalCreatorIdException;
-import com.landvibe.landlog.exceptionHandler.NoMemberException;
-import com.landvibe.landlog.exceptionHandler.NoValidPasswordException;
+import com.landvibe.landlog.exceptions.DuplicateSignUpInfoException;
+import com.landvibe.landlog.exceptions.IllegalCreatorIdException;
+import com.landvibe.landlog.exceptions.NoMemberException;
+import com.landvibe.landlog.exceptions.NoValidLoginException;
 import com.landvibe.landlog.form.LoginForm;
 import com.landvibe.landlog.domain.Member;
 import com.landvibe.landlog.repository.MemberRepository;
@@ -37,18 +37,18 @@ public class MemberService {
     private void validateDuplicateMember(Member member) {
         memberRepository.findByName(member.getName())
                 .ifPresent(m -> {
-                    throw new DuplicateLoginInfoException(DUPLICATE_NAME_SIGNUP_EXCEPTION);
+                    throw new DuplicateSignUpInfoException(DUPLICATE_NAME_SIGNUP_EXCEPTION);
                 });
 
         memberRepository.findByEmail(member.getEmail())
                 .ifPresent(m -> {
-                    throw new DuplicateLoginInfoException(DUPLICATE_EMAIL_SIGNUP_EXCEPTION);
+                    throw new DuplicateSignUpInfoException(DUPLICATE_EMAIL_SIGNUP_EXCEPTION);
                 });
     }
 
     public Long logIn(LoginForm logInForm) {
         Member member = memberRepository.findByEmail(logInForm.getEmail())
-                .orElseThrow(() -> new IllegalArgumentException(NO_EXIST_EMAIL_LOGIN_EXCEPTION.getExceptionMessage()));
+                .orElseThrow(() -> new NoValidLoginException(NO_EXIST_EMAIL_LOGIN_EXCEPTION));
         validCorrectPassword(logInForm, member);
         validNoMember();
         return member.getId();
@@ -56,7 +56,7 @@ public class MemberService {
 
     private void validCorrectPassword(LoginForm loginForm, Member member) {
         if (!member.getPassword().equals(loginForm.getPassword())) {
-            throw new NoValidPasswordException(INCORRECT_PASSWORD_EXCEPTION);
+            throw new NoValidLoginException(INCORRECT_PASSWORD_EXCEPTION);
         }
     }
 

@@ -1,9 +1,9 @@
 package com.landvibe.landlog.service;
 
 import com.landvibe.landlog.domain.Blog;
-import com.landvibe.landlog.exceptionHandler.IllegalBlogIdException;
-import com.landvibe.landlog.exceptionHandler.IllegalCreatorIdException;
-import com.landvibe.landlog.exceptionHandler.NoValidBlogFormException;
+import com.landvibe.landlog.exceptions.IllegalBlogIdException;
+import com.landvibe.landlog.exceptions.IllegalCreatorIdException;
+import com.landvibe.landlog.exceptions.NoValidBlogFormException;
 import com.landvibe.landlog.form.BlogForm;
 import com.landvibe.landlog.repository.BlogRepository;
 import org.springframework.stereotype.Service;

@@ -12,7 +12,7 @@ import java.util.List;
 public class BlogApiController {
     private final BlogService blogService;
 
-    BlogApiController(BlogService blogService){
+    public BlogApiController(BlogService blogService){
         this.blogService = blogService;
     }
 

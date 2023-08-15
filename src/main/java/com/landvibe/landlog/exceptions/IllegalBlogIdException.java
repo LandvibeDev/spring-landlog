@@ -1,5 +1,6 @@
-package com.landvibe.landlog.exceptionHandler;
+package com.landvibe.landlog.exceptions;
 
+import com.landvibe.landlog.exceptionHandler.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
