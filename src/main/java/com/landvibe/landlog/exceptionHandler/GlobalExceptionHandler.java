@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
-
-    //MemberService
     @ExceptionHandler({DuplicateSignUpInfoException.class})
     protected ResponseEntity<?> handleDuplicateSignUpInfoException(DuplicateSignUpInfoException e) {
         log.error(e.getMessage());
@@ -24,7 +22,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
 
-    @ExceptionHandler({NoValidLoginException.class}) //로그인 틀린 값 예외(이메일, 비밀번호)
+    @ExceptionHandler({NoValidLoginException.class})
     protected ResponseEntity<?> handleNoValidLoginException(NoValidLoginException e) {
         log.error(e.getMessage());
         ErrorResponse errorResponse = ErrorResponse.builder()
@@ -34,7 +32,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(errorResponse);
     }
 
-    @ExceptionHandler({NoMemberException.class}) //등록된 회원 없음 예외
+    @ExceptionHandler({NoMemberException.class})
     protected ResponseEntity<?> handleNoMemberException(NoMemberException e) {
         log.error(e.getMessage());
         ErrorResponse errorResponse = ErrorResponse.builder()
@@ -44,7 +42,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 
-    //blogService
     @ExceptionHandler()
     protected ResponseEntity<?> handleIllegalCreatorIdException(IllegalCreatorIdException e) {
         log.error(e.getMessage());
