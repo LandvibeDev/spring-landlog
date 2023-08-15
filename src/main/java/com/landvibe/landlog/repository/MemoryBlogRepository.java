@@ -16,10 +16,14 @@ public class MemoryBlogRepository implements BlogRepository {
 
     @Override
     public Blog save(Long creatorId, String title, String contents) {
-        Blog blog = Blog.createBlog(title, contents, creatorId);
-        blog.setId(++sequence);
-        store.put(blog.getId(), blog);
+        Blog blog = Blog.builder()
+                .id(++sequence)
+                .title(title)
+                .contents(contents)
+                .creatorId(creatorId)
+                .build();
 
+        store.put(blog.getId(), blog);
         return blog;
     }
 
@@ -36,10 +40,14 @@ public class MemoryBlogRepository implements BlogRepository {
 
     @Override
     public Blog modify(Long blogId, String title, String contents, Long creatorId) {
-        Blog blog = Blog.createBlog(title, contents, creatorId);
-        blog.setId(blogId);
-        store.replace(blogId, blog);
+        Blog blog = Blog.builder()
+                .id(blogId)
+                .title(title)
+                .contents(contents)
+                .creatorId(creatorId)
+                .build();
 
+        store.replace(blogId, blog);
         return blog;
     }
 
