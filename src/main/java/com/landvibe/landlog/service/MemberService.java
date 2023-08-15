@@ -18,9 +18,9 @@ public class MemberService {
     }
 
     // <--생성-->
-    public Long join(Member member) {
-        validateDuplicateMember(member); // 예외
-        memberRepository.save(member);
+    public Long join(String name, String email, String password) {
+        validateDuplicateMember(name, email); // 예외
+        Member member = memberRepository.save(name, email, password);
         return member.getId();
     }
 
@@ -42,13 +42,13 @@ public class MemberService {
     }
 
     // <--valid-->
-    private void validateDuplicateMember(Member member) {
-        memberRepository.findByName(member.getName())
+    private void validateDuplicateMember(String name, String email) {
+        memberRepository.findByName(name)
                 .ifPresent(m -> {
                     throw new LandLogException(DUPLICATE_USER_NAME);
                 });
 
-        memberRepository.findByEmail(member.getEmail())
+        memberRepository.findByEmail(email)
                 .ifPresent(m -> {
                     throw new LandLogException(DUPLICATE_USER_EMAIL);
                 });
