@@ -1,10 +1,8 @@
 package com.landvibe.landlog.controller;
 
-import com.landvibe.landlog.domain.Blog;
 import com.landvibe.landlog.domain.Member;
 import com.landvibe.landlog.form.BlogForm;
 import com.landvibe.landlog.form.BlogUpdateForm;
-import com.landvibe.landlog.form.MemberNewForm;
 import com.landvibe.landlog.service.BlogService;
 import com.landvibe.landlog.service.MemberService;
 import org.springframework.stereotype.Controller;
@@ -14,8 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/blogs")
