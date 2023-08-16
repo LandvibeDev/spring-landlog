@@ -2,9 +2,9 @@ package com.landvibe.landlog.service;
 
 import com.landvibe.landlog.Message;
 import com.landvibe.landlog.domain.Member;
+import com.landvibe.landlog.form.MemberLoginForm;
 import com.landvibe.landlog.repository.MemberRepository;
 import org.springframework.stereotype.Service;
-import com.landvibe.landlog.controller.*;
 
 import java.util.List;
 
@@ -46,14 +46,14 @@ public class MemberService {
     private void validateDuplicateEmail(Member member) {
         memberRepository.findByEmail(member.getEmail())
                 .ifPresent(m -> {
-                    throw new IllegalStateException(Message.DUPLICATE_EMAIL.message);
+                    throw new IllegalArgumentException(Message.DUPLICATE_EMAIL.message);
                 });
     }
 
     private void validateDuplicateName(Member member) {
         memberRepository.findByName(member.getName())
                 .ifPresent(m -> {
-                    throw new IllegalStateException(Message.DUPLICATE_NAME.message);
+                    throw new IllegalArgumentException(Message.DUPLICATE_NAME.message);
                 });
     }
 

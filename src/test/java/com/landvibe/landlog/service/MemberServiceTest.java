@@ -1,11 +1,12 @@
 package com.landvibe.landlog.service;
 
 import com.landvibe.landlog.Message;
-import com.landvibe.landlog.controller.MemberLoginForm;
+import com.landvibe.landlog.form.MemberLoginForm;
 import com.landvibe.landlog.domain.Member;
 import com.landvibe.landlog.repository.MemoryMemberRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -13,24 +14,24 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class MemberServiceTest {
-
     MemberService memberService;
     MemoryMemberRepository memberRepository;
     Member member = new Member("gildong", "abc@def.com", "1234");
 
     @BeforeEach
-    public void beforeEach() {
+    void beforeEach() {
         memberRepository = new MemoryMemberRepository();
         memberService = new MemberService(memberRepository);
     }
 
     @AfterEach
-    public void afterEach() {
+    void afterEach() {
         memberRepository.clearStore();
     }
 
     @Test
-    public void 회원가입_정상() throws Exception {
+    @DisplayName("정상 회원가입")
+    void normalJoin() throws Exception {
         //when
         Long id = memberService.join(member);
 
@@ -40,40 +41,44 @@ class MemberServiceTest {
     }
 
     @Test
-    public void 회원가입_이름_누락() throws Exception {
+    @DisplayName("이름 누락 회원가입")
+    void joinWithoutName() {
         //given
         Member member = new Member("", "abc@def.com", "1234");
 
         //when, then
-        Exception e = assertThrows(Exception.class,
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
                 () -> memberService.join(member));
         assertThat(e.getMessage()).isEqualTo(Message.NO_INPUT_NAME.message);
     }
 
     @Test
-    public void 회원가입_이메일_누락() throws Exception {
+    @DisplayName("이메일 누락 회원가입")
+    void joinWithoutEmail() {
         //given
         Member member = new Member("elice", "", "1234");
 
         //when, then
-        Exception e = assertThrows(Exception.class,
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
                 () -> memberService.join(member));
         assertThat(e.getMessage()).isEqualTo(Message.NO_INPUT_EMAIL.message);
     }
 
     @Test
-    public void 회원가입_비밀번호_누락() throws Exception {
+    @DisplayName("비밀번호 누락 회원가입")
+    void joinWithoutPassword() {
         //given
         Member member = new Member("july", "abc@def.com", "");
 
         //when, then
-        Exception e = assertThrows(Exception.class,
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
                 () -> memberService.join(member));
         assertThat(e.getMessage()).isEqualTo(Message.NO_INPUT_PASSWORD.message);
     }
 
     @Test
-    public void 로그인_정상() throws Exception {
+    @DisplayName("정상 로그인")
+    void normalLogin() {
         //given
         MemberLoginForm loginForm = new MemberLoginForm();
         loginForm.setEmail("abc@def.com");
@@ -89,25 +94,27 @@ class MemberServiceTest {
     }
 
     @Test
-    public void 중복_이름_예외() throws Exception {
+    @DisplayName("이름 중복 회원가입")
+    void joinWithDuplicateName() {
         //given
         memberService.join(member);
         Member anotherMember = new Member("gildong", "qwe@def.com", "1234");
 
         //when, then
-        IllegalStateException e = assertThrows(IllegalStateException.class,
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
                 () -> memberService.join(anotherMember));
         assertThat(e.getMessage()).isEqualTo(Message.DUPLICATE_NAME.message);
     }
 
     @Test
-    public void 중복_이메일_예외() throws Exception {
+    @DisplayName("이메일 중복 회원가입")
+    void joinWithDuplicateEmail() {
         //given
         memberService.join(member);
         Member anotherMember = new Member("jiwoo", "abc@def.com", "1234");
 
         //when, then
-        IllegalStateException e = assertThrows(IllegalStateException.class,
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
                 () -> memberService.join(anotherMember));
         assertThat(e.getMessage()).isEqualTo(Message.DUPLICATE_EMAIL.message);
     }
