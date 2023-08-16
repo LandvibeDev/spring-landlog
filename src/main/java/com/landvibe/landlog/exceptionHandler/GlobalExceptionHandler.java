@@ -2,7 +2,6 @@ package com.landvibe.landlog.exceptionHandler;
 
 import com.landvibe.landlog.exceptions.*;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -12,63 +11,23 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
-    @ExceptionHandler({DuplicateSignUpInfoException.class})
-    protected ResponseEntity<?> handleDuplicateSignUpInfoException(DuplicateSignUpInfoException e) {
+    @ExceptionHandler({BlogException.class})
+    protected ResponseEntity<?> handleBlogException(BlogException e){
         log.error(e.getMessage());
         ErrorResponse errorResponse = ErrorResponse.builder()
-                .code("회원가입에 실패했습니다.")
+                .status(e.getErrorCode().getStatus())
                 .message(e.getMessage())
                 .build();
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+        return ResponseEntity.status(e.getErrorCode().getStatus()).body(errorResponse);
     }
 
-    @ExceptionHandler({NoValidLoginException.class})
-    protected ResponseEntity<?> handleNoValidLoginException(NoValidLoginException e) {
+    @ExceptionHandler({MemberException.class})
+    protected ResponseEntity<?> handleMemberException(MemberException e){
         log.error(e.getMessage());
         ErrorResponse errorResponse = ErrorResponse.builder()
-                .code("로그인에 실패했습니다.")
+                .status(e.getErrorCode().getStatus())
                 .message(e.getMessage())
                 .build();
-        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(errorResponse);
-    }
-
-    @ExceptionHandler({NoMemberException.class})
-    protected ResponseEntity<?> handleNoMemberException(NoMemberException e) {
-        log.error(e.getMessage());
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .code("등록된 회원이 없습니다.")
-                .message(e.getMessage())
-                .build();
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
-    }
-
-    @ExceptionHandler()
-    protected ResponseEntity<?> handleIllegalCreatorIdException(IllegalCreatorIdException e) {
-        log.error(e.getMessage());
-        final ErrorResponse errorResponse = ErrorResponse.builder()
-                .code("회원 정보가 없습니다.")
-                .message(e.getMessage())
-                .build();
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
-    }
-
-    @ExceptionHandler()
-    protected ResponseEntity<?> handleIllegalBlogIdException(IllegalBlogIdException e) {
-        log.error(e.getMessage());
-        final ErrorResponse errorResponse = ErrorResponse.builder()
-                .code("블로그 정보가 없습니다.")
-                .message(e.getMessage())
-                .build();
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
-    }
-
-    @ExceptionHandler()
-    protected ResponseEntity<?> handleNoValidBlogFormException(NoValidBlogFormException e) {
-        log.error(e.getMessage());
-        final ErrorResponse errorResponse = ErrorResponse.builder()
-                .code("내용을 확인해 주세요.")
-                .message(e.getMessage())
-                .build();
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(errorResponse);
+        return ResponseEntity.status(e.getErrorCode().getStatus()).body(errorResponse);
     }
 }

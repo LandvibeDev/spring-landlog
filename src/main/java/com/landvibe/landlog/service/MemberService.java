@@ -1,9 +1,6 @@
 package com.landvibe.landlog.service;
 
-import com.landvibe.landlog.exceptions.DuplicateSignUpInfoException;
-import com.landvibe.landlog.exceptions.IllegalCreatorIdException;
-import com.landvibe.landlog.exceptions.NoMemberException;
-import com.landvibe.landlog.exceptions.NoValidLoginException;
+import com.landvibe.landlog.exceptions.*;
 import com.landvibe.landlog.form.LoginForm;
 import com.landvibe.landlog.domain.Member;
 import com.landvibe.landlog.repository.MemberRepository;
@@ -23,7 +20,7 @@ public class MemberService {
         validNoMember();
 
         Member member = memberRepository.findById(id)
-                .orElseThrow(() -> new IllegalCreatorIdException(NO_MATCH_MEMBERID_EXCEPTION));
+                .orElseThrow(() -> new MemberException(NO_MATCH_MEMBERID_EXCEPTION));
         return member;
     }
 
@@ -37,18 +34,18 @@ public class MemberService {
     private void validateDuplicateMember(Member member) {
         memberRepository.findByName(member.getName())
                 .ifPresent(m -> {
-                    throw new DuplicateSignUpInfoException(DUPLICATE_NAME_SIGNUP_EXCEPTION);
+                    throw new MemberException(DUPLICATE_NAME_SIGNUP_EXCEPTION);
                 });
 
         memberRepository.findByEmail(member.getEmail())
                 .ifPresent(m -> {
-                    throw new DuplicateSignUpInfoException(DUPLICATE_EMAIL_SIGNUP_EXCEPTION);
+                    throw new MemberException(DUPLICATE_EMAIL_SIGNUP_EXCEPTION);
                 });
     }
 
     public Long logIn(LoginForm logInForm) {
         Member member = memberRepository.findByEmail(logInForm.getEmail())
-                .orElseThrow(() -> new NoValidLoginException(NO_EXIST_EMAIL_LOGIN_EXCEPTION));
+                .orElseThrow(() -> new MemberException(NO_EXIST_EMAIL_LOGIN_EXCEPTION));
         validCorrectPassword(logInForm, member);
         validNoMember();
         return member.getId();
@@ -56,7 +53,7 @@ public class MemberService {
 
     private void validCorrectPassword(LoginForm loginForm, Member member) {
         if (!member.getPassword().equals(loginForm.getPassword())) {
-            throw new NoValidLoginException(INCORRECT_PASSWORD_EXCEPTION);
+            throw new MemberException(INCORRECT_PASSWORD_EXCEPTION);
         }
     }
 
@@ -66,7 +63,7 @@ public class MemberService {
 
     private void validNoMember() {
         if (memberRepository.noMember()) {
-            throw new NoMemberException(NO_ONE_MEMBER_EXCEPTION);
+            throw new MemberException(NO_ONE_MEMBER_EXCEPTION);
         }
     }
 }

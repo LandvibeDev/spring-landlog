@@ -6,6 +6,6 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class NoMemberException extends RuntimeException{
+public class BlogException extends RuntimeException{
     private final ErrorCode errorCode;
 }

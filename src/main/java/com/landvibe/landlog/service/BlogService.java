@@ -1,9 +1,7 @@
 package com.landvibe.landlog.service;
-
 import com.landvibe.landlog.domain.Blog;
-import com.landvibe.landlog.exceptions.IllegalBlogIdException;
-import com.landvibe.landlog.exceptions.IllegalCreatorIdException;
-import com.landvibe.landlog.exceptions.NoValidBlogFormException;
+import com.landvibe.landlog.exceptions.BlogException;
+import com.landvibe.landlog.exceptions.MemberException;
 import com.landvibe.landlog.form.BlogForm;
 import com.landvibe.landlog.repository.BlogRepository;
 import org.springframework.stereotype.Service;
@@ -39,7 +37,6 @@ public class BlogService {
         validBlogId(blogId);
         validCreatorId(creatorId);
         validateBlogForm(form.getTitle(), form.getContents());
-
         return blogRepository.update(blogId, form);
     }
 
@@ -51,22 +48,22 @@ public class BlogService {
     }
 
     public void validCreatorId(Long creatorId){
-        if(creatorId <= 0) throw new IllegalCreatorIdException(NO_MATCH_MEMBERID_EXCEPTION);
+        if(creatorId <= 0) throw new MemberException(NO_MATCH_MEMBERID_EXCEPTION);
         memberService.findMemberById(creatorId);
     }
 
     private void validBlogId(Long blogId){
-        if(blogId <= 0) throw new IllegalBlogIdException(NO_MATCH_BLOGID_EXCEPTION);
+        if(blogId <= 0) throw new BlogException(NO_MATCH_BLOGID_EXCEPTION);
         blogRepository.findBlogByBlogId(blogId).
-                orElseThrow(() -> new IllegalBlogIdException(NO_MATCH_BLOGID_EXCEPTION));
+                orElseThrow(() -> new BlogException(NO_MATCH_BLOGID_EXCEPTION));
     }
 
     public void validateBlogForm(String title, String contents) {
         if (title.equals("")) {
-            throw new NoValidBlogFormException(NO_VALID_BLOG_TITLE);
+            throw new BlogException(NO_VALID_BLOG_TITLE);
         }
         if (contents.equals("")) {
-            throw new NoValidBlogFormException(NO_VALID_BLOG_CONTENTS);
+            throw new BlogException(NO_VALID_BLOG_CONTENTS);
         }
     }
 

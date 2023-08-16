@@ -6,6 +6,6 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class IllegalCreatorIdException extends RuntimeException{
+public class MemberException extends RuntimeException{
     private final ErrorCode errorCode;
 }
