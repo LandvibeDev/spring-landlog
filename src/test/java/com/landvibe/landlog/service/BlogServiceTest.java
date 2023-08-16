@@ -45,38 +45,38 @@ public class BlogServiceTest {
 
     @Test
     @DisplayName("잘못된 creatorId로 블로그검색")
-    void findBlogByWrongCreatorId() throws Exception {
+    void findBlogByWrongCreatorId() {
         when(memberRepository.findById(2L))
                 .thenThrow(new IllegalArgumentException(Message.NO_USER.message));
-        Exception e = assertThrows(Exception.class,
+        Exception e = assertThrows(IllegalArgumentException.class,
                 () -> blogService.findBlogsByCreatorId(2L));
         assertThat(e.getMessage()).isEqualTo(Message.NO_USER.message);
     }
 
     @Test
     @DisplayName("제목 누락으로 블로그 수정")
-    void updateBlogWithoutTitle() throws Exception {
+    void updateBlogWithoutTitle() {
         BlogUpdateForm noTitleForm = new BlogUpdateForm(blogId, "", "contents");
 
         when(memberRepository.findById(creatorId))
                 .thenReturn(Optional.of(member));
         when(blogRepository.findBlogByBlogId(blogId))
                 .thenReturn(Optional.of(blog));
-        Exception e = assertThrows(Exception.class,
+        Exception e = assertThrows(IllegalArgumentException.class,
                 () -> blogService.update(creatorId, noTitleForm));
         assertThat(e.getMessage()).isEqualTo(Message.NO_INPUT_TITLE.message);
     }
 
     @Test
     @DisplayName("내용 누락으로 블로그 수정")
-    void updateBlogWithoutContents() throws Exception {
+    void updateBlogWithoutContents() {
         BlogUpdateForm noContentsForm = new BlogUpdateForm(blogId, "title", "");
 
         when(memberRepository.findById(creatorId))
                 .thenReturn(Optional.of(member));
         when(blogRepository.findBlogByBlogId(blogId))
                 .thenReturn(Optional.of(blog));
-        Exception e = assertThrows(Exception.class,
+        Exception e = assertThrows(IllegalArgumentException.class,
                 () -> blogService.update(creatorId, noContentsForm));
         assertThat(e.getMessage()).isEqualTo(Message.NO_INPUT_CONTENTS.message);
     }
@@ -84,46 +84,46 @@ public class BlogServiceTest {
 
     @Test
     @DisplayName("잘못된 블로그 ID로 블로그 수정")
-    void updateBlogWithoutBlogId() throws Exception {
+    void updateBlogWithoutBlogId() {
         BlogUpdateForm noContentsForm = new BlogUpdateForm(blogId, "title", "");
 
         when(memberRepository.findById(creatorId))
                 .thenReturn(Optional.of(member));
-        Exception e = assertThrows(Exception.class,
+        Exception e = assertThrows(IllegalArgumentException.class,
                 () -> blogService.update(creatorId, noContentsForm));
         assertThat(e.getMessage()).isEqualTo(Message.NO_BLOG.message);
     }
 
     @Test
     @DisplayName("제목 없이 블로그 추가")
-    void createBlogWithoutTitle() throws Exception {
+    void createBlogWithoutTitle() {
         BlogForm noTitleForm = new BlogForm("", "contents");
 
         when(memberRepository.findById(creatorId))
                 .thenReturn(Optional.of(member));
-        Exception e = assertThrows(Exception.class,
+        Exception e = assertThrows(IllegalArgumentException.class,
                 () -> blogService.create(creatorId, noTitleForm));
         assertThat(e.getMessage()).isEqualTo(Message.NO_INPUT_TITLE.message);
     }
 
     @Test
     @DisplayName("내용 없이 블로그 추가")
-    void createBlogWithoutContents() throws Exception {
+    void createBlogWithoutContents() {
         BlogForm noContentsForm = new BlogForm("title", "");
 
         when(memberRepository.findById(creatorId))
                 .thenReturn(Optional.of(member));
-        Exception e = assertThrows(Exception.class,
+        Exception e = assertThrows(IllegalArgumentException.class,
                 () -> blogService.create(creatorId, noContentsForm));
         assertThat(e.getMessage()).isEqualTo(Message.NO_INPUT_CONTENTS.message);
     }
 
     @Test
     @DisplayName("잘못된 creatorID로 블로그 삭제")
-    void deleteBlogWithWrongCreatorId() throws Exception {
+    void deleteBlogWithWrongCreatorId() {
         when(memberRepository.findById(2L))
                 .thenThrow(new IllegalArgumentException(Message.NO_USER.message));
-        Exception e = assertThrows(Exception.class,
+        Exception e = assertThrows(IllegalArgumentException.class,
                 () -> blogService.delete(2L, blogId));
         assertThat(e.getMessage()).isEqualTo(Message.NO_USER.message);
     }

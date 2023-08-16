@@ -46,14 +46,14 @@ public class MemberService {
     private void validateDuplicateEmail(Member member) {
         memberRepository.findByEmail(member.getEmail())
                 .ifPresent(m -> {
-                    throw new IllegalStateException(Message.DUPLICATE_EMAIL.message);
+                    throw new IllegalArgumentException(Message.DUPLICATE_EMAIL.message);
                 });
     }
 
     private void validateDuplicateName(Member member) {
         memberRepository.findByName(member.getName())
                 .ifPresent(m -> {
-                    throw new IllegalStateException(Message.DUPLICATE_NAME.message);
+                    throw new IllegalArgumentException(Message.DUPLICATE_NAME.message);
                 });
     }
 
