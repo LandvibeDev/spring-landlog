@@ -3,6 +3,7 @@ package com.landvibe.landlog.repository;
 import com.landvibe.landlog.domain.Blog;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public class MemoryBlogRepositoryTest {
     }
 
     @Test
+    @DisplayName("블로그 저장")
     void save() {
         //when
         Blog result = repository.findBlogByBlogId(blog.getId()).get();
@@ -35,6 +37,7 @@ public class MemoryBlogRepositoryTest {
     }
 
     @Test
+    @DisplayName("creatorId로 블로그 찾기")
     void findBlogsByCreatorId() {
         //given
         Blog anotherBlog = new Blog("title2","contents2", creatorId);
@@ -48,6 +51,7 @@ public class MemoryBlogRepositoryTest {
     }
 
     @Test
+    @DisplayName("블로그 수정")
     void update() {
         //given
         String updateTitle = "updateTitle";
@@ -66,6 +70,7 @@ public class MemoryBlogRepositoryTest {
     }
 
     @Test
+    @DisplayName("블로그 삭제")
     void delete() {
         //when
         repository.delete(blog);

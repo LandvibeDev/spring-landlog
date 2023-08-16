@@ -3,6 +3,7 @@ package com.landvibe.landlog.repository;
 import com.landvibe.landlog.domain.Member;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -24,6 +25,7 @@ class MemoryMemberRepositoryTest {
     }
 
     @Test
+    @DisplayName("유저 저장")
     void save() {
         //when
         Member result = repository.findById(member.getId()).get();
@@ -33,6 +35,7 @@ class MemoryMemberRepositoryTest {
     }
 
     @Test
+    @DisplayName("이름으로 유저 찾기")
     void findByName() {
         //when
         Member result = repository.findByName(member.getName()).get();
@@ -42,6 +45,7 @@ class MemoryMemberRepositoryTest {
     }
 
     @Test
+    @DisplayName("이메일로 유저 찾기")
     void findByEmail() {
         //when
         Member result = repository.findByEmail(member.getEmail()).get();
@@ -51,6 +55,7 @@ class MemoryMemberRepositoryTest {
     }
 
     @Test
+    @DisplayName("아이디로 유저 찾기")
     void findById() {
         //when
         Member result = repository.findById(member.getId()).get();
@@ -60,6 +65,7 @@ class MemoryMemberRepositoryTest {
     }
 
     @Test
+    @DisplayName("모든 유저 검색")
     void findAll() {
         //given
         Member anotherMember = new Member("gildong", "abc@def.com", "1234");

@@ -8,6 +8,7 @@ import com.landvibe.landlog.form.BlogUpdateForm;
 import com.landvibe.landlog.repository.MemoryBlogRepository;
 import com.landvibe.landlog.repository.MemoryMemberRepository;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -43,7 +44,8 @@ public class BlogServiceTest {
     }
 
     @Test
-    void 잘못된_creatorId로_블로그검색() throws Exception {
+    @DisplayName("잘못된 creatorId로 블로그검색")
+    void findBlogByWrongCreatorId() throws Exception {
         when(memberRepository.findById(2L))
                 .thenThrow(new IllegalArgumentException(Message.NO_USER.message));
         Exception e = assertThrows(Exception.class,
@@ -52,7 +54,8 @@ public class BlogServiceTest {
     }
 
     @Test
-    void 블로그_수정_제목_누락() throws Exception {
+    @DisplayName("제목 누락으로 블로그 수정")
+    void updateBlogWithoutTitle() throws Exception {
         BlogUpdateForm noTitleForm = new BlogUpdateForm(blogId, "", "contents");
 
         when(memberRepository.findById(creatorId))
@@ -65,7 +68,8 @@ public class BlogServiceTest {
     }
 
     @Test
-    void 블로그_수정_내용_누락() throws Exception {
+    @DisplayName("내용 누락으로 블로그 수정")
+    void updateBlogWithoutContents() throws Exception {
         BlogUpdateForm noContentsForm = new BlogUpdateForm(blogId, "title", "");
 
         when(memberRepository.findById(creatorId))
@@ -79,7 +83,8 @@ public class BlogServiceTest {
 
 
     @Test
-    void 블로그_수정_블로그id_없음() throws Exception {
+    @DisplayName("잘못된 블로그 ID로 블로그 수정")
+    void updateBlogWithoutBlogId() throws Exception {
         BlogUpdateForm noContentsForm = new BlogUpdateForm(blogId, "title", "");
 
         when(memberRepository.findById(creatorId))
@@ -90,7 +95,8 @@ public class BlogServiceTest {
     }
 
     @Test
-    void 블로그_추가_제목_누락() throws Exception {
+    @DisplayName("제목 없이 블로그 추가")
+    void createBlogWithoutTitle() throws Exception {
         BlogForm noTitleForm = new BlogForm("", "contents");
 
         when(memberRepository.findById(creatorId))
@@ -101,7 +107,8 @@ public class BlogServiceTest {
     }
 
     @Test
-    void 블로그_추가_내용_누락() throws Exception {
+    @DisplayName("내용 없이 블로그 추가")
+    void createBlogWithoutContents() throws Exception {
         BlogForm noContentsForm = new BlogForm("title", "");
 
         when(memberRepository.findById(creatorId))
@@ -112,7 +119,8 @@ public class BlogServiceTest {
     }
 
     @Test
-    void 블로그_삭제_잘못된_creatorId() throws Exception {
+    @DisplayName("잘못된 creatorID로 블로그 삭제")
+    void deleteBlogWithWrongCreatorId() throws Exception {
         when(memberRepository.findById(2L))
                 .thenThrow(new IllegalArgumentException(Message.NO_USER.message));
         Exception e = assertThrows(Exception.class,

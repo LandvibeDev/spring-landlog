@@ -6,6 +6,7 @@ import com.landvibe.landlog.domain.Member;
 import com.landvibe.landlog.repository.MemoryMemberRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,7 +30,8 @@ class MemberServiceTest {
     }
 
     @Test
-    void 회원가입_정상() throws Exception {
+    @DisplayName("정상 회원가입")
+    void normalJoin() throws Exception {
         //when
         Long id = memberService.join(member);
 
@@ -39,7 +41,8 @@ class MemberServiceTest {
     }
 
     @Test
-    void 회원가입_이름_누락() throws Exception {
+    @DisplayName("이름 누락 회원가입")
+    void joinWithoutName() throws Exception {
         //given
         Member member = new Member("", "abc@def.com", "1234");
 
@@ -50,7 +53,8 @@ class MemberServiceTest {
     }
 
     @Test
-    void 회원가입_이메일_누락() throws Exception {
+    @DisplayName("이메일 누락 회원가입")
+    void joinWithoutEmail() throws Exception {
         //given
         Member member = new Member("elice", "", "1234");
 
@@ -61,7 +65,8 @@ class MemberServiceTest {
     }
 
     @Test
-    void 회원가입_비밀번호_누락() throws Exception {
+    @DisplayName("비밀번호 누락 회원가입")
+    void joinWithoutPassword() throws Exception {
         //given
         Member member = new Member("july", "abc@def.com", "");
 
@@ -72,7 +77,8 @@ class MemberServiceTest {
     }
 
     @Test
-    void 로그인_정상() throws Exception {
+    @DisplayName("정상 로그인")
+    void normalLogin() throws Exception {
         //given
         MemberLoginForm loginForm = new MemberLoginForm();
         loginForm.setEmail("abc@def.com");
@@ -88,7 +94,8 @@ class MemberServiceTest {
     }
 
     @Test
-    void 중복_이름_예외() throws Exception {
+    @DisplayName("이름 중복 회원가입")
+    void joinWithDuplicateName() throws Exception {
         //given
         memberService.join(member);
         Member anotherMember = new Member("gildong", "qwe@def.com", "1234");
@@ -100,7 +107,8 @@ class MemberServiceTest {
     }
 
     @Test
-    void 중복_이메일_예외() throws Exception {
+    @DisplayName("이메일 중복 회원가입")
+    void joinWithDuplicateEmail() throws Exception {
         //given
         memberService.join(member);
         Member anotherMember = new Member("jiwoo", "abc@def.com", "1234");
