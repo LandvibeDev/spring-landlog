@@ -1,5 +1,6 @@
 package com.landvibe.landlog.controller;
 
+import com.landvibe.landlog.Message;
 import com.landvibe.landlog.domain.Member;
 import com.landvibe.landlog.form.MemberLoginForm;
 import com.landvibe.landlog.form.MemberNewForm;
@@ -42,6 +43,7 @@ public class MemberController {
     public String createForm() {
         return "members/createMemberForm";
     }
+
 
     @PostMapping("/new")
     public String create(MemberNewForm form) {

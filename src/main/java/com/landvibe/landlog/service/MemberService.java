@@ -5,6 +5,7 @@ import com.landvibe.landlog.domain.Member;
 import com.landvibe.landlog.form.MemberLoginForm;
 import com.landvibe.landlog.repository.MemberRepository;
 import org.springframework.stereotype.Service;
+import com.landvibe.landlog.controller.*;
 
 import java.util.List;
 
