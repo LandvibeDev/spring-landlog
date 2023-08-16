@@ -7,10 +7,7 @@ import com.landvibe.landlog.service.BlogService;
 import com.landvibe.landlog.service.MemberService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -57,14 +54,14 @@ public class BlogController {
         return "blog/updateBlogForm";
     }
 
-    @PostMapping("/update")
+    @PatchMapping("/update")
     public String update(@RequestParam Long creatorId, BlogUpdateForm form, RedirectAttributes redirectAttributes) {
         blogService.update(creatorId, form);
         redirectAttributes.addAttribute("creatorId", creatorId);
         return "redirect:/blogs";
     }
 
-    @PostMapping("/delete")
+    @DeleteMapping("/delete")
     public String delete(@RequestParam Long blogId, @RequestParam Long creatorId, RedirectAttributes redirectAttributes) {
         blogService.delete(creatorId, blogId);
         redirectAttributes.addAttribute("creatorId", creatorId);
