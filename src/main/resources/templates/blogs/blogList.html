@@ -7,7 +7,7 @@
 <body>
 <div class="container">
     <div>
-        <h1><span th:text="${name}"/>의 블로그</h1>
+        <h1><span th:text="${name}" />의 블로그</h1>
         <p>
             <a th:href="@{/blogs/new(creatorId=${creatorId})}">생성</a>
         </p>
@@ -62,11 +62,22 @@
                     }).then(() => {
                         console.log(`${blog.id} 삭제 완료`);
                         row.remove();
+                    }).catch(err => {
+                        if (err.response.status === 400 || err.response.status === 404) {
+                            alert(err.response.data);
+                            window.location.href = `/`;
+                        }
                     })
                 })
                 row.append(deleteBtn);
             }
+        }).catch(err => {
+            if (err.response.status === 400 || err.response.status === 404) {
+                alert(err.response.data);
+                window.location.href = `/`;
+            }
         })
     });
 </script>
+
 </html>

@@ -1,8 +1,11 @@
 package com.landvibe.landlog.service;
 
 import com.landvibe.landlog.domain.Blog;
+import com.landvibe.landlog.exception.BlogException;
+import com.landvibe.landlog.exception.MemberException;
 import com.landvibe.landlog.repository.BlogRepository;
 import com.landvibe.landlog.repository.MemberRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,50 +23,50 @@ public class BlogService {
 
     public void validateCreatorId(Long creatorId) {
         if (creatorId == null || creatorId == 0) {
-            throw new IllegalArgumentException(EMPTY_CREATOR_ID.message);
+            throw new MemberException(EMPTY_CREATOR_ID.message, HttpStatus.BAD_REQUEST);
         }
 
         boolean exists = memberRepository.existsById(creatorId);
-        if(!exists){
-            throw new IllegalArgumentException(NO_MATCH_MEMBER_WITH_CREATOR_ID.message);
+        if (!exists) {
+            throw new MemberException(NO_MATCH_MEMBER_WITH_CREATOR_ID.message, HttpStatus.NOT_FOUND);
         }
     }
 
     public void validateBlogId(Long blogId) {
         if (blogId == null || blogId == 0) {
-            throw new IllegalArgumentException(EMPTY_BLOG_ID.message);
+            throw new BlogException(EMPTY_BLOG_ID.message, HttpStatus.BAD_REQUEST);
         }
 
         boolean exists = blogRepository.existsById(blogId);
-        if(!exists){
-            throw new IllegalArgumentException(NO_MATCH_BLOG_WITH_BLOG_ID.message);
+        if (!exists) {
+            throw new BlogException(NO_MATCH_BLOG_WITH_BLOG_ID.message, HttpStatus.NOT_FOUND);
         }
     }
 
-    public Blog write(Blog blog) throws IllegalArgumentException {
+    public Blog write(Blog blog) throws MemberException {
         validateCreatorId(blog.getCreatorId());
         blogRepository.save(blog);
         return blog;
     }
 
-    public Blog update(Blog blog) throws IllegalArgumentException {
+    public Blog update(Blog blog) throws MemberException {
         validateCreatorId(blog.getCreatorId());
         blogRepository.update(blog);
         return blog;
     }
 
-    public List<Blog> findBlogsByCreatorId(Long creatorId) throws IllegalArgumentException {
+    public List<Blog> findBlogsByCreatorId(Long creatorId) throws MemberException {
         validateCreatorId(creatorId);
         return blogRepository.findBlogsByCreatorId(creatorId);
     }
 
     public Blog findById(Long blogId) {
         Blog blog = blogRepository.findById(blogId)
-                .orElseThrow(() -> new IllegalArgumentException(NO_MATCH_BLOG_WITH_BLOG_ID.message));
+                .orElseThrow(() -> new BlogException(NO_MATCH_BLOG_WITH_BLOG_ID.message, HttpStatus.NOT_FOUND));
         return blog;
     }
 
-    public Long deleteById(Long blogId) throws IllegalArgumentException {
+    public Long deleteById(Long blogId) throws MemberException, BlogException {
         validateCreatorId(findById(blogId).getCreatorId());
         Long id = blogRepository.deleteById(blogId);
         return id;

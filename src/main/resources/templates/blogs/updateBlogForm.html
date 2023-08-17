@@ -6,7 +6,7 @@
 </head>
 <body>
 <div class="container">
-  <h1><span th:text="${name}"/>의 블로그</h1>
+  <h1><span th:text="${name}" />의 블로그</h1>
   <div id="blog"></div>
   <input type="hidden" id="creatorId" name="creatorId" th:value="${creatorId}">
   <input type="hidden" id="blogId" name="blogId" th:value="${blogId}">
@@ -55,8 +55,18 @@
                     }
                 }).then(() => {
                     window.location.href = `/blogs?creatorId=${creatorId}`;
+                }).catch(err => {
+                    if (err.response.status === 400 || err.response.status === 404) {
+                        alert(err.response.data);
+                        window.location.href = `/`;
+                    }
                 })
             })
+        }).catch(err => {
+            if (err.response.status === 400 || err.response.status === 404) {
+                alert(err.response.data);
+                window.location.href = `/`;
+            }
         })
     });
 </script>

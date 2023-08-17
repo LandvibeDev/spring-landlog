@@ -1,7 +1,10 @@
 package com.landvibe.landlog.service;
 
 import com.landvibe.landlog.domain.Member;
+import com.landvibe.landlog.exception.LoginException;
+import com.landvibe.landlog.exception.MemberException;
 import com.landvibe.landlog.repository.MemberRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,8 +19,8 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
 
-    public Long join(Member member) throws IllegalStateException {
-        validateDuplicateMember(member); //중복 회원 검증
+    public Long join(Member member) throws MemberException {
+        validateDuplicateMember(member);
         memberRepository.save(member);
         return member.getId();
     }
@@ -25,7 +28,7 @@ public class MemberService {
     private void validateDuplicateMember(Member member) {
         memberRepository.findByName(member.getName())
                 .ifPresent(m -> {
-                    throw new IllegalStateException(EXIST_MEMBER.message);
+                    throw new MemberException(EXIST_MEMBER.message, HttpStatus.CONFLICT);
                 });
     }
 
@@ -35,15 +38,15 @@ public class MemberService {
 
     public Member findById(Long memberId) {
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException(NO_MATCH_MEMBER_WITH_CREATOR_ID.message));
+                .orElseThrow(() -> new MemberException(NO_MATCH_MEMBER_WITH_CREATOR_ID.message, HttpStatus.NOT_FOUND));
         return member;
     }
 
     public Long login(String email, String password) {
         Member member = memberRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException(WRONG_EMAIL.message));
+                .orElseThrow(() -> new LoginException(WRONG_EMAIL.message, HttpStatus.NOT_FOUND));
         if (!password.equals(member.getPassword())) {
-            throw new IllegalArgumentException(WRONG_PASSWORD.message);
+            throw new LoginException(WRONG_PASSWORD.message, HttpStatus.UNAUTHORIZED);
         }
         return member.getId();
     }
