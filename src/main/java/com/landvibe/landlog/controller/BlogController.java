@@ -2,8 +2,6 @@ package com.landvibe.landlog.controller;
 
 import com.landvibe.landlog.domain.Blog;
 import com.landvibe.landlog.domain.Member;
-import com.landvibe.landlog.exception.BlogException;
-import com.landvibe.landlog.exception.MemberException;
 import com.landvibe.landlog.service.BlogService;
 import com.landvibe.landlog.service.MemberService;
 import org.springframework.stereotype.Controller;
@@ -23,8 +21,7 @@ public class BlogController {
     }
 
     @GetMapping()
-    public String blogs(@RequestParam(value = "creatorId", required = false) Long creatorId, Model model)
-            throws MemberException {
+    public String blogs(@RequestParam(value = "creatorId", required = false) Long creatorId, Model model) {
         Member member = memberService.findById(creatorId);
 
         model.addAttribute("name", member.getName());
@@ -33,8 +30,7 @@ public class BlogController {
     }
 
     @GetMapping(value = "/new")
-    public String createForm(@RequestParam(value = "creatorId", required = false) Long creatorId, Model model)
-            throws MemberException {
+    public String createForm(@RequestParam(value = "creatorId", required = false) Long creatorId, Model model) {
         Member member = memberService.findById(creatorId);
 
         model.addAttribute("name", member.getName());
@@ -44,8 +40,7 @@ public class BlogController {
 
     @GetMapping(value = "/update")
     public String updateForm(@RequestParam(value = "blogId", required = false) Long blogId,
-                             @RequestParam(value = "creatorId", required = false) Long creatorId, Model model)
-            throws MemberException, BlogException {
+                             @RequestParam(value = "creatorId", required = false) Long creatorId, Model model) {
         Member member = memberService.findById(creatorId);
         Blog blog = blogService.findById(blogId);
 
