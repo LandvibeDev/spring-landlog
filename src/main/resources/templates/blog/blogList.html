@@ -62,9 +62,19 @@
                     }).then(() => {
                         console.log(`${blog.id} 삭제 완료`);
                         row.remove();
+                    }).catch(error => {
+                        console.log(error);
+                        if (error.response.status === 400) {
+                            window.location.href = `/`;
+                        }
                     })
                 })
                 row.append(deleteBtn);
+            }
+        }).catch(error => {
+            console.log(error);
+            if (error.response.status === 400) {
+                window.location.href = `/`;
             }
         })
     });
