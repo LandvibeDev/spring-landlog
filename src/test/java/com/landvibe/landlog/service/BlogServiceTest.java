@@ -1,6 +1,7 @@
 package com.landvibe.landlog.service;
 
 import com.landvibe.landlog.domain.Blog;
+import com.landvibe.landlog.exception.BlogException;
 import com.landvibe.landlog.repository.MemoryBlogRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -10,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 
 import java.util.Arrays;
 import java.util.List;
@@ -76,7 +78,7 @@ class BlogServiceTest {
     @Test
     void findById_fail() {
         Mockito.when(repository.findById(2L))
-                .thenThrow(new IllegalArgumentException(NO_BLOG.message));
+                .thenThrow(new BlogException(NO_BLOG.message, HttpStatus.BAD_REQUEST));
 
         Exception e = assertThrows(Exception.class,
                 () -> blogService.findById(1L, 2L));
@@ -98,9 +100,9 @@ class BlogServiceTest {
     @Test
     void updateBlog_fail() {
         Mockito.when(repository.findById(3L))
-                .thenThrow(new IllegalArgumentException(NO_BLOG.message));
+                .thenThrow(new BlogException(NO_BLOG.message, HttpStatus.BAD_REQUEST));
 
-        Exception e = assertThrows(Exception.class,
+        BlogException e = assertThrows(BlogException.class,
                 () -> blogService.updateBlog(1L, 3L, blog1));
         assertThat(e.getMessage()).isEqualTo(NO_BLOG.message);
     }
@@ -111,11 +113,11 @@ class BlogServiceTest {
         Mockito.when(memberService.isValidCreatorId(1L))
                 .thenReturn(true);
         Mockito.when(repository.findById(2L))
-                .thenThrow(new IllegalArgumentException(NO_BLOG.message));
+                .thenThrow(new BlogException(NO_BLOG.message, HttpStatus.BAD_REQUEST));
 
         blogService.deleteBlog(1L, 2L);
 
-        Exception e = assertThrows(Exception.class,
+        BlogException e = assertThrows(BlogException.class,
                 () -> blogService.findById(1L, 2L));
         assertThat(e.getMessage()).isEqualTo(NO_BLOG.message);
     }
@@ -124,9 +126,9 @@ class BlogServiceTest {
     @Test
     void deleteBlog_fail() {
         Mockito.when(memberService.isValidCreatorId(2L))
-                .thenThrow(new IllegalArgumentException(NO_BLOG.message));
+                .thenThrow(new BlogException(NO_BLOG.message, HttpStatus.BAD_REQUEST));
 
-        Exception e = assertThrows(Exception.class,
+        BlogException e = assertThrows(BlogException.class,
                 () -> blogService.deleteBlog(2L, 2L));
         assertThat(e.getMessage()).isEqualTo(NO_BLOG.message);
     }
