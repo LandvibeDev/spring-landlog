@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static com.landvibe.landlog.ErrorMessage.NO_BLOG;
+import static com.landvibe.landlog.exception.ExceptionMessage.NO_BLOG;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -8,7 +8,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static com.landvibe.landlog.ErrorMessage.*;
+import static com.landvibe.landlog.exception.ExceptionMessage.NO_USER;
+import static com.landvibe.landlog.exception.ExceptionMessage.WRONG_PASSWORD;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -30,7 +31,7 @@ class MemberServiceTest {
     }
 
     @Test
-    public void 회원가입() throws Exception {
+    public void 회원가입() {
         //Given
         Member member = new Member();
         member.setName("hello");
