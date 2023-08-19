@@ -16,11 +16,6 @@ import java.util.List;
 @RequestMapping("/members")
 @Controller
 public class MemberController {
-    private final MemberService memberService;
-
-    public MemberController(MemberService memberService) {
-        this.memberService = memberService;
-    }
 
     @GetMapping(value = "/new")
     public String createMemberForm() {
@@ -28,16 +23,12 @@ public class MemberController {
     }
 
     @PostMapping(value = "/new")
-    public String create(JoinForm form) {
-        Member member = new Member(form.getName(), form.getEmail(), form.getPassword());
-        memberService.join(member);
+    public String create() {
         return "redirect:/";
     }
 
     @GetMapping
-    public String list(Model model) {
-        List<Member> members = memberService.findMembers();
-        model.addAttribute("members", members);
+    public String list() {
         return "members/memberList";
     }
 
@@ -46,15 +37,5 @@ public class MemberController {
         return "login/loginForm";
     }
 
-    @PostMapping(value = "/login")
-    public String login(LoginForm loginForm, RedirectAttributes redirectAttributes) {
-        try {
-            Long memberId = memberService.login(loginForm);
-            redirectAttributes.addAttribute("creatorId", memberId);
-        } catch (IllegalArgumentException e) {
-            e.getMessage();
-        }
-        return "redirect:/blogs";
-    }
 }
 

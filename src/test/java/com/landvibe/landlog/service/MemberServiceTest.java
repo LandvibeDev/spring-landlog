@@ -2,12 +2,14 @@ package com.landvibe.landlog.service;
 
 import com.landvibe.landlog.dto.LoginForm;
 import com.landvibe.landlog.domain.Member;
+import com.landvibe.landlog.exception.MemberException;
 import com.landvibe.landlog.repository.MemoryMemberRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static com.landvibe.landlog.ErrorMessage.*;
+import static com.landvibe.landlog.exception.BaseException.NO_USER;
+import static com.landvibe.landlog.exception.BaseException.WRONG_PASSWORD;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -29,19 +31,18 @@ class MemberServiceTest {
     }
 
     @Test
-    public void 회원가입() throws Exception {
+    public void 회원가입() {
         //Given
         Member member = new Member();
         member.setName("hello");
         //When
-        Long saveId = memberService.join(member);
+        Member findMember = memberService.join(member);
         //Then
-        Member findMember = memberRepository.findById(saveId).get();
-        assertEquals(member.getName(), findMember.getName());
+        assertEquals(member, findMember);
     }
 
     @Test
-    public void 중복_회원_예외() throws Exception {
+    public void 중복_회원_예외() {
         //Given
         Member member1 = new Member();
         member1.setName("spring");
@@ -49,7 +50,7 @@ class MemberServiceTest {
         member2.setName("spring");
         //When
         memberService.join(member1);
-        IllegalStateException e = assertThrows(IllegalStateException.class,
+        MemberException e = assertThrows(MemberException.class,
                 () -> memberService.join(member2));//예외가 발생해야 한다.
         assertThat(e.getMessage()).isEqualTo("이미 존재하는 회원입니다.");
     }
@@ -71,7 +72,7 @@ class MemberServiceTest {
                 .build();
 
         //then
-        Exception e = assertThrows(Exception.class,
+        MemberException e = assertThrows(MemberException.class,
                 () -> memberService.login(loginForm));
         assertThat(e.getMessage()).isEqualTo(NO_USER.message);
     }
@@ -114,7 +115,7 @@ class MemberServiceTest {
                 .build();
 
         //then
-        Exception e = assertThrows(Exception.class,
+        MemberException e = assertThrows(MemberException.class,
                 () -> memberService.login(loginForm));
         assertThat(e.getMessage()).isEqualTo(WRONG_PASSWORD.message);
     }

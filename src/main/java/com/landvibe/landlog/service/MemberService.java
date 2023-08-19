@@ -2,12 +2,14 @@ package com.landvibe.landlog.service;
 
 import com.landvibe.landlog.dto.LoginForm;
 import com.landvibe.landlog.domain.Member;
+import com.landvibe.landlog.exception.MemberException;
 import com.landvibe.landlog.repository.MemberRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.landvibe.landlog.ErrorMessage.*;
+import static com.landvibe.landlog.exception.BaseException.*;
 
 @Service
 public class MemberService {
@@ -17,22 +19,22 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
 
-    public Long join(Member member) {
+    public Member join(Member member) {
         validateDuplicateMember(member); //중복 회원 검증
         memberRepository.save(member);
-        return member.getId();
+        return member;
     }
 
     private void validateDuplicateMember(Member member) {
         memberRepository.findByName(member.getName())
                 .ifPresent(m -> {
-                    throw new IllegalStateException(ALREADY_EXIST.message);
+                    throw new MemberException(ALREADY_EXIST);
                 });
     }
 
     public boolean isValidCreatorId(Long creatorId) {
         memberRepository.findById(creatorId)
-                .orElseThrow(() -> new IllegalArgumentException(NO_USER.message));
+                .orElseThrow(() ->  new MemberException(NO_USER));
         return true;
     }
 
@@ -42,15 +44,15 @@ public class MemberService {
 
     public Member findById(Long memberId) {
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException(NO_USER.message));
+                .orElseThrow(() -> new MemberException(NO_USER));
         return member;
     }
 
     public Long login(LoginForm loginForm) {
         Member member = memberRepository.findByEmail(loginForm.getEmail())
-                .orElseThrow(() -> new IllegalArgumentException(NO_USER.message));
+                .orElseThrow(() -> new MemberException(NO_USER));
         if (!member.getPassword().equals(loginForm.getPassword())) {
-            throw new IllegalArgumentException(WRONG_PASSWORD.message);
+            throw new MemberException(WRONG_PASSWORD);
         }
         return member.getId();
     }
