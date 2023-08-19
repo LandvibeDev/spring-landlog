@@ -24,7 +24,7 @@ public class MemberService {
         return member;
     }
 
-    public Long join(Member member) {
+    public Long join(Member member) throws MemberException{
         validateDuplicateMember(member);
 
         memberRepository.save(member);

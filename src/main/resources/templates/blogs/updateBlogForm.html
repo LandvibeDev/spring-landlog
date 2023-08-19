@@ -55,6 +55,9 @@
                     }
                 }).then(() => {
                     window.location.href = `/blogs?creatorId=${creatorId}`;
+                }).catch(error => {
+                    alert(error.response.data);
+                    window.location.href = `/`;
                 })
             })
         })
