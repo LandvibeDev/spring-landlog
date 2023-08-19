@@ -2,14 +2,13 @@ package com.landvibe.landlog.service;
 
 import com.landvibe.landlog.domain.Blog;
 import com.landvibe.landlog.exception.BlogException;
-import com.landvibe.landlog.exception.MemberException;
 import com.landvibe.landlog.repository.BlogRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.landvibe.landlog.exception.ExceptionMessage.NO_BLOG;
+import static com.landvibe.landlog.exception.BaseException.NO_BLOG;
 
 
 @Service
@@ -36,7 +35,7 @@ public class BlogService {
     public Blog findById(Long creatorId, Long id) {
         validateCreatorId(creatorId);
         return blogRepository.findById(id)
-                .orElseThrow(() -> new BlogException(NO_BLOG.message, HttpStatus.BAD_REQUEST));
+                .orElseThrow(() -> new BlogException(NO_BLOG));
     }
 
     public void deleteBlog(Long creatorId, Long id) {
@@ -56,6 +55,6 @@ public class BlogService {
 
     public void isValidBlogId(Long id) {
         blogRepository.findById(id)
-                .orElseThrow(() -> new BlogException(NO_BLOG.message, HttpStatus.BAD_REQUEST));
+                .orElseThrow(() -> new BlogException(NO_BLOG));
     }
 }

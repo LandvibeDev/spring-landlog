@@ -8,8 +8,8 @@ public class BlogException extends RuntimeException {
     private String message;
     private HttpStatus httpStatus;
 
-    public BlogException(String message, HttpStatus httpStatus) {
-        this.message = message;
-        this.httpStatus = httpStatus;
+    public BlogException(BaseException baseException) {
+        this.message = baseException.message;
+        this.httpStatus = baseException.httpStatus;
     }
 }

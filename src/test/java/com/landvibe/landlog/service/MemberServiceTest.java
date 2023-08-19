@@ -8,8 +8,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static com.landvibe.landlog.exception.ExceptionMessage.NO_USER;
-import static com.landvibe.landlog.exception.ExceptionMessage.WRONG_PASSWORD;
+import static com.landvibe.landlog.exception.BaseException.NO_USER;
+import static com.landvibe.landlog.exception.BaseException.WRONG_PASSWORD;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;

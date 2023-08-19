@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.landvibe.landlog.exception.ExceptionMessage.*;
+import static com.landvibe.landlog.exception.BaseException.*;
 
 @Service
 public class MemberService {
@@ -28,13 +28,13 @@ public class MemberService {
     private void validateDuplicateMember(Member member) {
         memberRepository.findByName(member.getName())
                 .ifPresent(m -> {
-                    throw new MemberException(ALREADY_EXIST.message, HttpStatus.BAD_REQUEST);
+                    throw new MemberException(ALREADY_EXIST);
                 });
     }
 
     public boolean isValidCreatorId(Long creatorId) {
         memberRepository.findById(creatorId)
-                .orElseThrow(() ->  new MemberException(NO_USER.message, HttpStatus.BAD_REQUEST));
+                .orElseThrow(() ->  new MemberException(NO_USER));
         return true;
     }
 
@@ -44,15 +44,15 @@ public class MemberService {
 
     public Member findById(Long memberId) {
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberException(NO_USER.message, HttpStatus.BAD_REQUEST));
+                .orElseThrow(() -> new MemberException(NO_USER));
         return member;
     }
 
     public Long login(LoginForm loginForm) {
         Member member = memberRepository.findByEmail(loginForm.getEmail())
-                .orElseThrow(() -> new MemberException(NO_USER.message, HttpStatus.BAD_REQUEST));
+                .orElseThrow(() -> new MemberException(NO_USER));
         if (!member.getPassword().equals(loginForm.getPassword())) {
-            throw new MemberException(WRONG_PASSWORD.message, HttpStatus.BAD_REQUEST);
+            throw new MemberException(WRONG_PASSWORD);
         }
         return member.getId();
     }

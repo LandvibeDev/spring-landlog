@@ -8,9 +8,9 @@ public class MemberException extends RuntimeException{
     private String message;
     private HttpStatus httpStatus;
 
-    public MemberException(String message, HttpStatus httpStatus) {
-        this.message = message;
-        this.httpStatus = httpStatus;
+    public MemberException(BaseException baseException) {
+        this.message = baseException.message;
+        this.httpStatus = baseException.httpStatus;
     }
 
 }
