@@ -62,11 +62,15 @@
                     }).then(() => {
                         console.log(`${blog.id} 삭제 완료`);
                         row.remove();
+                    }).catch(error => {
+                        alert(error.response.data);
+                        window.location.href = `/`;
                     })
                 })
                 row.append(deleteBtn);
             }
         })
     });
+
 </script>
 </html>
