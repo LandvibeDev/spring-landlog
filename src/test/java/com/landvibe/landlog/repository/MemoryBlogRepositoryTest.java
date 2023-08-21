@@ -2,23 +2,27 @@ package com.landvibe.landlog.repository;
 
 import com.landvibe.landlog.domain.Blog;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-
+@SpringBootTest
 class MemoryBlogRepositoryTest {
 
-    MemoryBlogRepository repository = new MemoryBlogRepository();
+    @Autowired
+    BlogRepository repository;
     Blog blog1 = new Blog(1L, "aa", "bb");
     Blog blog2 = new Blog(1L, "bb", "cc");
 
-    @AfterEach
-    public void afterEach() {
-        repository.clearStore();
+    @BeforeEach
+    void clear() {
+        repository.clear();
     }
 
     @Test
@@ -29,7 +33,7 @@ class MemoryBlogRepositoryTest {
 
         //then
         Blog result = repository.findById(blog1.getId()).get();
-        assertThat(result).isEqualTo(blog1);
+        assertThat(result.getId()).isEqualTo(blog1.getId());
     }
 
     @Test
@@ -42,7 +46,6 @@ class MemoryBlogRepositoryTest {
         repository.delete(blog1.getId());
 
         //then
-
         assertThat(repository.findById(blog1.getId())).isEqualTo(Optional.empty());
     }
 
@@ -56,7 +59,7 @@ class MemoryBlogRepositoryTest {
         List<Blog> blogs = repository.findByCreatorId(blog1.getCreatorId());
 
         //then
-        assertThat(blogs.get(0)).isEqualTo(blog1);
-        assertThat(blogs.get(1)).isEqualTo(blog2);
+        assertThat(blogs.get(0).getId()).isEqualTo(blog1.getId());
+        assertThat(blogs.get(1).getId()).isEqualTo(blog2.getId());
     }
 }

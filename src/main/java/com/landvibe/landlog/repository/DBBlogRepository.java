@@ -32,24 +32,33 @@ public class DBBlogRepository implements BlogRepository{
 
     @Override
     public void delete(Long id) {
-        jdbcTemplate.update("delete from blog where id = ?", "id");
+        jdbcTemplate.update("delete from blog where id = ?", id);
     }
 
     @Override
     public Blog update(Long id, Blog blog) {
-        jdbcTemplate.update("update blog set title = ?, content = ? where id = ? ", blog.getTitle(), blog.getContents());
+        jdbcTemplate.update("update blog set title = ?, content = ? where id = ? ", blog.getTitle(), blog.getContents(), id);
         return blog;
     }
 
     @Override
-    public Blog findById(Long id) {
-        return jdbcTemplate.queryForObject("select * from blog where id = ?", blogRowMapper(), id);
+    public Optional<Blog> findById(Long id) {
+        List<Blog> blogs = jdbcTemplate.query("select * from blog where id = ?", blogRowMapper(), id);
+        if (blogs.isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.ofNullable(blogs.get(0));
     }
 
     @Override
     public List<Blog> findByCreatorId(Long creatorId) {
         List<Blog> result = jdbcTemplate.query("select * from blog where creatorId = ?", blogRowMapper(), creatorId);
         return result.stream().toList();
+    }
+
+    @Override
+    public void clear() {
+        jdbcTemplate.update("truncate table blog");
     }
 
     private RowMapper<Blog> blogRowMapper() {

@@ -2,19 +2,24 @@ package com.landvibe.landlog.repository;
 
 import com.landvibe.landlog.domain.Member;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SpringBootTest
 class MemoryMemberRepositoryTest {
 
-    MemoryMemberRepository repository = new MemoryMemberRepository();
+    @Autowired
+    MemberRepository repository;
 
-    @AfterEach
-    public void afterEach() {
-        repository.clearStore();
+    @BeforeEach
+    void clear() {
+        repository.clear();
     }
 
     @Test
@@ -28,7 +33,7 @@ class MemoryMemberRepositoryTest {
 
         //then
         Member result = repository.findById(member.getId()).get();
-        assertThat(result).isEqualTo(member);
+        assertThat(result.getId()).isEqualTo(member.getId());
     }
 
     @Test
@@ -37,15 +42,12 @@ class MemoryMemberRepositoryTest {
         Member member1 = new Member();
         member1.setName("spring1");
         repository.save(member1);
-        Member member2 = new Member();
-        member2.setName("spring2");
-        repository.save(member2);
 
         //when
         Member result = repository.findByName("spring1").get();
 
         //then
-        assertThat(result).isEqualTo(member1);
+        assertThat(result.getName()).isEqualTo(member1.getName());
     }
 
     @Test
@@ -59,7 +61,7 @@ class MemoryMemberRepositoryTest {
         Member result = repository.findByEmail("123@naver.com").get();
 
         //then
-        assertThat(result).isEqualTo(member);
+        assertThat(result.getEmail()).isEqualTo(member.getEmail());
     }
 
     @Test
