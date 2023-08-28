@@ -36,23 +36,23 @@ public class DBMemberRepository implements MemberRepository{
 
     @Override
     public Optional<Member> findById(Long id) {
-        return Optional.ofNullable(jdbcTemplate.queryForObject("select * from member where id = ?", memberRowMapper(), id));
+        return Optional.ofNullable(jdbcTemplate.queryForObject("select id, name, email, password from member where id = ?", memberRowMapper(), id));
     }
 
     @Override
     public Optional<Member> findByName(String name) {
-        List<Member> result = jdbcTemplate.query("select * from member where name = ?", memberRowMapper(), name);
+        List<Member> result = jdbcTemplate.query("select id, name, email, password from member where name = ?", memberRowMapper(), name);
         return result.stream().findAny();
     }
 
     @Override
     public Optional<Member> findByEmail(String email) {
-        return Optional.ofNullable(jdbcTemplate.queryForObject("select * from member where email = ?", memberRowMapper(), email));
+        return Optional.ofNullable(jdbcTemplate.queryForObject("select id, name, email, password from member where email = ?", memberRowMapper(), email));
     }
 
     @Override
     public List<Member> findAll() {
-        return jdbcTemplate.query("select * from member", memberRowMapper());
+        return jdbcTemplate.query("select id, name, email, password from member", memberRowMapper());
     }
 
     @Override
@@ -61,13 +61,11 @@ public class DBMemberRepository implements MemberRepository{
     }
 
     private RowMapper<Member> memberRowMapper() {
-        return (rs, rowNum) -> {
-            Member member = new Member();
-            member.setId(rs.getLong("id"));
-            member.setName(rs.getString("name"));
-            member.setEmail(rs.getString("email"));
-            member.setPassword(rs.getString("password"));
-            return member;
-        };
+        return (rs, rowNum) -> Member.builder()
+                .id(rs.getLong("id"))
+                .name(rs.getString("name"))
+                .email(rs.getString("email"))
+                .password(rs.getString("password"))
+                .build();
     }
 }

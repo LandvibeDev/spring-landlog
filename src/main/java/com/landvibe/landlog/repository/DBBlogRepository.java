@@ -12,7 +12,7 @@ import java.util.*;
 
 @RequiredArgsConstructor
 @Repository
-public class DBBlogRepository implements BlogRepository{
+public class DBBlogRepository implements BlogRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -43,7 +43,7 @@ public class DBBlogRepository implements BlogRepository{
 
     @Override
     public Optional<Blog> findById(Long id) {
-        List<Blog> blogs = jdbcTemplate.query("select * from blog where id = ?", blogRowMapper(), id);
+        List<Blog> blogs = jdbcTemplate.query("select id, creatorId, title, content from blog where id = ?", blogRowMapper(), id);
         if (blogs.isEmpty()) {
             return Optional.empty();
         }
@@ -52,8 +52,8 @@ public class DBBlogRepository implements BlogRepository{
 
     @Override
     public List<Blog> findByCreatorId(Long creatorId) {
-        List<Blog> result = jdbcTemplate.query("select * from blog where creatorId = ?", blogRowMapper(), creatorId);
-        return result.stream().toList();
+        List<Blog> result = jdbcTemplate.query("select id, creatorId, title, content from blog where creatorId = ?", blogRowMapper(), creatorId);
+        return result;
     }
 
     @Override
@@ -62,13 +62,12 @@ public class DBBlogRepository implements BlogRepository{
     }
 
     private RowMapper<Blog> blogRowMapper() {
-        return (rs, rowNum) -> {
-                Blog blog = new Blog();
-                blog.setId(rs.getLong("id"));
-                blog.setCreatorId(rs.getLong("creatorId"));
-                blog.setTitle(rs.getString("title"));
-                blog.setContents(rs.getString("content"));
-                return blog;
-        };
+        return (rs, rowNum) ->
+                Blog.builder()
+                        .id(rs.getLong("id"))
+                        .creatorId(rs.getLong("creatorId"))
+                        .title(rs.getString("title"))
+                        .contents(rs.getString("content"))
+                        .build();
     }
 }
