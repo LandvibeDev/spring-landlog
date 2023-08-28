@@ -41,8 +41,7 @@ public class DBMemberRepository implements MemberRepository{
 
     @Override
     public Optional<Member> findByName(String name) {
-        List<Member> result = jdbcTemplate.query("select id, name, email, password from member where name = ?", memberRowMapper(), name);
-        return result.stream().findAny();
+        return Optional.ofNullable(jdbcTemplate.queryForObject("select id, name, email, password from member where name = ?", memberRowMapper(), name));
     }
 
     @Override
@@ -67,5 +66,6 @@ public class DBMemberRepository implements MemberRepository{
                 .email(rs.getString("email"))
                 .password(rs.getString("password"))
                 .build();
+
     }
 }

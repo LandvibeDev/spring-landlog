@@ -52,8 +52,7 @@ public class DBBlogRepository implements BlogRepository {
 
     @Override
     public List<Blog> findByCreatorId(Long creatorId) {
-        List<Blog> result = jdbcTemplate.query("select id, creatorId, title, content from blog where creatorId = ?", blogRowMapper(), creatorId);
-        return result;
+        return jdbcTemplate.query("select id, creatorId, title, content from blog where creatorId = ?", blogRowMapper(), creatorId);
     }
 
     @Override
@@ -69,5 +68,6 @@ public class DBBlogRepository implements BlogRepository {
                         .title(rs.getString("title"))
                         .contents(rs.getString("content"))
                         .build();
+
     }
 }
