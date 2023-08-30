@@ -2,33 +2,40 @@ package com.landvibe.landlog.service;
 
 import com.landvibe.landlog.dto.LoginForm;
 import com.landvibe.landlog.domain.Member;
+import com.landvibe.landlog.exception.BlogException;
 import com.landvibe.landlog.exception.MemberException;
-import com.landvibe.landlog.repository.MemoryMemberRepository;
+
+import com.landvibe.landlog.repository.DBMemberRepository;
+import com.landvibe.landlog.repository.MemberRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.landvibe.landlog.exception.BaseException.NO_USER;
-import static com.landvibe.landlog.exception.BaseException.WRONG_PASSWORD;
+import java.util.Optional;
+
+import static com.landvibe.landlog.exception.BaseException.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@ExtendWith(MockitoExtension.class)
 class MemberServiceTest {
 
+    @InjectMocks
     MemberService memberService;
-    MemoryMemberRepository memberRepository;
+    @Mock
+    MemberRepository memberRepository;
 
     @BeforeEach
     public void beforeEach() {
-        memberRepository = new MemoryMemberRepository();
         memberService = new MemberService(memberRepository);
     }
 
-    @AfterEach
-    public void afterEach() {
-        memberRepository.clearStore();
-    }
 
     @Test
     public void 회원가입() {
@@ -44,14 +51,14 @@ class MemberServiceTest {
     @Test
     public void 중복_회원_예외() {
         //Given
-        Member member1 = new Member();
-        member1.setName("spring");
-        Member member2 = new Member();
-        member2.setName("spring");
+        Member member = new Member();
+        member.setName("spring");
+
+        Mockito.when(memberRepository.findByName("spring"))
+                .thenThrow(new MemberException(ALREADY_EXIST));
         //When
-        memberService.join(member1);
         MemberException e = assertThrows(MemberException.class,
-                () -> memberService.join(member2));//예외가 발생해야 한다.
+                () -> memberService.join(member));//예외가 발생해야 한다.
         assertThat(e.getMessage()).isEqualTo("이미 존재하는 회원입니다.");
     }
 
@@ -86,8 +93,9 @@ class MemberServiceTest {
                 .email("123@naver.com")
                 .build();
 
+        Mockito.when(memberRepository.findByEmail("123@naver.com"))
+                .thenReturn(Optional.ofNullable(member));
         //when
-        memberService.join(member);
         LoginForm loginForm = LoginForm.builder()
                 .email("123@naver.com")
                 .password("1234")
@@ -106,6 +114,8 @@ class MemberServiceTest {
                 .password("1234")
                 .email("123@naver.com")
                 .build();
+        Mockito.when(memberRepository.findByEmail("123@naver.com"))
+                .thenReturn(Optional.ofNullable(member));
 
         //when
         memberService.join(member);

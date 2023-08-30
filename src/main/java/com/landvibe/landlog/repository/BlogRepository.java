@@ -16,4 +16,5 @@ public interface BlogRepository {
 
     List<Blog> findByCreatorId(Long creatorId);
 
+    void clear();
 }

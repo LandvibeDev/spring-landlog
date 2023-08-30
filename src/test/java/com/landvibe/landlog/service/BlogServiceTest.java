@@ -2,7 +2,7 @@ package com.landvibe.landlog.service;
 
 import com.landvibe.landlog.domain.Blog;
 import com.landvibe.landlog.exception.BlogException;
-import com.landvibe.landlog.repository.MemoryBlogRepository;
+import com.landvibe.landlog.repository.BlogRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,13 +21,14 @@ import static com.landvibe.landlog.exception.BaseException.NO_BLOG;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
+
 @ExtendWith(MockitoExtension.class)
 class BlogServiceTest {
 
     @InjectMocks
     BlogService blogService;
     @Mock
-    MemoryBlogRepository repository;
+    BlogRepository repository;
     @Mock
     MemberService memberService;
     Blog blog1 = Blog.builder()
